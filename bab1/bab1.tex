@@ -1,0 +1,50 @@
+\begin{spacing}{1.2}
+	\chapter{PENDAHULUAN}
+\end{spacing}
+
+\pagenumbering{arabic}
+\vspace{4ex}
+
+\section{Latar Belakang}
+Kemajuan teknologi \textit{Unmanned Aerial Vehicle} (UAV) atau drone telah membuka peluang besar untuk pemanfaatan di berbagai bidang, termasuk dalam operasi penyelamatan atau \textit{Search and Rescue} (SAR). Drone memiliki kemampuan untuk menjangkau area yang sulit diakses oleh manusia, seperti lereng gunung, hutan lebat, atau wilayah terdampak bencana dengan infrastruktur rusak. Hal ini menjadikan drone sebagai alat yang potensial dalam meningkatkan kecepatan, efisiensi, dan efektivitas operasi penyelamatan di situasi darurat.
+
+Tinjauan sistematik yang dilakukan oleh Lyu et al. (2023) menunjukkan bahwa pemanfaatan UAV dalam operasi SAR dapat meningkatkan tingkat keberhasilan misi dengan memperluas jangkauan area pencarian serta menyediakan data visual bagi tim penyelamat\cite{Lyu2023SARUAV}. Secara global, tren tersebut tercermin dari laporan Fact.MR (2024) yang memproyeksikan nilai pasar drone untuk misi SAR mencapai USD 3,76 miliar pada tahun 2024, dengan tingkat pertumbuhan majemuk tahunan (CAGR) sekitar 13,6\% hingga tahun 2034\cite{FactMR2024SearchRescueDroneMarket}. Pertumbuhan ini menunjukkan bahwa penggunaan drone untuk misi kemanusiaan dan darurat kini menjadi prioritas strategis di berbagai negara.
+
+Kebutuhan terhadap sistem drone yang adaptif dalam konteks kebencanaan menjadi semakin mendesak bila melihat kondisi faktual di Indonesia. Berdasarkan data dari Badan Nasional Penanggulangan Bencana (BNPB, 2025), sepanjang tahun 2024 tercatat 3.472 kejadian bencana yang menyebabkan 540 korban meninggal dunia, 63 orang hilang, dan lebih dari 8 juta orang mengungsi. Meskipun frekuensi bencana menurun dibandingkan tahun sebelumnya, tingkat fatalitas dan kerusakan meningkat hampir 96\%, menandakan masih terbatasnya sistem deteksi dini dan pencarian korban yang cepat di lapangan\cite{BNPB2024}. Penelitian oleh Sopha, Asih, dan Agriawan (2024) juga menegaskan bahwa adopsi drone dalam operasi kemanusiaan di Indonesia masih rendah, dipengaruhi oleh keterbatasan teknologi di kondisi ekstrem \cite{Sopha2024DronesHumanitarian}.
+
+Meskipun potensinya besar, operasi SAR konvensional berbasis drone saat ini masih memiliki kelemahan fundamental. Drone umumnya dioperasikan secara manual dan sangat bergantung pada transmisi video mentah (\textit{video streaming}) ke \textit{Ground Control Station} (GCS) untuk dianalisis oleh mata manusia. Di lingkungan bencana, ketersediaan \textit{bandwidth} jaringan radio seringkali tidak stabil, memicu latensi transmisi yang tinggi atau hilangnya sinyal (\textit{signal loss}). Untuk mengatasi masalah ini, diperlukan pergeseran menuju pemrosesan visual langsung di atas wahana (\textit{on-board detection}) menggunakan konsep komputasi tepi (\textit{edge computing}).
+
+Berdasarkan kondisi tersebut, penelitian ini berfokus pada perancangan sistem drone otonom yang memadukan \textit{flight controller} dengan \textit{companion computer} Raspberry Pi 5. Dengan menempatkan unit pemrosesan kecerdasan buatan secara lokal, drone dapat mengeksekusi model deteksi objek \textit{state-of-the-art} seperti YOLOv8 (\textit{You Only Look Once}) tanpa bergantung pada komunikasi data ke darat. Sistem ini dirancang agar drone dapat melakukan navigasi mandiri, mendeteksi keberadaan manusia secara \textit{real-time}, serta mengambil keputusan tindak lanjut secara otomatis. Dengan demikian, penelitian ini diharapkan dapat mengatasi kendala latensi komunikasi, mempercepat proses pencarian, dan meningkatkan keselamatan tim penolong di wilayah bencana.
+
+\section{Rumusan Masalah}
+Berdasarkan uraian latar belakang di atas, rumusan masalah dalam penelitian ini didefinisikan secara lebih spesifik sebagai berikut:
+\begin{enumerate}
+	\item Bagaimana merancang arsitektur perangkat keras dan sistem kelistrikan yang stabil untuk mengintegrasikan \textit{companion computer} Raspberry Pi 5 dan webcam pada drone tanpa mengganggu kinerja drone?
+	\item Bagaimana mengoptimalkan algoritma deteksi manusia berbasis YOLOv8n agar mampu dieksekusi secara \textit{real-time} pada perangkat \textit{edge} dengan menyeimbangkan \textit{frame rate} (FPS) dan akurasi deteksi?
+	\item Bagaimana merancang mesin logika otonom (\textit{state machine}) yang dapat menerjemahkan hasil deteksi visual menjadi perintah navigasi otomatis penerbangan?
+\end{enumerate}
+
+\section{Tujuan Penelitian}
+Sejalan dengan rumusan masalah, penelitian ini bertujuan untuk:
+\begin{enumerate}
+	\item Menghasilkan rancang bangun perangkat keras dan kelistrikan sistem drone yang mampu menyuplai daya komputasi secara stabil bagi Raspberry Pi 5 selama drone terbang.
+	\item Mengevaluasi dan memvalidasi performa iterasi model YOLOv8n hasil \textit{fine-tuning} khusus kelas manusia pada resolusi yang efisien untuk \textit{deployment} pada raspberry pi 5.
+	\item Mengembangkan dan menguji integrasi perangkat lunak navigasi berbasis MAVSDK yang memungkinkan drone mencari, mengunci, dan mendekati target secara otomatis.
+\end{enumerate}
+
+\section{Batasan Masalah}
+Agar ruang lingkup penelitian tetap terarah dan terukur, ditetapkan batasan masalah sebagai berikut:
+\begin{enumerate}
+	\item Penelitian berfokus pada implementasi drone tunggal (\textit{single-UAV}) menggunakan \textit{frame} Holybro S500 dan \textit{flight controller} Pixhawk 6C.
+	\item Unit                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              (\textit{edge computing}) dibatasi menggunakan Raspberry Pi 5 8GB yang dioperasikan dalam lingkungan Linux \textit{headless}.
+	\item Sistem deteksi visual menggunakan kamera RGB standar tanpa stabilisasi mekanis (gimbal), dengan target identifikasi dibatasi hanya pada kelas manusia (\textit{single-class object detection}).
+	\item Skenario pengujian sistem kontrol dan deteksi dilakukan pada kondisi pencahayaan siang hari (\textit{daylight}) di luar ruangan, dengan asumsi target manusia tidak tertimbun sepenuhnya (\textit{fully occluded}).
+	\item Komunikasi antara \textit{companion computer} dan \textit{flight controller} menggunakan antarmuka MAVSDK Python melalui protokol MAVLink.
+\end{enumerate}
+
+\section{Manfaat Penelitian}
+Penelitian ini diharapkan dapat memberikan kontribusi dan manfaat sebagai berikut:
+\begin{enumerate}
+	\item Menjadi referensi teknis komprehensif terkait optimasi integrasi \textit{edge computing} perangkat keras berbiaya rendah dan arsitektur visi komputer \textit{real-time} pada \textit{unmanned aerial systems}.
+	\item Menghasilkan purwarupa fungsional drone SAR yang berpotensi dikembangkan lebih lanjut untuk membantu instansi tanggap darurat dalam memangkas waktu pencarian korban secara otomatis dan presisi.
+\end{enumerate}
