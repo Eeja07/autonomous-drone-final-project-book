@@ -1,28 +1,27 @@
 \begin{center}
-  \large\textbf{ABSTRAK}
+	\large\textbf{ABSTRAK}
 \end{center}
 
 \addcontentsline{toc}{chapter}{ABSTRAK}
 
 \vspace{2ex}
-
 \begingroup
 % Menghilangkan padding
 \setlength{\tabcolsep}{0pt}
 
 \noindent
 \begin{tabularx}{\textwidth}{l >{\centering}m{2em} X}
-  Nama Mahasiswa    & : & \name{}         \\
-
-  Judul Tugas Akhir & : & \tatitle{}      \\
-
-  Pembimbing        & : & 1. \advisor{}   \\
-                    &   & 2. \coadvisor{} \\
+	Nama Mahasiswa    & : & \name{}         \\
+	
+	Judul Tugas Akhir & : & \tatitle{}      \\
+	
+	Pembimbing        & : & 1. \advisor{}   \\
+	&   & 2. \coadvisor{} \\
 \end{tabularx} 
 \endgroup
 
 % Ubah paragraf berikut dengan abstrak dari tugas akhir
-Bahasa isyarat merupakan bahasa yang direpresentasikan dalam gerakan tangan dan ekspresi wajah. Tunarungu menggunakan bahasa isyarat sebagai bahasa komunikasi utama. Dalam berkomunikasi sehari – hari, tunarungu lebih memilih menggunakan BISINDO karena tidak terikat dengan struktur baku bahasa Indonesia dan disertai ekspresi wajah. Menurut GERKATIN terdapat setidaknya 2,9 juta orang penyandang tunarungu. Jumlah penyandang tunarungu yang cukup besar ini tidak diikuti dengan pengetahuan masyarakat umum mengenai bahasa isyarat. Hal ini berdampak pada sulitnya komunikasi tunarungu dengan masyarakat sekitar sehingga adanya keterbatasan dalam peningkatan kualitas hidup mereka. Sistem penerjemah saat ini masih terbatas dalam menerjemahkan dalam bentuk kata saja dan belum adanya upaya dalam membuat sistem yang bersifat inklusif. Pada tugas akhir ini telah dikembangkan sistem penerjemah BISINDO menggunakan arsitektur LSTM. Sistem telah diimplementasikan pada Intel NUC dengan kemampuan dalam menerjemahkan gerakan isyarat secara \emph{real time}. Pengguna dapat membentuk kalimat - kalimat yang umum digunakan sehari - hari dan mengkonversinya ke media suara dengan bantuan gerakan isyarat kontrol. Berdasarkan pengujian yang telah dilakukan, didapat bahwa sistem dapat beradaptasi dengan adanya perbedaan intensitas cahaya, jarak, serta subjek yang berbeda dengan penulis dengan akurasi tertinggi mencapai 100\%. Sistem juga telah dapat berjalan secara \emph{realtime} dengan performa baik pada Intel \emph{Next Unit Computing} (NUC). Sistem ini dapat menjadi solusi dalam mengatasi hambatan komunikasi antara tunarungu dengan khalayak umum.
+Kemajuan teknologi Unmanned Aerial Vehicle (UAV) atau drone telah memberikan peluang besar dalam operasi pencarian dan penyelamatan (Search and Rescue / SAR). Di Indonesia, tingginya frekuensi bencana alam menuntut adanya sistem yang mampu membantu proses pencarian korban secara cepat dan efisien di area yang sulit dijangkau manusia. Penelitian ini bertujuan untuk merancang sistem otonom pada drone Holybro S500 yang dapat mendeteksi korban bencana secara otomatis menggunakan Raspberry Pi 5 dan kamera webcam. Sistem dirancang dengan mengintegrasikan Pixhawk Flight Controller 6C sebagai pengendali utama penerbangan dan Raspberry Pi 5 sebagai companion computer yang menjalankan sistem kontrol otonom melalui protokol MAVLink (MAVSDK Python) dan algoritma deteksi manusia. Berdasarkan hasil evaluasi, model YOLOv8n standar hasil fine-tuning berformat ONNX (resolusi 320x320) dipilih menggantikan model pose estimation karena terbukti lebih konsisten dan stabil memertahankan bounding box di lingkungan luar ruangan. Penelitian ini juga mengimplementasikan arsitektur perangkat lunak multi-thread asinkron untuk mencegah latensi kontrol, serta perancangan sistem kelistrikan terisolasi menggunakan regulator UBEC 5A yang terbukti efektif mencegah voltage sag pada Raspberry Pi 5 saat drone bermanuver. Hasil pengujian secara keseluruhan menunjukkan bahwa. %purwarupa sistem ini berhasil mengintegrasikan modul persepsi visual, navigasi otonom berbasis state machine, dan pemantauan jarak jauh secara real-time, sehingga berpotensi menjadi dasar pengembangan drone SAR yang efisien, responsif, dan dapat dioperasikan secara mandiri.
 
 % Ubah kata-kata berikut dengan kata kunci dari tugas akhir
-Kata Kunci: Tunarungu, BISINDO, LSTM, Intel NUC
+Kata Kunci: Drone Otonom, Komputasi Edge, MAVSDK, Raspberry Pi 5, Pencarian dan Penyelamatan, YOLOv8n

@@ -1,0 +1,789 @@
+\chapter{PENGUJIAN DAN ANALISIS}
+\label{chap:bab4}
+
+Bab ini membahas proses pengujian, validasi, dan analisis performa sistem drone otonom yang telah dikembangkan.
+Pengujian dilakukan secara bertahap mulai dari validasi perangkat keras, kestabilan kelistrikan, optimasi lingkungan komputasi \textit{edge}, pelatihan model kecerdasan buatan, hingga integrasi sistem secara keseluruhan pada skenario operasi pencarian korban.
+Fokus utama pada bab ini tidak hanya mengevaluasi keberhasilan implementasi perangkat lunak, tetapi juga memvalidasi integrasi rekayasa sistem (\textit{systems engineering}) agar seluruh subsistem mampu bekerja secara sinkron, stabil, dan aman pada platform UAV berbasis \textit{edge computing}.
+
+\section{Metode Evaluasi Sistem}
+
+Evaluasi sistem dilakukan menggunakan metode penelitian kuantitatif dengan pendekatan eksperimental komparatif.
+Pengujian dilakukan dengan membandingkan beberapa konfigurasi parameter rekayasa sistem untuk mengetahui pengaruhnya terhadap performa dan stabilitas drone otonom berbasis \textit{edge computing}.
+Parameter yang diuji meliputi:
+
+\begin{itemize}
+	\item jenis regulator daya,
+	\item mode sistem operasi,
+	\item format model inferensi,
+	\item jenis model deteksi,
+	\item resolusi input model,
+	\item serta performa integrasi komunikasi \textit{real-time}.
+\end{itemize}
+
+Variabel dependen yang diamati meliputi:
+
+\begin{itemize}
+	\item latency inferensi,
+	\item frame per second (FPS),
+	\item stabilitas sistem,
+	\item penggunaan memori,
+	\item precision,
+	\item recall,
+	\item dan nilai mAP.
+\end{itemize}
+
+Hasil pengujian kemudian dianalisis secara komparatif untuk menentukan konfigurasi sistem paling optimal terhadap kebutuhan operasi \textit{real-time} pada platform UAV berbasis \textit{edge computing}.
+
+\section{Lingkungan dan Konfigurasi Pengujian}
+
+Pengujian dilakukan pada dua kondisi lingkungan, yaitu lingkungan laboratorium untuk pengujian integrasi perangkat lunak dan perangkat keras, serta area terbuka untuk validasi sistem deteksi manusia dan navigasi drone otonom.
+
+\subsection{Perangkat Keras Pengujian}
+
+Spesifikasi perangkat keras yang digunakan pada penelitian ini ditunjukkan pada Tabel \ref{tab:hardware_testing}.
+
+\begin{table}[H]
+	\centering
+	\caption{Konfigurasi Perangkat Keras Sistem}
+	\label{tab:hardware_testing}
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabular}{|p{5cm}|p{8cm}|}
+		\hline
+		Komponen & Spesifikasi \\ \hline
+		
+		Frame Drone &
+		Holybro S500 Quadcopter Frame \\ \hline
+		
+		Flight Controller &
+		Pixhawk 6C dengan PX4 Firmware \\ \hline
+		
+		Companion Computer &
+		Raspberry Pi 5 RAM 8GB \\ \hline
+		
+		Kamera &
+		Logitech C922 USB Camera \\ \hline
+		
+		Sumber Daya &
+		Baterai LiPo 4S \\ \hline
+		
+		Regulator Daya &
+		UBEC 5A \\ \hline
+		
+		Jaringan &
+		Wi-Fi Lokal dan MiFi 4G \\ \hline
+	\end{tabular}
+\end{table}
+
+\subsection{Perangkat Lunak Pengujian}
+
+Lingkungan perangkat lunak yang digunakan pada sistem ditunjukkan pada Tabel \ref{tab:software_testing}.
+
+\begin{table}[H]
+	\centering
+	\caption{Konfigurasi Perangkat Lunak Sistem}
+	\label{tab:software_testing}
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabular}{|p{5cm}|p{8cm}|}
+		\hline
+		Komponen & Versi / Teknologi \\ \hline
+		
+		Sistem Operasi &
+		Raspberry Pi OS Bookworm 64-bit \\ \hline
+		
+		Bahasa Pemrograman &
+		Python 3.10 \\ \hline
+		
+		Framework AI &
+		Ultralytics YOLOv8 \\ \hline
+		
+		Inference Runtime &
+		ONNX Runtime \\ \hline
+		
+		Komunikasi Drone &
+		MAVSDK Python \\ \hline
+		
+		Backend &
+		Flask dan SocketIO \\ \hline
+		
+		Frontend &
+		React 19 \\ \hline
+		
+		Video Pipeline &
+		GStreamer \\ \hline
+	\end{tabular}
+\end{table}
+
+\section{Pengujian Sistem Kelistrikan dan Stabilitas Daya}
+
+Pengujian dilakukan untuk memastikan Raspberry Pi 5 memperoleh suplai daya stabil selama seluruh subsistem drone aktif secara bersamaan.
+
+\subsection{Iterasi Pengembangan Sistem Catu Daya}
+
+Beberapa iterasi desain dilakukan untuk memperoleh konfigurasi suplai daya yang stabil sebagaimana ditunjukkan pada Tabel \ref{tab:iterasi_daya}.
+
+\begin{table}[H]
+	\centering
+	\caption{Iterasi Pengembangan Sistem Catu Daya Raspberry Pi 5}
+	\label{tab:iterasi_daya}
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|p{5cm}|}
+		\hline
+		Metode & Kondisi Sistem & Hasil & Permasalahan \\ \hline
+		
+		Mini UPS GPIO 3A &
+		Booting awal &
+		Gagal total &
+		Terjadi kerusakan PMIC akibat lonjakan arus transien \\ \hline
+		
+		XL4015E1 5A &
+		Sistem aktif &
+		Tidak stabil &
+		Muncul \textit{under-voltage warning} dan restart berkala \\ \hline
+		
+		XL4016E1 8A &
+		Idle stabil &
+		Gagal saat inferensi &
+		Terjadi \textit{voltage sag} akibat keterbatasan baterai Li-ion \\ \hline
+		
+		UBEC 5A + LiPo &
+		Beban penuh &
+		Stabil &
+		Digunakan sebagai konfigurasi final sistem \\ \hline
+	\end{tabular}
+\end{table}
+
+\subsection{Analisis Kegagalan Sistem Daya}
+
+Berdasarkan iterasi pengujian yang dilakukan, ditemukan beberapa permasalahan teknis terkait suplai daya untuk komputasi \textit{edge} pada Raspberry Pi 5. Rincian analisis kegagalan pada masing-masing konfigurasi adalah sebagai berikut:
+
+\begin{enumerate}
+	\item Analisis Insiden Korsleting GPIO (Modul Mini UPS):
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.6\linewidth]{bab4/korslet_pi5}
+		\caption{Insiden Korsleting pada Raspberry Pi 5}
+		\label{fig:korsletingpi5}
+	\end{figure}
+	Pada uji coba fase pertama menggunakan modul Mini UPS melalui pin ekspansi GPIO, sistem mengalami kegagalan booting permanen. Ketika model YOLOv8 melakukan inisialisasi beban kerja (\textit{startup spike}), terjadi lonjakan arus transien yang radikal. Karena pin GPIO Raspberry Pi 5 tidak dilengkapi sirkuit proteksi internal seperti \textit{Over-Voltage Protection} (OVP) atau \textit{Over-Current Protection} (OCP), lonjakan ini memicu kondisi arus pendek (\textit{short circuit}) ringan yang langsung merusak PMIC (\textit{Power Management Integrated Circuit}) \textit{board}. Kegagalan ini divalidasi oleh indikator LED diagnostik yang menyala merah kaku (\textit{stuck red LED}).
+	
+	\item Analisis Gejala \textit{Throttling} 0x5000 (Modul XL4015E1):
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.6\linewidth]{bab4/throttle_pi5}
+		\caption{Insiden Throttling pada Raspberry Pi 5}
+		\label{fig:throttlingxl4015e1}
+	\end{figure}
+	Pengujian diturunkan menggunakan regulator XL4015E1. Meskipun \textit{board} berhasil melakukan booting dan menjalankan program ringan seperti 1 pekerjaan deteksi saja, Raspberry Pi 5 mengalami \textit{reboot} otomatis secara berkala dalam rentang waktu operasi tertentu. Berdasarkan pembacaan \textit{log kernel} sistem, ditemukan \textit{flag} kesalahan berupa kode 0x5000 (\textit{Under-voltage has occurred}). Analisis menunjukkan bahwa meskipun XL4015E1 memiliki batas atas 5A, respons transien induktor pada modul komersial ini terlalu lambat untuk mengompensasi fluktuasi daya digital, sehingga tegangan \textit{drop} di bawah batas aman 4.63V dan memicu sistem melakukan \textit{restart} demi keamanan data.
+	
+	\item Analisis \textit{Power Drop} akibat Karakteristik Baterai (Modul XL4016E1): 
+	Untuk mengatasi \textit{under-voltage}, pengujian beralih ke modul XL4016E1 (8A). Kondisi awal menunjukkan performa yang sangat stabil pada saat sistem berada dalam posisi \textit{idle}. Namun, seketika program otonom dieksekusi secara utuh \textit{pipeline} video GStreamer aktif, MAVSDK melakukan \textit{polling} data, dan model YOLOv8 menginferensi citra secara paralel mengakibatkan Raspberry Pi 5 langsung mati total (\textit{blackout}). Masalah ini bersumber dari keterbatasan baterai Li-ion 18650 standar yang memiliki nilai \textit{continuous discharge rate} (C-rating) yang rendah. Ketika sirkuit otonom meminta lonjakan arus masif secara mendadak, sel baterai mengalami \textit{drop} tegangan internal yang drastis (\textit{voltage sag}), sehingga XL4016E1 kehilangan tegangan input minimal untuk meregulasi daya keluaran.
+\end{enumerate}
+
+Sebagai solusi akhir untuk mengatasi seluruh kendala tersebut, sistem direvisi menggunakan UBEC 5A yang dihubungkan langsung ke baterai LiPo utama drone melalui konektor XT60 \textit{Y-Splitter}. Konfigurasi ini terbukti berhasil mempertahankan tegangan suplai secara stabil meskipun inferensi AI dan operasi penerbangan drone berlangsung secara bersamaan.
+\section{Optimasi Lingkungan Sistem Operasi Edge Computing}
+
+Pengujian dilakukan untuk mengevaluasi pengaruh lingkungan sistem operasi terhadap performa inferensi AI pada Raspberry Pi 5.
+
+\subsection{Perbandingan Mode Desktop dan Headless}
+
+Perbandingan penggunaan sistem operasi desktop dan headless ditunjukkan pada Tabel \ref{tab:headless_compare}.
+
+\begin{table}[H]
+	\centering
+	\caption{Perbandingan Sistem Operasi Desktop dan Headless}
+	\label{tab:headless_compare}
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabular}{|p{3cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{3cm}|}
+		\hline
+		Mode Sistem & RAM Idle & CPU Idle & FPS Inferensi & Stabilitas Sistem \\ \hline
+		
+		Desktop &
+		$\sim$1.2 GB &
+		Tinggi &
+		Tidak stabil &
+		Frame drop dan latensi meningkat \\ \hline
+		
+		Headless &
+		$\sim$420 MB &
+		Lebih rendah &
+		Stabil &
+		Respons inferensi lebih konsisten \\ \hline
+	\end{tabular}
+\end{table}
+
+Hasil pengujian menunjukkan bahwa mode headless menghasilkan konsumsi sumber daya yang jauh lebih rendah dibandingkan mode desktop.
+Penghapusan graphical environment memungkinkan inferensi ONNX Runtime berjalan lebih stabil pada Raspberry Pi 5.
+Selain itu, penggunaan mode headless juga mengurangi proses latar belakang sistem operasi sehingga sumber daya CPU dan RAM dapat lebih difokuskan untuk proses inferensi, telemetry MAVSDK, dan streaming video secara simultan.
+
+\section{Pengujian Komparatif Model Deteksi Manusia}
+
+Sebelum melakukan proses \textit{fine-tuning} model, penelitian ini terlebih dahulu melakukan pengujian komparatif terhadap beberapa konfigurasi model deteksi manusia untuk menentukan base model yang paling sesuai digunakan pada Raspberry Pi 5.
+Tahap ini bertujuan untuk mengevaluasi pengaruh arsitektur model, penggunaan pose estimation, dan resolusi inferensi terhadap performa \textit{real-time} pada platform \textit{edge computing}.
+Hasil pengujian awal ini kemudian digunakan sebagai dasar pemilihan model utama yang akan digunakan pada proses \textit{fine-tuning} khusus kelas manusia.
+Model yang dibandingkan meliputi:
+
+\begin{itemize}
+	\item YOLOv8n original,
+	\item YOLOv8n-pose,
+	\item resolusi inferensi 256×256,
+	\item resolusi inferensi 320×320,
+	\item dan resolusi inferensi 640×640.
+\end{itemize}
+
+Pengujian dilakukan pada kondisi indoor dan outdoor dengan jarak deteksi manusia sekitar 2--5 meter.
+Evaluasi dilakukan terhadap performa inferensi \textit{real-time}, latency, FPS, stabilitas sistem, kestabilan bounding box, konsistensi deteksi antar frame, serta kualitas deteksi manusia pada Raspberry Pi 5.
+
+\subsection{Perbandingan YOLOv8n dan YOLOv8n-Pose}
+
+YOLOv8n-pose dipilih sebagai salah satu model pembanding karena memiliki kemampuan estimasi pose tubuh manusia menggunakan keypoint detection.
+Namun demikian, kompleksitas tambahan pada proses inferensi menyebabkan beban komputasi model meningkat dibandingkan YOLOv8n original.
+Selain itu, kebutuhan utama sistem drone otonom pada penelitian ini berfokus pada deteksi keberadaan manusia secara \textit{real-time}, bukan analisis pose tubuh secara detail.
+Oleh karena itu, penggunaan model pose estimation dinilai menghasilkan beban komputasi tambahan yang kurang efisien untuk platform \textit{edge computing} berbasis Raspberry Pi 5.
+
+Pengujian awal dilakukan menggunakan empat konfigurasi model ONNX sebagaimana ditunjukkan pada Tabel \ref{tab:model_compare_awal}.
+
+\begin{table}[H]
+	\centering
+	\caption{Perbandingan Awal Model YOLOv8n dan YOLOv8n-Pose}
+	\label{tab:model_compare_awal}
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabular}{|p{5cm}|c|c|}
+		\hline
+		Model & FPS (avg) & Inferensi (ms) \\ \hline
+		
+		YOLOv8n 256 &
+		17.67 &
+		46.16 \\ \hline
+		
+		YOLOv8n 320 &
+		15.08 &
+		65.39 \\ \hline
+		
+		YOLOv8n 256 Pose &
+		18.08 &
+		43.92 \\ \hline
+		
+		YOLOv8n 320 Pose &
+		14.70 &
+		62.81 \\ \hline
+	\end{tabular}
+\end{table}
+
+Untuk memastikan hasil pengujian bersifat konsisten dan tidak dipengaruhi fluktuasi sesaat pada sistem operasi Raspberry Pi 5, dilakukan pengujian ulang menggunakan skenario identik sebagaimana ditunjukkan pada Tabel \ref{tab:model_compare_awal2}.
+
+\begin{table}[H]
+	\centering
+	\caption{Pengujian Ulang Perbandingan Model YOLOv8n dan YOLOv8n-Pose}
+	\label{tab:model_compare_awal2}
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabular}{|p{5cm}|c|c|}
+		\hline
+		Model & FPS (avg) & Inferensi (ms) \\ \hline
+		
+		YOLOv8n 256 &
+		18.02 &
+		49.10 \\ \hline
+		
+		YOLOv8n 320 &
+		15.21 &
+		63.30 \\ \hline
+		
+		YOLOv8n 256 Pose &
+		18.18 &
+		44.67 \\ \hline
+		
+		YOLOv8n 320 Pose &
+		14.70 &
+		63.12 \\ \hline
+	\end{tabular}
+\end{table}
+
+Berdasarkan hasil pengujian awal dan pengujian ulang, performa inferensi seluruh model relatif konsisten.
+Model dengan resolusi 256×256 menghasilkan FPS lebih tinggi dibandingkan resolusi 320×320 karena ukuran input citra lebih kecil sehingga jumlah operasi komputasi yang diproses ONNX Runtime menjadi lebih rendah.
+Meskipun model YOLOv8n-pose memiliki FPS yang relatif mirip dengan YOLOv8n original, pengamatan visual secara langsung menunjukkan bahwa model pose mengalami ketidakstabilan pada proses estimasi skeleton ketika dijalankan pada kondisi outdoor.
+
+Pada pengujian outdoor dengan jarak sekitar 2--3 meter, model YOLOv8n256-pose menghasilkan rata-rata FPS sekitar 19--24 FPS dengan confidence deteksi berkisar antara 0.40 hingga 0.55. Namun demikian, sebagaimana ditunjukkan pada Gambar \ref{fig:outdoor_pose256}, skeleton pose dan bounding box sering mengalami flickering atau hilang secara intermittently ketika objek manusia bergerak maupun ketika terjadi perubahan pencahayaan alami. Kondisi ini membuktikan bahwa penggunaan pose estimation pada lingkungan outdoor memiliki tantangan yang lebih tinggi akibat noise visual dan intensitas cahaya alami yang dinamis.
+
+Sebaliknya, model YOLOv8n320 non-pose pada kondisi outdoor menghasilkan rata-rata FPS sekitar 23--25 FPS dengan confidence deteksi berkisar antara 0.41 hingga 0.60. Meskipun nilai confidence tidak meningkat secara signifikan, hasil visual pada Gambar \ref{fig:outdoor_320} menunjukkan bahwa kestabilan bounding box yang dihasilkan terlihat lebih konsisten, lebih robust, dan tidak mudah hilang ketika objek manusia bergerak meskipun dijalankan pada lingkungan dengan perubahan perspektif kamera akibat pergerakan drone.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{bab4/outdoor_yolov8n256_pose}
+	\caption{Pengujian outdoor YOLOv8n256-pose ONNX pada Raspberry Pi 5}
+	\label{fig:outdoor_pose256}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{bab4/outdoor_yolov8n320}
+	\caption{Pengujian outdoor YOLOv8n320 ONNX pada Raspberry Pi 5}
+	\label{fig:outdoor_320}
+\end{figure}
+
+Fenomena tersebut menunjukkan bahwa penggunaan pose estimation pada platform \textit{edge computing} berbasis CPU masih memiliki keterbatasan pada kestabilan inferensi \textit{real-time}, khususnya ketika sistem dijalankan pada lingkungan outdoor dengan perubahan pencahayaan dinamis, motion blur, dan perubahan perspektif kamera.
+
+Selain pengujian outdoor, dilakukan pula pengujian indoor dengan kondisi pencahayaan laboratorium yang relatif stabil untuk kedua jenis model tersebut. Hasil pengujian menunjukkan bahwa model YOLOv8n320 menghasilkan rata-rata FPS sekitar 20.25 FPS dengan latency inferensi sekitar 38--39 ms dan confidence deteksi mencapai sekitar 0.85, dengan visualisasi kestabilan bounding box yang ditunjukkan pada Gambar \ref{fig:indoor_320}. Pada pengujian yang sama, model YOLOv8n256 menghasilkan rata-rata FPS sekitar 27.66 FPS dengan latency inferensi sekitar 25 ms dan confidence deteksi mencapai sekitar 0.88 sebagaimana ditampilkan pada Gambar \ref{fig:indoor_256}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{bab4/indoor_yolov8n320}
+	\caption{Pengujian indoor YOLOv8n320 ONNX pada Raspberry Pi 5}
+	\label{fig:indoor_320}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{bab4/indoor_yolov8n256}
+	\caption{Pengujian indoor YOLOv8n256 ONNX pada Raspberry Pi 5}
+	\label{fig:indoor_256}
+\end{figure}
+
+Meskipun resolusi 256×256 menghasilkan FPS lebih tinggi, pada beberapa kondisi tertentu kualitas detail bounding box terlihat sedikit lebih rendah dibandingkan resolusi 320×320 terutama ketika objek manusia berada lebih jauh dari kamera. Secara umum, hasil pengujian indoor membuktikan bahwa seluruh model mampu bekerja lebih stabil karena lingkungan laboratorium memiliki pencahayaan lebih konstan, tingkat noise visual lebih rendah, dan pergerakan objek yang relatif lebih terkendali.
+
+Meskipun demikian, pada implementasi sistem drone otonom nyata, kondisi outdoor tetap menjadi fokus utama penelitian karena operasi pencarian korban dilakukan pada area terbuka dengan kondisi lingkungan yang dinamis dan tidak terkontrol. Berdasarkan seluruh hasil pengujian tersebut, YOLOv8n original dinilai lebih sesuai digunakan sebagai base model dibandingkan YOLOv8n-pose karena memiliki kestabilan inferensi lebih baik pada kondisi operasi nyata meskipun tidak menyediakan fitur estimasi pose tubuh manusia.
+
+\subsection{Analisis Pemilihan Model Final}
+
+Berdasarkan seluruh hasil pengujian komparatif, penelitian ini memilih YOLOv8n original dengan resolusi inferensi 320×320 sebagai base model utama untuk proses \textit{fine-tuning}.
+Keputusan tersebut didasarkan pada beberapa pertimbangan utama, yaitu:
+
+\begin{itemize}
+	\item performa inferensi lebih ringan,
+	\item latency lebih rendah,
+	\item FPS lebih stabil,
+	\item penggunaan memori lebih kecil,
+	\item kestabilan bounding box lebih baik,
+	\item dan kebutuhan sistem yang berfokus pada deteksi manusia secara \textit{real-time}.
+\end{itemize}
+
+Meskipun model YOLOv8n-pose mampu menghasilkan estimasi skeleton tubuh manusia, pengujian menunjukkan bahwa stabilitas keypoint detection masih kurang optimal ketika dijalankan pada lingkungan outdoor berbasis \textit{edge computing}.
+Selain itu, penggunaan pose estimation tidak memberikan peningkatan signifikan terhadap kebutuhan navigasi drone otonom karena sistem utama penelitian hanya membutuhkan informasi lokasi manusia untuk proses tracking dan pendekatan target.
+Resolusi 256×256 memang menghasilkan FPS lebih tinggi, namun kualitas deteksi manusia kecil dan kestabilan bounding box masih kurang optimal pada beberapa kondisi outdoor.
+Sebaliknya, resolusi 640×640 menghasilkan latency terlalu tinggi sehingga tidak memenuhi kebutuhan inferensi \textit{real-time}.
+Oleh karena itu, resolusi 320×320 dipilih sebagai konfigurasi paling optimal karena mampu memberikan keseimbangan terbaik antara kualitas deteksi manusia dan performa inferensi pada Raspberry Pi 5.
+
+Setelah proses seleksi model selesai dilakukan, penelitian kemudian melanjutkan proses \textit{fine-tuning} YOLOv8n menggunakan dataset COCO2017 \textit{person-only} untuk meningkatkan fokus deteksi manusia sekaligus mempertahankan performa inferensi pada platform \textit{edge computing}.
+
+\section{Konfigurasi Pelatihan Model YOLOv8n}
+
+\subsection{Konfigurasi Pelatihan Model}
+
+Pelatihan model dilakukan menggunakan YOLOv8n pretrained dengan dataset COCO2017 kelas \textit{person-only}.
+Konfigurasi pelatihan ditunjukkan pada Tabel \ref{tab:training_config}.
+
+\begin{table}[H]
+	\centering
+	\caption{Konfigurasi Pelatihan Model YOLOv8n}
+	\label{tab:training_config}
+	\renewcommand{\arraystretch}{1.1}
+	\begin{tabular}{|l|l|}
+		\hline
+		Parameter & Nilai \\ \hline
+		Base Model & YOLOv8n pretrained COCO \\ \hline
+		Dataset & COCO2017 person-only \\ \hline
+		Epoch & 50 \\ \hline
+		Batch Size & 128 \\ \hline
+		Image Size & 320$\times$320 \\ \hline
+		Optimizer & SGD \\ \hline
+		Learning Rate & 0.002 \\ \hline
+		AMP & Enabled \\ \hline
+	\end{tabular}
+\end{table}
+
+\section{Analisis Hasil Pelatihan dan Validasi Model YOLOv8n}
+
+Bagian ini membahas hasil pelatihan (\textit{training}), validasi, dan evaluasi performa model YOLOv8n yang telah dilakukan menggunakan dataset COCO2017 khusus kelas \textit{person}.
+
+\subsection{Visualisasi Distribusi Dataset dan Bounding Box}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{bab4/labels}
+	\caption{Visualisasi distribusi label dan persebaran bounding box dataset person-only}
+	\label{fig:labels_distribution}
+\end{figure}
+
+Berdasarkan hasil pemeriksaan dataset, total data citra yang digunakan pada proses pelatihan dan validasi berjumlah 123.287 gambar dengan total 116.497 file anotasi.
+Distribusi bounding box menunjukkan bahwa mayoritas objek manusia berada pada area tengah citra dengan variasi ukuran kecil hingga menengah.
+Hal ini sesuai dengan karakteristik dataset umum COCO yang banyak berisi objek manusia dalam skenario aktivitas sehari-hari.
+
+\subsection{Visualisasi Sampel Data Pelatihan}
+\begin{figure}[H]
+	\centering
+	
+	\begin{subfigure}{0.49\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{bab4/train_batch0}
+		\caption{Contoh batch data pelatihan}
+		\label{fig:train_batch0}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.49\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{bab4/train_batch1}
+		\caption{Contoh batch data pelatihan dengan variasi objek}
+		\label{fig:train_batch1}
+	\end{subfigure}
+	
+	\caption{Visualisasi sampel data pelatihan}
+	\label{fig:train_batch}
+\end{figure}
+Dataset memiliki variasi lingkungan indoor dan outdoor, pencahayaan beragam, pose manusia berbeda, serta objek manusia berukuran kecil hingga besar.
+
+\subsection{Visualisasi Augmentasi Data Pelatihan}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{bab4/train_batch37000}
+	\caption{Contoh hasil augmentasi data pelatihan pada epoch akhir}
+	\label{fig:train_batch_aug}
+\end{figure}
+
+Visualisasi augmentasi menunjukkan bahwa proses pelatihan menerapkan transformasi data untuk meningkatkan keragaman citra masukan sehingga model menjadi lebih robust terhadap variasi posisi, pencahayaan, dan orientasi objek manusia.
+
+\subsection{Analisis Proses Training Model}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{bab4/results}
+	\caption{Grafik perkembangan training loss, validation loss, precision, recall, dan mAP}
+	\label{fig:training_results}
+\end{figure}
+
+Seluruh komponen loss mengalami penurunan stabil selama proses training.
+Precision, recall, dan mAP juga meningkat secara bertahap hingga mendekati konvergen pada epoch akhir.
+Penurunan \textit{train loss} dan \textit{validation loss} yang relatif konsisten menunjukkan bahwa proses pelatihan berjalan stabil tanpa divergensi signifikan.
+Selain itu, tidak terlihat peningkatan \textit{validation loss} secara ekstrem pada epoch akhir sehingga indikasi overfitting berat tidak ditemukan pada model hasil \textit{fine-tuning}.
+
+\subsection{Hasil Evaluasi Model}
+
+\begin{table}[H]
+	\centering
+	\caption{Hasil Evaluasi Akhir Model YOLOv8n}
+	\label{tab:metric_result}
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabular}{|l|c|}
+		\hline
+		Metrik & Nilai \\ \hline
+		
+		Precision & 0.809 \\ \hline
+		Recall & 0.646 \\ \hline
+		mAP@50 & 0.757 \\ \hline
+		mAP@50-95 & 0.531 \\ \hline
+		F1-Score & 0.720 \\ \hline
+		Threshold Optimal & 0.224 \\ \hline
+	\end{tabular}
+\end{table}
+
+Nilai precision yang tinggi menunjukkan bahwa model mampu meminimalkan false positive, sedangkan nilai recall menunjukkan masih terdapat beberapa objek manusia kecil yang belum terdeteksi secara optimal.
+
+\subsection{Analisis Precision, Recall, dan F1-Score}
+
+Untuk mengevaluasi performa deteksi model secara lebih rinci, dilakukan analisis terhadap hubungan confidence threshold dengan precision, recall, dan F1-score sebagaimana ditunjukkan pada Gambar \ref{fig:boxp_curve} hingga Gambar \ref{fig:boxf1_curve}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{bab4/BoxP_curve}
+	\caption{Kurva Precision-Confidence model YOLOv8n}
+	\label{fig:boxp_curve}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{bab4/BoxR_curve}
+	\caption{Kurva Recall-Confidence model YOLOv8n}
+	\label{fig:boxr_curve}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{bab4/BoxF1_curve}
+	\caption{Kurva F1-Confidence model YOLOv8n}
+	\label{fig:boxf1_curve}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{bab4/BoxPR_curve}
+	\caption{Kurva Precision-Recall model YOLOv8n}
+	\label{fig:boxpr_curve}
+\end{figure}
+
+Berdasarkan hasil pengujian, peningkatan confidence threshold menyebabkan precision meningkat namun recall menurun.
+Hal ini menunjukkan adanya tradeoff antara sensitivitas deteksi dan minimisasi false positive.
+Kurva F1-score menunjukkan nilai optimum diperoleh pada confidence threshold sekitar 0.224 dengan nilai F1-score maksimum sekitar 0.72.
+Threshold tersebut kemudian digunakan sebagai konfigurasi inferensi utama pada sistem drone otonom.
+Kurva Precision-Recall menunjukkan bahwa model masih mampu mempertahankan tingkat precision yang relatif tinggi sebelum recall mencapai nilai maksimum.
+Hal ini menunjukkan bahwa model cukup efektif dalam mengurangi false positive pada sebagian besar kondisi pengujian.
+
+\subsection{Analisis Confusion Matrix}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\linewidth]{bab4/confusion_matrix}
+	\caption{Confusion matrix hasil evaluasi model}
+	\label{fig:conf_matrix}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\linewidth]{bab4/confusion_matrix_normalized}
+	\caption{Normalized confusion matrix}
+	\label{fig:conf_matrix_norm}
+\end{figure}
+
+Berdasarkan confusion matrix, sebagian besar objek manusia berhasil diklasifikasikan dengan benar.
+Namun demikian, masih terdapat false negative pada objek manusia berukuran kecil, objek dengan occlusion parsial, dan kondisi pencahayaan kompleks.
+Nilai false positive yang relatif rendah menunjukkan bahwa model cukup baik dalam membedakan manusia dengan objek non-manusia pada sebagian besar kondisi pengujian.
+
+\subsection{Analisis Hasil Prediksi Validasi}
+
+Untuk mengevaluasi kualitas deteksi model, dilakukan perbandingan antara ground truth dataset dan hasil prediksi model pada beberapa batch validasi sebagaimana ditunjukkan pada Gambar \ref{fig:val_compare0} hingga Gambar \ref{fig:val_compare2}.
+
+\begin{figure}[H]
+	\centering
+	
+	\begin{minipage}{0.49\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{bab4/val_batch0_labels}
+		\small (a) Ground truth batch validasi ke-0
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.49\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{bab4/val_batch0_pred}
+		\small (b) Hasil prediksi model batch validasi ke-0
+	\end{minipage}
+	
+	\caption{Perbandingan ground truth dan hasil prediksi pada batch validasi ke-0}
+	\label{fig:val_compare0}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	
+	\begin{minipage}{0.49\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{bab4/val_batch1_labels}
+		\small (a) Ground truth batch validasi ke-1
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.49\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{bab4/val_batch1_pred}
+		\small (b) Hasil prediksi model batch validasi ke-1
+	\end{minipage}
+	
+	\caption{Perbandingan ground truth dan hasil prediksi pada batch validasi ke-1}
+	\label{fig:val_compare1}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	
+	\begin{minipage}{0.49\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{bab4/val_batch2_labels}
+		\small (a) Ground truth batch validasi ke-2
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.49\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{bab4/val_batch2_pred}
+		\small (b) Hasil prediksi model batch validasi ke-2
+	\end{minipage}
+	
+	\caption{Perbandingan ground truth dan hasil prediksi pada batch validasi ke-2}
+	\label{fig:val_compare2}
+\end{figure}
+
+Hasil validasi menunjukkan bahwa model masih mampu mendeteksi manusia pada kondisi keramaian, variasi pose tubuh, dan sebagian objek dengan ukuran relatif kecil.
+Namun demikian, confidence deteksi cenderung menurun pada objek yang mengalami occlusion atau berada jauh dari kamera.
+Perbandingan antara ground truth dan hasil prediksi menunjukkan bahwa model berhasil mengikuti mayoritas bounding box manusia dengan cukup baik.
+Selain itu, model juga mampu mempertahankan konsistensi deteksi pada beberapa kondisi lingkungan kompleks dengan banyak objek manusia dalam satu citra.
+\subsection{Perbandingan Resolusi Inferensi Model Hasil \textit{Fine-Tuning}}
+
+Setelah memperoleh model terbaik dari proses \textit{fine-tuning}, penelitian ini mengevaluasi pengaruh resolusi inferensi terhadap performa komputasi pada Raspberry Pi 5. Pengujian ini dilakukan menggunakan model YOLOv8n hasil \textit{fine-tuning} yang telah diekspor ke format ONNX Runtime dengan variasi resolusi input 256×256, 320×320, dan 640×640 sebagaimana ditunjukkan pada Tabel \ref{tab:benchmark_resolution}.
+
+\begin{table}[H]
+	\centering
+	\caption{Perbandingan Resolusi Inferensi YOLOv8n Hasil Fine-Tuning pada Raspberry Pi 5}
+	\label{tab:benchmark_resolution}
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabular}{|p{2.5cm}|p{2cm}|p{3cm}|p{2cm}|p{3cm}|}
+		\hline
+		\textbf{Model} &
+		\textbf{Input} &
+		\textbf{Output Shape} &
+		\textbf{FPS} &
+		\textbf{Inferensi (ms)} \\ \hline
+		
+		256n &
+		256 &
+		[1, 300, 6] &
+		35.54 &
+		28.13 \\ \hline
+		
+		320n &
+		320 &
+		[1, 300, 6] &
+		23.72 &
+		42.17 \\ \hline
+		
+		640n &
+		640 &
+		[1, 300, 6] &
+		5.84 &
+		171.22 \\ \hline
+	\end{tabular}
+\end{table}
+
+Hasil pengujian menunjukkan bahwa peningkatan resolusi inferensi menyebabkan latency meningkat secara signifikan akibat bertambahnya kompleksitas komputasi pada proses inferensi model. Karakteristik grafik perbandingan performa dari variasi resolusi ini diperjelas pada Gambar \ref{fig:onnx_compare}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\linewidth]{bab4/onnx_performance_comparison}
+	\caption{Perbandingan performa model ONNX hasil fine-tuning pada Raspberry Pi 5}
+	\label{fig:onnx_compare}
+\end{figure}
+
+Berdasarkan hasil benchmark tersebut, peningkatan resolusi input memberikan pengaruh yang signifikan terhadap korelasi antara kecepatan sistem dan detail spasial citra. Model dengan resolusi 256×256 menghasilkan performa inferensi tercepat dengan rata-rata latency sekitar 28.13 ms dan FPS mencapai sekitar 35.54 FPS. Namun demikian, pada beberapa kondisi outdoor ditemukan penurunan kualitas deteksi manusia berukuran kecil akibat detail spasial citra yang lebih rendah.
+
+Sebaliknya, resolusi 640×640 menghasilkan kualitas visual yang lebih baik namun menyebabkan beban komputasi pada CPU meningkat tajam sehingga latency membengkak hingga sekitar 171.22 ms dan performa menurun signifikan hingga hanya mencapai sekitar 5.84 FPS. Kondisi ini dinilai tidak memenuhi kebutuhan sistem navigasi drone otonom \textit{real-time} karena delay inferensi terlalu tinggi untuk proses pengambilan keputusan secara langsung.
+
+Resolusi 320×320 menghasilkan kompromi terbaik antara performa \textit{real-time} dan kualitas deteksi objek manusia. Dengan rata-rata latency sekitar 42.17 ms dan FPS sekitar 23.72 FPS, sistem masih mampu mempertahankan operasi \textit{real-time} sambil menghasilkan bounding box yang stabil. Selain itu, resolusi ini juga memberikan hasil deteksi yang lebih baik pada kondisi lingkungan kompleks dengan variasi pencahayaan dan ukuran objek manusia yang beragam. Berdasarkan hasil pengujian komparatif tersebut, resolusi 320×320 dipilih sebagai konfigurasi inferensi final yang diimplementasikan pada platform \textit{edge computing} drone otonom secara \textit{real-time}.
+\section{Pengujian Integrasi Sistem Backend, MAVSDK, dan Frontend}
+
+Pengujian ini dilakukan untuk memastikan seluruh arsitektur perangkat lunak mampu berjalan secara bersamaan tanpa saling memblokir (blocking) pada Raspberry Pi 5 selama operasi drone berlangsung.
+
+\subsection{Pengujian Integrasi Backend dan Multi-Threading}
+
+Pengujian integrasi perangkat lunak dilakukan untuk memastikan arsitektur \textit{multi-threading} pada Raspberry Pi 5 (skrip \texttt{app.py}) berjalan tanpa \textit{bottleneck}. Berdasarkan hasil eksekusi terminal pada Gambar \ref{fig:logflask1} dan Gambar \ref{fig:logflask2}, server utama Flask berhasil dijalankan pada port 3000 menggunakan SocketIO dengan mode \textit{threading}. Pada saat yang bersamaan, \textit{thread} \texttt{YOLOConsumer} (Gambar \ref{fig:logyolo}) berhasil melakukan inferensi objek dari \textit{Frame Queue} GStreamer dan Gambar \ref{fig:loggstreamer} menunjukkan inisialisasi \textit{pipeline} video berjalan baik. Hasil pengujian menunjukkan waktu inferensi (\textit{inference\_ms}) yang stabil untuk mendeteksi \textit{class person} tanpa memblokir perputaran data pada \textit{thread} telemetri \texttt{MAVSDKListener}.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\textwidth]{bab4/screenshot_flask_log} 
+	\caption{Log aktivitas server Flask dan SocketIO}
+	\label{fig:logflask1}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{bab4/screenshot_flask_log_2} 
+	\caption{Log aktivitas server Flask dan SocketIO 2}
+	\label{fig:logflask2}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{bab4/diagram_gstreamer_pipeline} 
+	\caption{Implementasi percabangan aliran video GStreamer}
+	\label{fig:loggstreamer}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{bab4/screenshot_yolo_inference} 
+	\caption{Eksekusi deteksi objek YOLOv8 pada thread terpisah}
+	\label{fig:logyolo}
+\end{figure}
+
+\subsection{Pengujian Aliran Telemetri MAVSDK ke Frontend}
+
+Validasi komunikasi asinkron diuji dengan mengamati aliran data dari \textit{Flight Controller} menuju antarmuka web. Seperti yang terlihat pada log terminal (Gambar \ref{fig:logtelemmavsdk}), kelas \texttt{MAVSDKListener} berhasil membaca status parameter terbang (mode penerbangan, baterai, altitudo, kecepatan) melalui \textit{event loop} \texttt{asyncio}. Data tersebut kemudian dipancarkan (\textit{broadcast}) secara kontinu menggunakan \textit{event} \texttt{drone:status}. Keberhasilan transmisi ini dikonfirmasi pada antarmuka operator (Gambar \ref{fig:logsocket}), di mana \textit{tab} Developer Tools pada peramban web menunjukkan klien React berhasil menerima muatan JSON dari server setiap interval 200 ms (5 Hz) melalui modul \texttt{socket.js}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{bab4/screenshot_mavsdk_stream} 
+	\caption{Proses \textit{streaming} telemetri melalui MAVSDK}
+	\label{fig:logtelemmavsdk}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{bab4/screenshot_socket_update} 
+	\caption{Visualisasi pembaruan data real-time pada antarmuka}
+	\label{fig:logsocket}
+\end{figure}
+
+\subsection{Pengujian Fungsional Antarmuka Dashboard}
+
+Pengujian fungsional \textit{dashboard} dilakukan untuk memvalidasi performa antarmuka berbasis React dalam merender data secara \textit{real-time}. Pada Gambar \ref{fig:uiweb1}, Gambar \ref{fig:uiweb2}, dan Gambar \ref{fig:uiweb3}, komponen \texttt{DroneStatus.jsx} berhasil memvisualisasikan seluruh metrik absolut drone dengan latensi yang minimal. Komponen \texttt{VideoControl.jsx} juga berhasil merender kotak pembatas (\textit{bounding box}) target secara dinamis beserta nilai \textit{confidence} dari algoritma YOLOv8. Sistem pelaporan keadaan (\textit{state machine}) juga berjalan sesuai skenario \textit{Scout Mission}, di mana status transisi dari \texttt{SCAN} menuju \texttt{APPROACH} yard \texttt{DOCUMENT} terpantau langsung oleh operator.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\textwidth]{bab4/screenshot_ui_dashboard} 
+	\caption{Tampilan antarmuka dashboard monitoring operator 1}
+	\label{fig:uiweb1}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{bab4/screenshot_ui_dashboard_2} 
+	\caption{Tampilan antarmuka dashboard monitoring operator 2}
+	\label{fig:uiweb2}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{bab4/screenshot_ui_dashboard_3} 
+	\caption{Tampilan antarmuka dashboard monitoring operator 3}
+	\label{fig:uiweb3}
+\end{figure}
+
+\section{Validasi Integrasi Sistem Drone Otonom}
+
+Pengujian akhir dilakukan pada skenario operasi drone otonom secara menyeluruh.
+
+\subsection{Skenario Pengujian}
+
+\begin{table}[H]
+	\centering
+	\caption{Skenario Validasi Sistem}
+	\label{tab:skenario_validasi}
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabular}{|p{5cm}|p{8cm}|}
+		\hline
+		Skenario & Hasil \\ \hline
+		
+		Hover dan SCAN &
+		Deteksi target berjalan stabil \\ \hline
+		
+		Approach Target &
+		Bounding box tetap mengikuti target \\ \hline
+		
+		Streaming + Inferensi &
+		FPS tetap stabil \\ \hline
+		
+		Kondisi Outdoor Terang &
+		Deteksi optimal \\ \hline
+		
+		Kondisi Backlight &
+		Confidence menurun \\ \hline
+	\end{tabular}
+\end{table}
+
+\subsection{Analisis Integrasi Sistem}
+%
+%Hasil pengujian menunjukkan bahwa integrasi antara Raspberry Pi 5, Pixhawk, MAVSDK, GStreamer, ONNX Runtime, dan frontend monitoring berhasil berjalan secara sinkron.
+%State machine mampu menerjemahkan hasil deteksi YOLO menjadi perintah VelocityNedYaw secara real-time selama mode OFFBOARD aktif.
+%Meskipun demikian, beberapa keterbatasan masih ditemukan, antara lain:
+%
+%\begin{itemize}
+%	\item inferensi masih berbasis CPU,
+%	\item belum terdapat AI accelerator eksternal,
+%	\item belum menggunakan gimbal stabilizer,
+%	\item dan kualitas deteksi masih dipengaruhi pencahayaan lingkungan.
+%\end{itemize}
+%
+%Secara keseluruhan, sistem berhasil memenuhi kebutuhan minimum operasi drone otonom berbasis edge computing untuk misi pencarian korban secara real-time.
+
+\section{Evaluasi Keberhasilan Sistem}
+
+%Berdasarkan seluruh hasil pengujian, sistem drone otonom berhasil memenuhi kebutuhan minimum operasi \textit{real-time} berbasis \textit{edge computing}.
+%Integrasi antara sistem deteksi manusia, komunikasi MAVSDK, video streaming, dan frontend monitoring berhasil berjalan secara sinkron pada Raspberry Pi 5.
+%
+%Pendekatan optimasi menggunakan ONNX Runtime, mode \textit{headless}, serta resolusi inferensi 320×320 terbukti mampu meningkatkan performa sistem secara signifikan dibandingkan konfigurasi awal.
+%Selain itu, implementasi regulator UBEC 5A berhasil menjaga kestabilan suplai daya selama inferensi AI dan operasi drone berlangsung secara simultan.
+%Arsitektur \textit{multithreading} juga mampu mempertahankan kontinuitas komunikasi telemetry dan video streaming tanpa mengganggu proses inferensi utama.
+%Meskipun demikian, sistem masih memiliki beberapa keterbatasan, terutama pada kondisi pencahayaan ekstrem, objek manusia berukuran sangat kecil, dan inferensi yang masih sepenuhnya bergantung pada CPU Raspberry Pi 5. Oleh karena itu, pengembangan lanjutan masih diperlukan terutama pada sisi akselerasi inferensi dan stabilisasi visual.
