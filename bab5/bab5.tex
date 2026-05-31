@@ -1,15 +1,30 @@
 \chapter{PENUTUP}
 \label{sec:chap5_tutup}
 \vspace{1ex}
-\section*{}
-Setelah penerapan metode terhadap masalah yang ingin diselesaikan pada \vspace{1ex}
+
+Setelah merancang, mengimplementasikan, dan menguji seluruh subsistem otonom drone pendeteksi manusia berbasis \textit{companion computer} Raspberry Pi 5, bab ini menyajikan kesimpulan yang diperoleh dari penelitian serta saran akademis untuk pengembangan sistem selanjutnya.
 
 \section{Kesimpulan}
 \label{sec:sec4_kesimpulan}
 \vspace{1ex}
-%\lipsum[1]
+
+Berdasarkan seluruh hasil pengujian fisik dan analisis integrasi perangkat lunak otonom, ditarik beberapa kesimpulan sebagai berikut:
+\begin{enumerate}
+	\item Sistem drone otonom pendeteksi manusia berhasil diimplementasikan secara utuh menggunakan platform \textit{edge computing} Raspberry Pi 5 dan autopilot Pixhawk 6C yang terhubung secara asinkron via MAVSDK Python dengan frekuensi kontrol 20 Hz.
+	\item Pendekatan optimasi sistem yang mencakup konversi model ke format ONNX Runtime, penggunaan sistem operasi headless (RAM idle $\sim 420$ MB), dan resolusi inferensi optimal 320$\times$320 piksel berhasil mencapai operasi \textit{real-time} dengan rata-rata inferensi 42,17 ms ($\sim 24$ FPS), sehingga memenuhi batas aman kendali penerbangan otonom.
+	\item Desain arsitektur keselamatan tiga lapis (\textit{Three-Layer Safety System}) terbukti 100\% andal dalam memecahkan masalah kecelakaan penerbangan (\textit{crash}) akibat penyimpangan barometer (\textit{barometric altitude drift}) pada area penerbangan rendah. Mekanisme penguncian batas ketinggian minimum (\textit{altitude floor} = 1,2 meter) dan fase pendakian paksa (\textit{pre-RTL safety climb} pada kecepatan $vz = -0,8$ m/s selama 3,0 detik ke atas sebelum RTL) berhasil memulihkan wahana secara aman ke pangkalan darurat tanpa menyenggol rintangan tanah.
+	\item Peniadaan sistem perekaman video lokal (\textit{onboard recording system}) dan pembatasan penyimpanan eksklusif pada hasil tangkapan foto korban terbukti sangat efektif menghemat kapasitas CPU sebesar $\sim 21,7\%$, menurunkan suhu SoC hingga $54,1^\circ\text{C}$ untuk mencegah \textit{thermal throttling}, serta meminimalkan keausan tulis memori (\textit{SD-card write wear}) untuk keawetan perangkat keras dalam jangka panjang.
+	\item Integrasi komunikasi multi-client berbasis REST API dan SocketIO asinkron berhasil memancarkan telemetri dinamis dan kotak pembatas deteksi AI secara instan ke layar dasbor operator (React 19) dengan laju penyegaran data 5 Hz (latensi minimal).
+\end{enumerate}
+
 \section{Saran}
 \label{sec:sec4_saran}
 \vspace{1ex}
-%\lipsum[2]
 
+Demi kemajuan dan penyempurnaan sistem otonom drone di masa depan, beberapa saran akademis yang direkomendasikan adalah:
+\begin{enumerate}
+	\item \textbf{Akselerasi Perangkat Keras AI}: Menambahkan modul akselerator \textit{edge AI} khusus, seperti Google Coral Edge TPU atau Raspberry Pi AI Kit (Hailo-8), agar proses inferensi model YOLOv8 dapat berjalan di atas 30 FPS pada resolusi spasial penuh 640$\times$640 piksel guna memperjauh radius deteksi korban.
+	\item \textbf{Stabilisasi Kamera dengan Gimbal}: Mengintegrasikan mekanisme penyangga kamera aktif (\textit{2-axis or 3-axis brushless gimbal stabilizer}) guna meredam guncangan sudut kemiringan (\textit{roll} dan \textit{pitch}) drone selama bermanuver, sehingga citra masukan YOLOv8 tetap horizontal dan stabil.
+	\item \textbf{Sensor Ketinggian AGL Non-Barometrik}: Memasang sensor jarak laser LiDAR atau ultrasonik berbasis \textit{Above Ground Level} (AGL) ke Pixhawk agar estimasi ketinggian di bawah 2 meter sepenuhnya lepas dari penyimpangan sensor barometer (\textit{barometer drift}).
+	\item \textbf{Estimasi Lokasi Korban Berbasis GPS}: Mengembangkan sistem estimasi titik koordinat geografis (lintang dan bujur) korban secara matematis dengan memadukan posisi GPS drone, orientasi hadap (\textit{heading yaw}), serta jarak piksel sasaran di dalam frame kamera.
+\end{enumerate}

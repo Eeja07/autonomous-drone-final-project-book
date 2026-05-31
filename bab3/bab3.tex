@@ -661,7 +661,7 @@ Secara keseluruhan, arsitektur perangkat lunak dibagi menjadi beberapa subsistem
 \end{figure}
 Subsistem akuisisi video dirancang menggunakan GStreamer untuk mendistribusikan aliran data visual dengan efisiensi tinggi melalui mekanisme \textit{tee pipeline}. Alur pemrosesan dimulai dari kamera USB (\texttt{/dev/video*}) yang ditangkap oleh \texttt{v4l2src}. Aliran ini kemudian dicabangkan (\textit{branching}):
 \begin{itemize}
-	\item Branch Streaming: Menggunakan perangkat lunak \textit{encoder} H.264 (atau \textit{hardware encoder} \texttt{v4l2h264enc}) untuk mentransmisikan video latensi rendah via protokol UDP pada \textit{port} 5600, yang ditujukan untuk \textit{Ground Control Station} (GCS) eksternal. Cabang ini juga menyediakan \textit{fallback} berupa aliran \textit{Motion JPEG} (MJPEG) pada \textit{endpoint} \textit{REST API} untuk pemantauan antarmuka berbasis web. Perlu dicatat bahwa sistem \textit{backend} tidak melakukan perekaman video di atas wahana (\textit{onboard video recording}) guna mereduksi beban komputasi CPU, aktivitas \textit{storage I/O}, serta memperpanjang usia pakai kartu memori (\textit{SD-card}) pada Raspberry Pi 5. Direktori \texttt{/recordings} disediakan hanya untuk akses pembacaan berkas (\textit{file access only}) dan tidak ditulis secara aktif oleh sistem.
+	\item Branch Streaming: Menggunakan perangkat lunak \textit{encoder} H.264 (atau \textit{hardware encoder} \texttt{v4l2h264enc}) untuk mentransmisikan video latensi rendah via protokol UDP pada \textit{port} 5600, yang ditujukan untuk GCS (\textit{Ground Control Station}) eksternal. Cabang ini juga menyediakan \textit{fallback} berupa aliran \textit{Motion JPEG} (MJPEG) pada \textit{endpoint} \textit{REST API} untuk pemantauan antarmuka dasbor berbasis web. Guna mereduksi beban komputasi CPU, aktivitas \textit{storage I/O}, serta memperpanjang usia pakai kartu memori (\textit{SD-card}) pada Raspberry Pi 5, seluruh sistem perekaman video di atas wahana (\textit{onboard video recording}) beserta rute-rute penyimpanan berkas video telah sepenuhnya ditiadakan dari sistem \textit{backend} dan dasbor \textit{frontend}, menjadikan media penyimpanan terfokus secara eksklusif pada hasil dokumentasi foto korban.
 	\item Branch YOLO: \textit{Frame} diarahkan ke \texttt{appsink} yang kemudian memasukkan citra ke dalam \textit{frame queue} dengan mekanisme penjatuhan \textit{frame} lama (\textit{leaky queue}) guna memastikan sistem deteksi selalu mendapatkan citra paling baru (\textit{latest frame}).
 \end{itemize}
 
@@ -732,7 +732,7 @@ Sebagai sistem udara tanpa awak yang didesain untuk ranah pencarian korban di ar
 \begin{itemize}
 	\item OFFBOARD Keepalive: Mengingat batasan keamanan internal \textit{firmware} PX4, sistem secara konstan menembakkan setpoint instruksi kendali bernilai netral (\textit{keepalive}) sebanyak 20 kali per detik bahkan saat drone masih di darat. Ini adalah mitigasi agar PX4 mengizinkan perpindahan \textit{mode} penerbangan ke \textit{OFFBOARD} kapan pun pilot pada kendali radio menginginkannya.
 	\item Connection Watchdog: Mengawasi kontinuitas koneksi dari MAVSDK. Apabila putus dalam durasi tertentu, sistem seketika memicu perintah berhenti darurat (\textit{emergency stop}).
-	\item Battery Failsafe: Telemetri baterai dipantau terus-menerus. Jika parameter menyentuh ambang batas kritis (< 15\%), sistem mengabaikan semua tugas dan memerintahkan tindakan mode \textit{Return to Launch} (RTL) atau \texttt{SCOUT\_RETURN\_HOME}.
+	\item Battery Failsafe: Telemetri baterai dipantau secara kontinu. Apabila tingkat kapasitas baterai menyentuh ambang batas kritis (\texttt{BATTERY\_RTL\_THRESHOLD} sebesar $< 15\%$), sistem secara otomatis membatalkan seluruh tugas navigasi dan memicu fase pengamanan berupa pendakian paksa vertikal (\textit{pre-RTL safety climb}) selama 3,0 detik ke atas pada kecepatan $vz = -0,8$ m/s guna memitigasi efek penyimpangan barometer (\textit{barometric drift}). Setelah fase pendakian keselamatan selesai, drone mengirimkan perintah mode \textit{Return to Launch} (RTL) bawaan PX4 secara aman untuk menghentikan misi dan pulang ke titik asal lepas landas.
 	\item Target Timeout Mitigation: Ketika berada dalam mode pengejaran target (\texttt{SCOUT\_APPROACH}), bila subjek hilang dari pantauan kamera melampaui 2 detik, atau jika target tak kunjung tergapai melebihi 20 detik, navigasi \textit{approach} dibatalkan dan digugurkan kembali ke awal fase \texttt{SCOUT\_SCAN}.
 \end{itemize}
 
@@ -1110,8 +1110,7 @@ Untuk memberikan gambaran menyeluruh terhadap ruang lingkup pengembangan, perang
 	|   |-- /core             # Mesin keputusan & telemetri
 	|   |-- /pipeline         # Subsistem akuisisi video & AI (YOLO)
 	|   |-- /web              # Titik akhir komunikasi HTTP server
-	|   |-- /photos           # Penyimpanan persisten dokumentasi visual
-	|   `-- /recordings       # Akses berkas rekaman (tidak ditulis aktif oleh backend, video H264 langsung via UDP guna meminimalkan beban CPU, I/O, dan SD-card)
+	|   |-- /photos           # Penyimpanan persisten dokumentasi visual (foto korban)
 	|-- start_all.fish        # Skrip otomatisasi inisialisasi program
 	`-- yolov8n320.onnx       # Model bobot kecerdasan buatan
 \end{lstlisting}
@@ -1216,25 +1215,57 @@ Bagian ini bertugas menerjemahkan posisi objek di dalam layar kamera menjadi per
 \end{lstlisting}
 
 \subsubsection{Implementasi Diagram Keadaan Navigasi Pencarian}
-Skenario misi pencarian (\textit{Scout Mission}) mengatur tahapan gerak drone menggunakan diagram keadaan (\textit{State Machine}). Mengacu pada Listing \ref{lst:scoutstate}, sistem pertama-tama bertugas sebagai penjaga keamanan (\textit{failsafe}). Jika sisa baterai berada di bawah batas aman (\texttt{BATTERY\_RTL\_THRESHOLD}), otonom backend akan langsung memicu perintah \textit{Return to Launch} (RTL) bawaan PX4 secara mandiri untuk menghentikan misi dan memulangkan drone. Jika kondisi baterai aman, program akan menghitung dan membatasi kecepatan naik-turun drone (\texttt{vz}). Setelah itu, drone akan beroperasi sesuai dengan tahapan aktif saat itu, mulai dari proses menyapu mencari korban (\texttt{SCAN}), menghampiri korban (\texttt{APPROACH}), mengambil dokumentasi foto (\texttt{DOCUMENT}), hingga akhirnya melakukan pergeseran posisi secara lateral (\texttt{DISPLACING}) sebelum kembali memindai (\texttt{SCAN}).
+Skenario misi pencarian (\textit{Scout Mission}) mengatur tahapan gerak drone menggunakan diagram keadaan (\textit{State Machine}) yang diintegrasikan dengan arsitektur keselamatan tiga lapis (\textit{Three-Layer Safety System}). Arsitektur keselamatan ini dirancang secara khusus untuk memitigasi risiko kegagalan fatal akibat penyimpangan sensor barometer (\textit{barometric altitude drift}) pada area penerbangan rendah di mana pembacaan ketinggian relatif (\textit{relative altitude}) Pixhawk sering kali melayang jauh lebih tinggi dari kondisi \textit{Above Ground Level} (AGL) sebenarnya (misalnya, pembacaan log menunjukkan ketinggian 1,6 meter sementara kondisi riil wahana hanya berada di bawah 60 cm). Tiga lapis sistem pengamanan keselamatan ini meliputi:
 
-\begin{lstlisting}[language=Python, caption={Perpindahan diagram keadaan (\textit{State Machine}) skenario pencarian udara}, label={lst:scoutstate}]
-	if self.state_dict.get("battery_pct", 100) < self.BATTERY_RTL_THRESHOLD:
-	await self.drone.action.return_to_launch()
-	self.stop_scout()
-	return
-	
+\begin{enumerate}
+	\item \textbf{Altitude Floor (Batas Bawah Ketinggian)}: Pada saat inisialisasi awal maupun selama penerbangan otonom berlangsung, ketinggian target \texttt{\_target\_altitude\_scout} dikunci ke batas bawah keselamatan (\texttt{MIN\_SAFE\_ALTITUDE\_M} sebesar 1,2 meter) untuk mencegah drift barometer memaksa drone terbang terlalu rendah hingga membentur rintangan di permukaan tanah.
+	\item \textbf{Runtime Altitude Floor Clamp}: Pada setiap iterasi loop kontrol utama (20 Hz), target altitude drone diverifikasi secara dinamis. Apabila nilai target terdeteksi berada di bawah ambang batas aman 1,2 meter, sistem secara aktif menolak dan memaksa nilai tersebut kembali ke batas keselamatan minimum agar perintah kecepatan vertikal (\texttt{vz}) mendorong drone naik kembali ke ketinggian aman.
+	\item \textbf{Pre-RTL Safety Climb (Fase Pendakian Sebelum RTL)}: Ketika tingkat baterai drone kritis di bawah ambang batas ($< 15\%$) atau terjadi perintah darurat (\textit{emergency stop}), drone tidak diizinkan langsung beralih ke mode RTL bawaan autopilot PX4 yang akan memulangkan drone secara horizontal dengan kecepatan tinggi pada ketinggian rendah. Sebagai gantinya, sistem otonom membatalkan seluruh misi dan memasuki fase pendakian keselamatan secara paksa dengan kecepatan vertikal konstan $vz = -0,8$ m/s (ke atas dalam kerangka acuan NED Pixhawk, menghasilkan pertambahan ketinggian sekitar 2,4 meter) selama durasi \texttt{SCOUT\_PRE\_RTL\_CLIMB\_S} (3,0 detik). Setelah mencapai ketinggian aman, gerak horizontal dihentikan sementara (\textit{hold}) sebelum kendali diserahterimakan sepenuhnya ke perintah \textit{Return to Launch} (RTL) PX4.
+\end{enumerate}
+
+Mengacu pada Listing \ref{lst:scoutstate}, integrasi diagram keadaan otonom beserta tiga lapis sistem keselamatan tersebut dijalankan di dalam loop kontrol berfrekuensi 20 Hz.
+
+\begin{lstlisting}[language=Python, caption={Perpindahan diagram keadaan (\textit{State Machine}) dengan tiga lapis sistem keselamatan}, label={lst:scoutstate}]
+	# 1. Safety Check Baterai & Pre-RTL Climb Phase
+	battery = self.state_dict.get("battery_pct", 100)
+	if battery < self.BATTERY_RTL_THRESHOLD and not self._battery_rtl_triggered:
+		self._battery_rtl_triggered = True
+		self._scout_mode = False
+		self._scout_state = ScoutState.IDLE
+		
+		# Prosedur pendakian paksa (pre-RTL safety climb) untuk memitigasi baro-drift
+		cur_yaw = self.state_dict.get("attitude", {}).get("yaw", 0.0)
+		climb_end = asyncio.get_event_loop().time() + self.SCOUT_PRE_RTL_CLIMB_S
+		while asyncio.get_event_loop().time() < climb_end:
+			await self.drone.offboard.set_velocity_ned(
+				VelocityNedYaw(0.0, 0.0, self.SCOUT_PRE_RTL_VZ, cur_yaw)
+			)
+			await asyncio.sleep(SCOUT_LOOP_PERIOD)
+			
+		# Hentikan gerakan sebelum serah terima kontrol ke PX4 RTL
+		await self.drone.offboard.set_velocity_ned(VelocityNedYaw(0.0, 0.0, 0.0, cur_yaw))
+		await self.drone.action.return_to_launch()
+		break
+
+	# 2. Runtime Altitude Floor Clamping
 	alt = float(self.state_dict.get("position", {}).get("alt", 0.0))
+	target_alt = self._target_altitude_scout if self._target_altitude_scout is not None else alt
+	if target_alt < self.MIN_SAFE_ALTITUDE_M:
+		target_alt = self.MIN_SAFE_ALTITUDE_M
+		self._target_altitude_scout = target_alt
+
+	# Hitung vz otonom dengan redaman saat di area stabil
 	vz = max(-self.SCOUT_MAX_VZ, min(self.SCOUT_MAX_VZ, -self.SCOUT_KP_ALT * (target_alt - alt)))
 	
+	# 3. Eksekusi Diagram Keadaan Scout
 	if self._scout_state == ScoutState.SCAN: 
-	await self._scout_state_scan(vz, loop_count)
+		await self._scout_state_scan(vz, loop_count)
 	elif self._scout_state == ScoutState.APPROACH: 
-	await self._scout_state_approach(vz, loop_count)
+		await self._scout_state_approach(vz, loop_count)
 	elif self._scout_state == ScoutState.DOCUMENT: 
-	await self._scout_state_document(vz)
+		await self._scout_state_document(vz)
 	elif self._scout_state == ScoutState.DISPLACING:
-	await self._scout_state_displacing(vz)
+		await self._scout_state_displacing(vz)
 \end{lstlisting}
 
 \subsection{Implementasi Frontend Monitoring}
@@ -1285,7 +1316,7 @@ Tahap integrasi akhir memastikan seluruh subsistem—mulai dari struktur mekanik
 	Keputusan dari \textit{State Machine} diterjemahkan menjadi perintah kecepatan (vektor \texttt{VelocityNedYaw}) dan dikirimkan kembali ke \textit{Pixhawk}. Selama mode penerbangan \textit{OFFBOARD} aktif, \textit{Pixhawk} akan mengeksekusi perintah tersebut menjadi pergerakan motor fisik secara otomatis.
 	
 	\item Sistem Keselamatan dan \textit{Failsafe} \\
-	Integritas misi dilindungi oleh sistem pengawasan (\textit{watchdog}). Apabila terjadi kondisi kritis seperti kapasitas baterai di bawah ambang batas atau kehilangan koneksi, sistem secara otomatis akan memicu prosedur \textit{Return to Launch} (RTL) atau \textit{Return Home}. Selain itu, operator memegang otoritas tertinggi melalui \textit{Remote Controller} untuk melakukan \textit{override} manual kapan saja dalam kondisi darurat.
+	Integritas misi dilindungi secara berlapis oleh sistem pengawasan (\textit{watchdog}) dan arsitektur keselamatan terpadu. Apabila terdeteksi kondisi kritis baterai rendah di bawah ambang batas ($< 15\%$) atau hilangnya koneksi telemetri, sistem secara asinkron memicu prosedur pendakian darurat (\textit{pre-RTL safety climb}) selama 3,0 detik pada kecepatan $0,8$ m/s ke atas untuk mencapai ketinggian aman sebelum mengaktifkan perintah \textit{Return to Launch} (RTL) otonom bawaan PX4. Mekanisme pendakian darurat ini krusial guna mencegah benturan akibat penyimpangan pembacaan ketinggian barometer (\textit{barometric altitude drift}) pada area penerbangan rendah. Selain itu, operator di darat memegang kendali prioritas tertinggi melalui \textit{Remote Controller} untuk melakukan pengambilalihan manual (\textit{manual override}) kapan saja demi alasan keselamatan penerbangan.
 	
 	\item Pengawasan Operator (\textit{Monitoring}) \\
 	Seluruh data operasional, status terbang, dan tangkapan visual dipancarkan secara kontinu ke \textit{frontend monitoring} melalui koneksi jaringan nirkabel (\textit{Wi-Fi} lokal atau modem \textit{MiFi 4G}), memungkinkan operator melakukan pengawasan misi pencarian secara presisi.
