@@ -83,6 +83,16 @@ GStreamer adalah \textit{framework} multimedia \textit{open-source} yang menyedi
 \end{equation}
 di mana $S_t$ adalah nilai EMA pada waktu $t$, $x_t$ adalah pengamatan terbaru, dan $\alpha$ ($0 < \alpha \leq 1$) adalah faktor pemulusan. Pada sistem drone otonom, EMA diterapkan untuk menghaluskan koordinat posisi target (\textit{center x} dan \textit{center y}) dari hasil deteksi visual sehingga perintah navigasi yang dihasilkan tidak tersendat atau bergetar (\textit{jitter}) akibat fluktuasi posisi \textit{bounding box} antar \textit{frame}.
 
+\subsection{Formula Jarak Haversine}
+Formula \textit{Haversine} adalah persamaan navigasi matematis yang digunakan untuk menghitung jarak lingkaran besar (\textit{great-circle distance}) antara dua titik pada permukaan bola bumi berdasarkan koordinat garis lintang (\textit{latitude}) dan garis bujur (\textit{longitude}) \cite{Sinnott1984Haversine}. Formula ini sangat krusial dalam navigasi wahana udara otonom untuk menghitung jarak spasial absolut antar objek. Persamaan \textit{Haversine} didefinisikan sebagai:
+\begin{equation}
+	a = \sin^2\left(\frac{\Delta \phi}{2}\right) + \cos(\phi_1) \cdot \cos(\phi_2) \cdot \sin^2\left(\frac{\Delta \lambda}{2}\right)
+\end{equation}
+\begin{equation}
+	d = 2 \cdot R \cdot \operatorname{atan2}\left(\sqrt{a}, \sqrt{1-a}\right)
+\end{equation}
+di mana $\phi$ adalah garis lintang, $\lambda$ adalah garis bujur, $\Delta \phi$ dan $\Delta \lambda$ adalah selisih koordinat antar kedua titik, serta $R$ adalah radius rata-rata bumi (sekitar 6.371 km). Dalam konteks sistem drone otonom ini, formula \textit{Haversine} diimplementasikan untuk menciptakan radius eksklusi (\textit{exclusion radius}). Komputasi ini berfungsi menolak target korban baru yang titik koordinat GPS-nya berhimpitan atau berada terlalu dekat dengan korban yang telah didokumentasikan sebelumnya, mencegah duplikasi penargetan dan menjaga keberlanjutan (\textit{persistence}) proses \textit{scouting}.
+
 \subsection{Arsitektur Multi-Thread dan Asynchronous}
 Arsitektur \textit{multi-thread} memungkinkan sebuah program menjalankan beberapa alur eksekusi secara bersamaan dalam satu proses, sehingga tugas-tugas yang bersifat independen dapat diproses secara paralel tanpa saling memblokir \cite{Nwankpa2023Multithreading}. Pada sistem drone otonom yang memerlukan pemrosesan inferensi AI, komunikasi telemetri, dan \textit{streaming} video secara simultan, pemisahan proses ke dalam \textit{thread} independen sangat krusial untuk mencegah \textit{bottleneck} komputasi. Pemrograman \textit{asynchronous} menggunakan pustaka \texttt{asyncio} pada Python memungkinkan operasi input/output (\textit{I/O-bound}) seperti komunikasi MAVLink berjalan secara non-\textit{blocking} dengan frekuensi tinggi. Kombinasi kedua pendekatan ini memastikan bahwa latensi komputasi pada satu subsistem (misalnya inferensi YOLO) tidak menghentikan pengiriman sinyal kontrol ke drone.
 

@@ -26,7 +26,7 @@ Daftar perangkat keras yang digunakan dalam penelitian ini meliputi:
 	\item Flight Controller: Pixhawk 6C sebagai unit kendali terbang utama.
 	\item Komponen Drone: Frame Quadcopter Holybro S500 beserta sistem propulsi (Motor Brushless dan ESC).
 	\item Sistem Daya: Baterai LiPo 4S, Modul UBEC 5A Hobbywing, dan XT60 Y-Splitter.
-	\item Komunikasi: Remote Controller Skydroid T10, Kabel JST GH 1.25mm 6 Pin, USB type C dan Modem MiFi 4G.
+	\item Komunikasi: Remote Controller Skydroid T10, Kabel JST GH 1.25mm 6 Pin, USB type C dan Modem MiFi 4G/5G.
 	\item Pendukung Mekanik: Komponen cetak 3D berbahan PLA, baut M2, dan baut M3.
 \end{enumerate}
 
@@ -198,7 +198,7 @@ Desain elektrikal bertujuan untuk mengatur skema aliran daya ke seluruh komponen
 		Perancangan jalur distribusi daya juga mengalami perubahan dari yang awalnya direncanakan memanfaatkan pin ekspansi GPIO hingga dialihkan menuju port input USB-C bawaan Raspberry Pi 5 guna memanfaatkan sirkuit regulasi internal board.
 		
 		\item Desain Kelistrikan Akhir (Berbasis UBEC 5A)\\
-		Untuk mengatasi kendala tersebut, desain kelistrikan akhir diubah menggunakan modul UBEC (\textit{Universal Battery Elimination Circuit}) tipe \textit{step-down} kontinu 5A yang disuplai oleh baterai LiPo. Baterai LiPo memiliki tingkat pelepasan arus (\textit{C-Rating}) yang sangat tinggi sehingga memastikan Raspberry Pi 5 menerima tegangan 5V yang stabil tanpa \textit{drop}. Pada implementasinya, konfigurasi desain kelistrikan akhir berbasis UBEC ini mendukung dua mode operasional:
+		Untuk mengatasi kendala \textit{under-voltage}, desain kelistrikan akhir diimplementasikan menggunakan modul UBEC 5A tersebut yang disuplai langsung oleh baterai LiPo. Baterai LiPo memiliki tingkat pelepasan arus (\textit{C-Rating}) yang sangat tinggi sehingga memastikan Raspberry Pi 5 menerima tegangan 5V yang stabil tanpa \textit{drop}. Konfigurasi desain kelistrikan ini mendukung dua mode operasional:
 		
 		\begin{enumerate}
 			\item Konfigurasi Baterai Tunggal (Paralel)\\
@@ -454,14 +454,14 @@ Seluruh komponen mekanik dirancang menggunakan perangkat lunak pemodelan 3D berb
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
 			\includegraphics[width=0.9\linewidth]{bab3/dudukan_utama_kompartemen_3d_1}
-			\caption{Desain 3D Dudukan Utama Kompartemen 1}
+			\caption{Desain 3D Dudukan Utama Kompartemen 1 (Desain Awal)}
 			\label{fig:dudukan-utama-kompartemen-3d-1}
 		\end{subfigure}
 		\hfill
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
 			\includegraphics[width=0.9\linewidth]{bab3/dudukan_utama_kompartemen_3d_2}
-			\caption{Desain 3D Dudukan Utama Kompartemen 2}
+			\caption{Desain 3D Dudukan Utama Kompartemen 2 (Desain Awal)}
 			\label{fig:dudukan-utama-kompartemen-3d-2}
 		\end{subfigure}
 	\end{figure}
@@ -469,7 +469,7 @@ Seluruh komponen mekanik dirancang menggunakan perangkat lunak pemodelan 3D berb
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.9\linewidth]{bab3/dudukan_utama_kompartemen_2d}
-		\caption{Desain 2D dan Dimensi Dudukan Utama Kompartemen}
+		\caption{Desain 2D dan Dimensi Dudukan Utama Kompartemen (Desain Awal)}
 		\label{fig:dudukan-utama-kompartemen-2d}
 	\end{figure}
 	
@@ -481,14 +481,14 @@ Seluruh komponen mekanik dirancang menggunakan perangkat lunak pemodelan 3D berb
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
 			\includegraphics[width=0.9\linewidth]{bab3/top_plate_3d_1}
-			\caption{Desain 3D Plat Pengikat Kompartemen 1}
+			\caption{Desain 3D Plat Pengikat Kompartemen 1 (Desain Awal)}
 			\label{fig:top-plate-3d-1}
 		\end{subfigure}
 		\hfill
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
 			\includegraphics[width=0.9\linewidth]{bab3/top_plate_3d_2}
-			\caption{Desain 3D Plat Pengikat Kompartemen 2}
+			\caption{Desain 3D Plat Pengikat Kompartemen 2 (Desain Awal)}
 			\label{fig:top-plate-3d-2}
 		\end{subfigure}
 	\end{figure}
@@ -496,7 +496,7 @@ Seluruh komponen mekanik dirancang menggunakan perangkat lunak pemodelan 3D berb
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.9\linewidth]{bab3/top_plate_2d}
-		\caption{Desain 2D dan Dimensi Plat Pengikat Kompartemen}
+		\caption{Desain 2D dan Dimensi Plat Pengikat Kompartemen (Desain Awal)}
 		\label{fig:top-plate-2d}
 	\end{figure}
 	
@@ -508,14 +508,14 @@ Seluruh komponen mekanik dirancang menggunakan perangkat lunak pemodelan 3D berb
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
 			\includegraphics[width=0.9\linewidth]{bab3/retainer_baterai_3d_1}
-			\caption{Desain 3D Retainer Baterai LiPo 1}
+			\caption{Desain 3D Retainer Baterai LiPo 1 (Desain Awal)}
 			\label{fig:retainer-baterai-3d-1}
 		\end{subfigure}
 		\hfill
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
 			\includegraphics[width=0.9\linewidth]{bab3/retainer_baterai_3d_2}
-			\caption{Desain 3D Retainer Baterai LiPo 2}
+			\caption{Desain 3D Retainer Baterai LiPo 2 (Desain Awal)}
 			\label{fig:retainer-baterai-3d-2}
 		\end{subfigure}
 	\end{figure}
@@ -523,7 +523,7 @@ Seluruh komponen mekanik dirancang menggunakan perangkat lunak pemodelan 3D berb
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.9\linewidth]{bab3/retainer_baterai_2d}
-		\caption{Desain 2D dan Dimensi Retainer Baterai LiPo}
+		\caption{Desain 2D dan Dimensi Retainer Baterai LiPo (Desain Awal)}
 		\label{fig:retainer-baterai-2d}
 	\end{figure}
 	
@@ -535,14 +535,14 @@ Seluruh komponen mekanik dirancang menggunakan perangkat lunak pemodelan 3D berb
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
 			\includegraphics[width=0.9\linewidth]{bab3/rpi5_cover_3d_1}
-			\caption{Desain 3D Casing Pelindung Companion Computer 1}
+			\caption{Desain 3D Casing Pelindung Companion Computer 1 (Desain Awal)}
 			\label{fig:rpi5-cover-3d-1}
 		\end{subfigure}
 		\hfill
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
 			\includegraphics[width=0.9\linewidth]{bab3/rpi5_cover_3d_2}
-			\caption{Desain 3D Casing Pelindung Companion Computer 2}
+			\caption{Desain 3D Casing Pelindung Companion Computer 2 (Desain Awal)}
 			\label{fig:rpi5-cover-3d-2}
 		\end{subfigure}
 	\end{figure}
@@ -550,7 +550,7 @@ Seluruh komponen mekanik dirancang menggunakan perangkat lunak pemodelan 3D berb
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.9\linewidth]{bab3/rpi5_cover_2d}
-		\caption{Desain 2D dan Dimensi Casing Pelindung Companion Computer}
+		\caption{Desain 2D dan Dimensi Casing Pelindung Companion Computer (Desain Awal)}
 		\label{fig:rpi5-cover-2d}
 	\end{figure}
 	
@@ -562,14 +562,14 @@ Seluruh komponen mekanik dirancang menggunakan perangkat lunak pemodelan 3D berb
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
 			\includegraphics[width=0.9\linewidth]{bab3/ubec_cover_3d_1}
-			\caption{Desain 3D Pelindung Modul Regulator Daya 1}
+			\caption{Desain 3D Pelindung Modul Regulator Daya 1 (Desain Awal)}
 			\label{fig:ubec-cover-3d-1}
 		\end{subfigure}
 		\hfill
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
 			\includegraphics[width=0.9\linewidth]{bab3/ubec_cover_3d_2}
-			\caption{Desain 3D Pelindung Modul Regulator Daya 2}
+			\caption{Desain 3D Pelindung Modul Regulator Daya 2 (Desain Awal)}
 			\label{fig:ubec-cover-3d-2}
 		\end{subfigure}
 	\end{figure}
@@ -577,7 +577,7 @@ Seluruh komponen mekanik dirancang menggunakan perangkat lunak pemodelan 3D berb
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.9\linewidth]{bab3/ubec_cover_2d}
-		\caption{Desain 2D dan Dimensi Pelindung Modul Regulator Daya}
+		\caption{Desain 2D dan Dimensi Pelindung Modul Regulator Daya (Desain Awal)}
 		\label{fig:ubec-cover-2d}
 	\end{figure}
 	
@@ -589,14 +589,14 @@ Seluruh komponen mekanik dirancang menggunakan perangkat lunak pemodelan 3D berb
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
 			\includegraphics[width=0.9\linewidth]{bab3/webcam_back_cover_3d_1}
-			\caption{Desain 3D Dudukan Belakang Kamera 1}
+			\caption{Desain 3D Dudukan Belakang Kamera 1 (Desain Awal)}
 			\label{fig:webcam-back-3d-1}
 		\end{subfigure}
 		\hfill
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
 			\includegraphics[width=0.9\linewidth]{bab3/webcam_back_cover_3d_2}
-			\caption{Desain 3D Dudukan Belakang Kamera 2}
+			\caption{Desain 3D Dudukan Belakang Kamera 2 (Desain Awal)}
 			\label{fig:webcam-back-3d-2}
 		\end{subfigure}
 	\end{figure}
@@ -604,7 +604,7 @@ Seluruh komponen mekanik dirancang menggunakan perangkat lunak pemodelan 3D berb
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.9\linewidth]{bab3/webcam_back_cover_2d}
-		\caption{Desain 2D dan Dimensi Dudukan Belakang Kamera}
+		\caption{Desain 2D dan Dimensi Dudukan Belakang Kamera (Desain Awal)}
 		\label{fig:webcam-back-2d}
 	\end{figure}
 	
@@ -616,14 +616,14 @@ Seluruh komponen mekanik dirancang menggunakan perangkat lunak pemodelan 3D berb
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
 			\includegraphics[width=0.9\linewidth]{bab3/webcam_front_cover_3d_1}
-			\caption{Desain 3D Penjepit Depan Kamera 1}
+			\caption{Desain 3D Penjepit Depan Kamera 1 (Desain Awal)}
 			\label{fig:webcam-front-3d-1}
 		\end{subfigure}
 		\hfill
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
 			\includegraphics[width=0.9\linewidth]{bab3/webcam_front_cover_3d_2}
-			\caption{Desain 3D Penjepit Depan Kamera 2}
+			\caption{Desain 3D Penjepit Depan Kamera 2 (Desain Awal)}
 			\label{fig:webcam-front-3d-2}
 		\end{subfigure}
 	\end{figure}
@@ -631,12 +631,108 @@ Seluruh komponen mekanik dirancang menggunakan perangkat lunak pemodelan 3D berb
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.9\linewidth]{bab3/webcam_front_cover_2d}
-		\caption{Desain 2D dan Dimensi Penjepit Depan Kamera}
+		\caption{Desain 2D dan Dimensi Penjepit Depan Kamera (Desain Awal)}
 		\label{fig:webcam-front-2d}
 	\end{figure}
 	
 \end{enumerate}
 Dengan integrasi ketujuh komponen tersebut, drone memiliki konfigurasi beban yang terpusat dan simetris, sehingga beban kerja pada setiap motor menjadi seimbang dan efisiensi konsumsi daya baterai dapat terjaga selama otonom berlangsung.
+
+\subsubsection{Revisi dan Iterasi Desain Mekanik}
+Pada tahap awal pengembangan, beberapa \textit{flight trial}, integrasi \textit{hardware}, dan \textit{debugging} program dilakukan menggunakan desain mekanik generasi awal sebagaimana yang telah diuraikan pada tujuh komponen di atas. Desain awal tersebut memiliki karakteristik khusus, yaitu masih mengakomodasi kompartemen suplai daya Raspberry Pi 5 (seperti dudukan modul Mini UPS atau baterai terpisah), belum menyediakan ruang untuk perangkat komunikasi Modem/MiFi 4G/5G, dan secara keseluruhan memiliki konfigurasi mekanik yang belum final.
+
+Setelah proses integrasi sistem selesai dan pengujian kelistrikan membuktikan bahwa Raspberry Pi 5 dapat disuplai secara langsung dan stabil menggunakan modul UBEC 5A yang dihubungkan ke baterai utama, struktur mekanik drone direvisi secara komprehensif. Perubahan utama pada iterasi desain akhir ini meliputi:
+\begin{itemize}
+	\item Penghilangan kompartemen suplai daya Raspberry Pi 5 yang terpisah, sehingga beban \textit{payload} berkurang dan desain menjadi lebih ringkas.
+	\item Desain ulang pada sebagian komponen penyusun lama agar lebih presisi.
+	\item Pemecahan beberapa komponen lama menjadi beberapa bagian mekanik baru guna mempermudah proses perakitan (\textit{assembly}) dan perawatan.
+	\item Penambahan ruang dan dudukan khusus untuk menempatkan Modem/MiFi 4G/5G secara aman.
+	\item Penyederhanaan \textit{routing} kabel antar komponen elektronik.
+\end{itemize}
+
+Desain final hasil iterasi inilah yang kemudian diproduksi, diimplementasikan secara permanen, dan digunakan pada seluruh pengujian resmi sistem otonom yang dibahas pada Bab 4. Berikut adalah lokasi penyisipan dan pengelompokan komponen CAD final baru yang merepresentasikan iterasi desain mekanik tersebut:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{bab3/casingbateraidesainbaru}
+	\caption{Casing baterai utama (Iterasi Desain Baru)}
+	\label{fig:casing_baterai_baru}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{bab3/casingraspidesainbaru}
+	\caption{Casing pelindung Raspberry Pi 5 (Iterasi Desain Baru)}
+	\label{fig:casing_raspi_baru}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{bab3/casingmodemdesainbaru}
+	\caption{Dudukan kompartemen Modem/MiFi 4G/5G (Iterasi Desain Baru)}
+	\label{fig:casing_modem_baru}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{bab3/tampaksampingusbdesainbaru}
+	\caption{Tampak samping penyederhanaan manajemen kabel (Iterasi Desain Baru)}
+	\label{fig:tampak_samping_usb_baru}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{bab3/tutupclampdesainbaru}
+		\caption{Tutup clamp atas}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{bab3/depanbawahclampkiri}
+		\caption{Clamp depan kiri}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{bab3/depanbawahclampkanan}
+		\caption{Clamp depan kanan}
+	\end{subfigure}
+	
+	\vspace{0.5cm}
+	
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{bab3/belakangbawahclampkiri}
+		\caption{Clamp belakang kiri}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{bab3/belakangbawahclampkanan}
+		\caption{Clamp belakang kanan}
+	\end{subfigure}
+	\caption{Revisi penjepit dudukan kamera (Iterasi Desain Baru)}
+	\label{fig:tutup_clamp_baru}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[b]{0.45\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{bab3/IMG_1258}
+		\caption{Hasil Realisasi Perakitan Final Tampak Perspektif 1}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{bab3/IMG_1268}
+		\caption{Hasil Realisasi Perakitan Final Tampak Perspektif 2}
+	\end{subfigure}
+	\caption{Realisasi Fisik Perakitan Keseluruhan Sistem (Desain Final)}
+	\label{fig:perakitan_final_real}
+\end{figure}
 
 \subsection{Desain Software}
 Desain perangkat lunak pada sistem drone otonom ini dirancang untuk menangani tingkat kompleksitas yang tinggi, mencakup navigasi otomatis, deteksi manusia secara \textit{real-time}, pengolahan data telemetri, dan pemantauan sistem. Sistem ini mengimplementasikan arsitektur \textit{multi-thread} dan \textit{asynchronous} terdistribusi untuk memastikan bahwa pemrosesan berat seperti inferensi kecerdasan buatan tidak memblokir atau mengganggu \textit{loop} kontrol penerbangan kritis.
@@ -673,35 +769,20 @@ Subsistem akuisisi video dirancang menggunakan GStreamer untuk mendistribusikan 
 	\label{fig:flowyolo}
 \end{figure}
 
-Modul deteksi berfungsi menerjemahkan data piksel mentah menjadi koordinat target spasial. Berdasarkan hasil analisis dan tahapan optimasi, sistem ini menggunakan model YOLOv8n standar yang telah melalui proses \textit{fine-tuning} khusus untuk deteksi kelas tunggal manusia (\textit{person-only}) menggunakan dataset COCO yang difilter dengan total boks anotasi sebanyak 244.799 instans target. Model final PyTorch (\texttt{best.pt}) berukuran 6,0 MB tersebut kemudian diekspor ke dalam format ONNX dengan resolusi input sebesar 320x320 piksel (\texttt{320n.onnx}) untuk diimplementasikan pada perangkat \textit{edge} Raspberry Pi 5.
+Modul deteksi berfungsi menerjemahkan data piksel mentah menjadi koordinat target spasial yang akan digunakan oleh sistem kendali terbang. Berdasarkan hasil analisis dan tahapan optimasi, sistem ini menggunakan model YOLOv8n standar yang telah melalui proses \textit{fine-tuning} khusus untuk deteksi kelas tunggal manusia (\textit{person-only}) menggunakan dataset COCO yang difilter dengan total kotak pembatas anotasi sebanyak 244.799 instans target. Model final PyTorch (\texttt{best.pt}) berukuran 6,0 MB tersebut kemudian diekspor ke dalam format ONNX dengan resolusi input sebesar 320x320 piksel (\texttt{320n.onnx}) untuk diimplementasikan pada perangkat \textit{edge} \textit{companion computer} Raspberry Pi 5.
 
-Pemilihan resolusi input 320x320 piksel dengan format ONNX didasarkan pada titik temu (\textit{trade-off}) paling optimal antara performa komputasi dan akurasi deteksi. Strategi pemangkasan ruang prediksi menjadi kelas tunggal ini mampu mendongkrak nilai mAP@50 secara signifikan hingga mencapai 0,757 (meningkat sekitar 13\% dibandingkan model \textit{baseline} multi-kelas COCO) serta meraih tingkat \textit{Precision} sebesar 80,9\%. Reduksi ukuran input dan pemfokusan kelas ini sangat krusial untuk meminimalkan latensi pemrosesan (\textit{inference time}) pada lingkungan perangkat \textit{single-board computer}, sehingga sirkuit asinkron \textit{YOLO Consumer} tetap mampu memasok data secara konstan demi menjaga stabilitas responsivitas dari \textit{loop} kontrol otonom drone.
+Pemilihan resolusi input 320x320 piksel dengan format ONNX didasarkan pada titik temu (\textit{trade-off}) paling optimal antara performa komputasi dan akurasi deteksi. Strategi pemangkasan ruang prediksi menjadi kelas tunggal ini mampu mendongkrak nilai mAP@50 secara signifikan hingga mencapai 0,757 (meningkat sekitar 13\% dibandingkan model \textit{baseline} multi-kelas COCO) serta meraih tingkat \textit{Precision} sebesar 80,9\%. Reduksi ukuran input dan pemfokusan kelas ini sangat krusial untuk meminimalkan latensi pemrosesan (\textit{inference time}), sehingga sirkuit asinkron \textit{YOLO Consumer} tetap mampu memasok data secara konstan agar selaras dengan frekuensi \textit{loop} kontrol otonom utama yang bekerja pada 20 Hz.
 
-Proses deteksi dimulai saat \textit{YOLO Consumer} mengambil citra dari \textit{frame queue} dan memprosesnya menggunakan model tersebut melalui \textit{ONNX Runtime}. Untuk menjaga stabilitas penentuan target di lingkungan dinamis, sistem mengimplementasikan algoritma pemeringkatan (\textit{scoring}) dan penguncian target (\textit{target lock}) \cite{BarShalom2001Tracking}. Kandidat target dievaluasi berdasarkan kombinasi pembobotan: luas area \textit{bounding box} (45\%), tingkat keyakinan atau \textit{confidence} (25\%), kedekatan dengan titik tengah \textit{frame} (20\%), dan konsistensi pelacakan spasial (10\%). Sistem akan menahan fokus (\textit{lock}) pada target terpilih dan tidak akan berpindah ke objek manusia lain kecuali objek baru memiliki skor minimal 35\% lebih tinggi. Hal ini diterapkan guna mencegah fenomena transisi target yang tidak stabil (\textit{target ping-pong}). Hasil akhir deteksi secara asinkron didistribusikan ke dalam \textit{detection queue}.
+Alur logika pemrosesan dirancang mengalir secara asinkron, di mana komponen \texttt{YOLO Consumer} mengambil citra dari \textit{frame queue} dan memprosesnya menggunakan model tersebut melalui \textit{ONNX Runtime}. Untuk menjaga stabilitas penentuan target di lingkungan dinamis dan mencegah transisi yang tidak stabil (\textit{target ping-pong}), sistem mengimplementasikan algoritma pemeringkatan (\textit{scoring}) dan penguncian target (\textit{target lock}) \cite{BarShalom2001Tracking}. Kandidat target dievaluasi berdasarkan kombinasi pembobotan linear sebagai berikut:
 
-\subsubsection{Arsitektur Deteksi YOLO}
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.6\linewidth]{bab3/flow3-32.pdf}
-	\caption{Flowchart Deteksi \& Target Lock}
-	\label{fig:flowyolo}
-\end{figure}
-	
-	Modul deteksi dirancang untuk menerjemahkan data piksel mentah dari sensor visual menjadi koordinat target spasial yang akan digunakan oleh sistem kendali terbang. Arsitektur sistem otonom ini mengonfigurasikan model YOLOv8n (\textit{Nano}) yang disederhanakan menjadi detektor kelas tunggal khusus manusia (\textit{person-only}). Model dikonversi ke dalam format ONNX (\textit{Open Neural Network Exchange}) dengan perancangan dimensi resolusi input sebesar 320x320 piksel.
-	
-	Perancangan resolusi input 320x320 piksel dan pemilihan mesin inferensi \textit{ONNX Runtime} dispesifikasikan sebagai batasan desain (\textit{design constraint}) untuk menjamin efisiensi alokasi daya komputasi pada \textit{companion computer} Raspberry Pi 5. Dimensi ini dirancang agar pemrosesan visi komputer tidak menimbulkan latensi yang dapat menghambat pasokan data koordinat ke sirkuit kendali. Pemotongan struktur arsitektur jaringan menjadi kelas tunggal bertujuan mengeliminasi beban komputasi ekstra untuk klasifikasi objek non-target, sehingga seluruh kapasitas ekstraksi fitur fokus pada kontur dan siluet manusia. Hal ini dirancang untuk menjaga stabilitas pasokan data koordinat agar selaras dengan frekuensi \textit{loop} kontrol otonom utama yang bekerja pada 20 Hz.
-	
-	Alur logika pemrosesan dirancang mengalir secara asinkron, di mana komponen \\
-	\texttt{YOLOConsumer} mengekstraksi citra dari \textit{frame queue} untuk diumpankan ke mesin inferensi. Guna menangani ketidakpastian kondisi di lapangan dan menjaga kestabilan navigasi, sistem mengintegrasikan rancangan algoritma pemeringkatan (\textit{scoring}) dan penguncian target (\textit{target lock}) sebelum perintah kecepatan diterbitkan. Matriks evaluasi kandidat target dirancang menggunakan kombinasi pembobotan linear sebagai berikut:
-	
-	\begin{itemize}
-		\item Luas area boks pembatas (\textit{bounding box}) sebesar 45\%, sebagai indikator kedekatan jarak fisik target terhadap sensor kamera.
-		\item Nilai tingkat keyakinan (\textit{confidence score}) dari model sebesar 25\%, sebagai validasi kepastian objek.
-		\item Kedekatan posisi koordinat target terhadap titik tengah (\textit{center of frame}) sebesar 20\%, untuk menjaga keterpusatan orientasi drone.
-		\item Konsistensi pelacakan spasial antar-frame (\textit{tracking history}) sebesar 10\%, untuk memvalidasi kontinuitas pergerakan target.
-	\end{itemize}
-	
-	Sistem dirancang untuk mengunci (\textit{lock}) satu target utama dan mengabaikan kehadiran orang lain di sekitarnya. Fokus pelacakan hanya akan berpindah jika ada target manusia baru yang skor evaluasinya minimal 35\% lebih tinggi dari target saat ini. Aturan penahan ini sengaja diterapkan agar drone tidak kebingungan dan bolak-balik berganti sasaran dalam waktu singkat, yang dapat membuat arah terbangnya menjadi tidak stabil. Setelah target dipastikan, titik koordinat lokasinya akan dikirimkan ke dalam antrean sistem (\textit{detection queue}) agar drone dapat langsung bergerak menghampiri target secara otomatis.
+\begin{itemize}
+	\item Luas area kotak pembatas (\textit{bounding box}) sebesar 45\%, sebagai indikator kedekatan jarak fisik target terhadap sensor kamera.
+	\item Nilai tingkat keyakinan (\textit{confidence score}) dari model sebesar 25\%, sebagai validasi kepastian objek.
+	\item Kedekatan posisi koordinat target terhadap titik tengah (\textit{center of frame}) sebesar 20\%, untuk menjaga keterpusatan orientasi drone.
+	\item Konsistensi pelacakan spasial antar-frame (\textit{tracking history}) sebesar 10\%, untuk memvalidasi kontinuitas pergerakan target.
+\end{itemize}
+
+Sistem dirancang untuk menahan fokus (\textit{lock}) pada satu target utama terpilih dan tidak akan berpindah ke objek manusia lain kecuali objek baru memiliki skor minimal 35\% lebih tinggi. Setelah target dipastikan, titik koordinat lokasinya secara asinkron didistribusikan ke dalam antrean sistem (\textit{detection queue}) agar dapat diproses oleh pengendali otonom.
 
 \subsubsection{State Machine Sistem Otonom}
 \begin{figure}[H]
@@ -717,7 +798,7 @@ Inti dari logika pencarian dan penyelamatan direpresentasikan melalui \textit{st
 	\begin{itemize}
 		\item \texttt{SCOUT\_SCAN}: Drone melakukan rotasi secara perlahan (\textit{yaw rate} 30 deg/s) untuk menyapu dan memperluas area observasi.
 		\item \texttt{SCOUT\_APPROACH}: Saat target manusia dikunci, drone bermanuver mendekat. Kecepatan pendekatan dikomputasi dan dihaluskan melalui filter \textit{Exponential Moving Average} (EMA).
-		\item \texttt{SCOUT\_DOCUMENT}: Drone menahan posisinya di udara (\textit{hold setpoint}) di dekat korban, memvalidasi radius eksklusi koordinat geospasial, dan mengambil dokumentasi (\textit{screenshot}) visual-spasial.
+		\item \texttt{SCOUT\_DOCUMENT}: Drone menahan posisinya di udara (\textit{hold setpoint}) di dekat korban, memvalidasi radius eksklusi sejauh 3,0 meter menggunakan komputasi jarak \textit{Haversine} untuk memastikan bahwa target tidak berada di koordinat yang sudah dikunjungi sebelumnya, lalu mengambil dokumentasi (\textit{screenshot}) visual-spasial.
 		\item \texttt{SCOUT\_DISPLACING}: Begitu dokumentasi selesai, drone melakukan pergeseran posisi secara lateral (sejauh 2 meter ke kanan) guna perluasan cakupan area secara kontinu dan pencarian korban yang persisten. Drone kemudian kembali memasuki \textit{state} \texttt{SCOUT\_SCAN} untuk melanjutkan misi secara berkelanjutan. Prosedur kembali ke titik asal (\texttt{RETURN\_HOME}) bukan bagian dari siklus pencarian normal; kepulangan akibat baterai kritis ditangani terpisah oleh fitur RTL bawaan PX4.
 	\end{itemize}
 \end{enumerate}
@@ -725,7 +806,7 @@ Inti dari logika pencarian dan penyelamatan direpresentasikan melalui \textit{st
 \subsubsection{Sistem Telemetri dan Komunikasi Realtime (SocketIO)}
 Sistem telemetri dirancang untuk memfasilitasi pertukaran data kecepatan tinggi antara \textit{flight controller} dan antarmuka pengguna (\textit{frontend}). Modul \textit{MAVSDK Listener} membuka 8 aliran data (\textit{stream}) asinkron untuk memantau posisi, kapasitas baterai, mode penerbangan, orientasi, dan konstelasi GPS secara simultan.
 
-Keseluruhan informasi tersebut diperbarui secara terpusat pada kamus \textit{state} internal. Sebuah \textit{loop} penyiaran (\textit{broadcast loop}) berjalan membelah sistem secara periodik pada frekuensi 5Hz, mengambil cuplikan (\textit{snapshot}) matriks data telemetri terkini, dan memancarkannya (\textit{emit}) melalui \textit{SocketIO} di bawah \textit{event} \texttt{drone:status}. Pada ujung antarmuka (React), pembaruan data yang sangat responsif ini ditangkap dan merender dasbor operator secara instan.
+Keseluruhan informasi tersebut diperbarui secara terpusat pada kamus \textit{state} internal. Sebuah \textit{loop} penyiaran (\textit{broadcast loop}) berjalan membelah sistem secara periodik pada frekuensi 5Hz, mengambil cuplikan (\textit{snapshot}) matriks data telemetri terkini, dan memancarkannya (\textit{emit}) melalui \textit{SocketIO} di bawah \textit{event} \texttt{drone:status}. Selain disiarkan, matriks telemetri ini juga direkam secara persisten ke dalam sistem \textit{rotating log} internal dengan pembatasan laju (\textit{rate limit}) 5Hz untuk memfasilitasi kebutuhan analisis misi pasca-penerbangan tanpa menghambat performa inti pemrosesan. Pada ujung antarmuka (React), pembaruan data yang sangat responsif ini ditangkap dan merender dasbor operator secara instan.
 
 \subsubsection{Sistem Watchdog dan Failsafe}
 Sebagai sistem udara tanpa awak yang didesain untuk ranah pencarian korban di area bencana, integritas dan keamanan misi ditangani secara ketat lewat \textit{watchdog} perangkat lunak dan arsitektur \textit{failsafe}:
@@ -734,6 +815,7 @@ Sebagai sistem udara tanpa awak yang didesain untuk ranah pencarian korban di ar
 	\item Connection Watchdog: Mengawasi kontinuitas koneksi dari MAVSDK. Apabila putus dalam durasi tertentu, sistem seketika memicu perintah berhenti darurat (\textit{emergency stop}).
 	\item Battery Failsafe: Telemetri baterai dipantau secara kontinu. Apabila tingkat kapasitas baterai menyentuh ambang batas kritis (\texttt{BATTERY\_RTL\_THRESHOLD} sebesar $< 15\%$), sistem secara otomatis membatalkan seluruh tugas navigasi dan memicu fase pengamanan berupa pendakian paksa vertikal (\textit{pre-RTL safety climb}) selama 3,0 detik ke atas pada kecepatan $vz = -0,8$ m/s guna memitigasi efek penyimpangan barometer (\textit{barometric drift}). Setelah fase pendakian keselamatan selesai, drone mengirimkan perintah mode \textit{Return to Launch} (RTL) bawaan PX4 secara aman untuk menghentikan misi dan pulang ke titik asal lepas landas.
 	\item Target Timeout Mitigation: Ketika berada dalam mode pengejaran target (\texttt{SCOUT\_APPROACH}), bila subjek hilang dari pantauan kamera melampaui 2 detik, atau jika target tak kunjung tergapai melebihi 20 detik, navigasi \textit{approach} dibatalkan dan digugurkan kembali ke awal fase \texttt{SCOUT\_SCAN}.
+	\item OFFBOARD Exit Handling: Sistem pemantau MAVSDK secara kontinu mengawasi transisi mode penerbangan. Apabila pilot mengambil alih kendali manual menggunakan \textit{remote controller} sehingga drone keluar dari mode \textit{OFFBOARD}, sistem perangkat lunak secara asinkron akan langsung menggugurkan (\textit{halt}) seluruh siklus misi otonom dengan aman untuk mencegah benturan komando navigasi.
 \end{itemize}
 
 \subsection{Desain Arsitektur Sistem}
@@ -813,7 +895,17 @@ Implementasi \textit{hardware} berfokus pada integrasi komponen komputasi dan se
 	\item Integrasi Unit Komputasi dan Sensor: Raspberry Pi 5 dipasang sebagai \textit{companion computer} utama untuk menjalankan algoritma deteksi manusia. Unit ini dihubungkan dengan \textit{webcam} Logitech C922 melalui antarmuka USB 3.0 untuk menjamin transmisi data visual berkecepatan tinggi.
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.7\linewidth]{bab3/integrasi_webcam_rpi5_depan} 
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\linewidth]{bab3/integrasi_webcam_rpi5_depan}
+			\caption{Desain Awal}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\linewidth]{bab3/integrasi_webcam_rpi5_depan_desainbaru}
+			\caption{Desain Baru}
+		\end{subfigure}
 		\caption{Integrasi Raspberry Pi 5 dan Webcam Logitech C922 depan}
 		\label{fig:integrasi_rpi5_webcam_depan}
 	\end{figure}
@@ -844,17 +936,32 @@ Implementasi \textit{hardware} berfokus pada integrasi komponen komputasi dan se
 			\centering
 			\begin{subfigure}[b]{0.45\textwidth}
 				\centering
-				\includegraphics[width=0.9\linewidth]{bab3/konfig_baterai_tunggal_nc} % Sesuaikan path
-				\caption{Realisasi Fisik Konfigurasi Baterai Tunggal (Paralel) Tanpa Penutup}
+				\includegraphics[width=0.9\linewidth]{bab3/konfig_baterai_tunggal_nc}
+				\caption{Tanpa Penutup (Desain Awal)}
 				\label{fig:baterai-tunggal-real-no-case}
 			\end{subfigure}
 			\hfill
 			\begin{subfigure}[b]{0.45\textwidth}
 				\centering
-				\includegraphics[width=0.9\linewidth]{bab3/konfig_baterai_tunggal_wc} % Sesuaikan path
-				\caption{Realisasi Fisik Konfigurasi Baterai Tunggal (Paralel) Dengan Penutup}
+				\includegraphics[width=0.9\linewidth]{bab3/konfig_baterai_tunggal_wc}
+				\caption{Dengan Penutup (Desain Awal)}
 				\label{fig:baterai-tunggal-real-with-case}
 			\end{subfigure}
+			
+			\vspace{0.5cm}
+			
+			\begin{subfigure}[b]{0.45\textwidth}
+				\centering
+				\includegraphics[width=0.9\linewidth]{bab3/konfig_baterai_tunggal_nc_desainbaru}
+				\caption{Tanpa Penutup (Desain Baru)}
+			\end{subfigure}
+			\hfill
+			\begin{subfigure}[b]{0.45\textwidth}
+				\centering
+				\includegraphics[width=0.9\linewidth]{bab3/konfig_baterai_tunggal_wc_desainbaru}
+				\caption{Dengan Penutup (Desain Baru)}
+			\end{subfigure}
+			\caption{Realisasi Fisik Konfigurasi Baterai Tunggal (Paralel)}
 		\end{figure}
 		\item Konfigurasi Baterai Ganda (Terisolasi): Modul UBEC 5A dihubungkan langsung ke baterai LiPo sekunder yang terpisah dari PDB. Implementasi fisik ini dilakukan untuk mengisolasi catu daya \textit{companion computer} dari potensi penurunan tegangan sementara (\textit{voltage sag}) akibat lonjakan arus dari motor propulsi saat drone bermanuver ekstrem.
 		\begin{figure}[H]
@@ -874,7 +981,7 @@ Implementasi \textit{hardware} berfokus pada integrasi komponen komputasi dan se
 			\end{subfigure}
 		\end{figure}
 	\end{enumerate}
-	Melalui implementasi modul UBEC 5A pada kedua konfigurasi tersebut, suplai tegangan 5V ke Raspberry Pi terbukti tetap stabil selama proses inferensi berlangsung, yang mana hal ini berhasil mengatasi masalah malfungsi daya pada purwarupa awal.
+	Melalui implementasi modul UBEC 5A pada kedua konfigurasi tersebut, suplai tegangan 5V ke Raspberry Pi terbukti tetap stabil selama proses inferensi berlangsung, sehingga berhasil mengatasi masalah malfungsi daya pada purwarupa awal.
 	
 	\item Konektivitas Data Telemetri:\\
 	Komunikasi pertukaran pesan MAVLink antara Raspberry Pi 5 dan Pixhawk dikonfigurasi pada \textit{baud rate} 57600. Implementasi pengiriman data telemetri ini dapat diakses secara \textit{real-time} baik menggunakan antarmuka Serial USB melalui \textit{port} \texttt{/dev/ttyUSB0}, maupun menggunakan jalur Serial UART melalui \textit{port} \texttt{/dev/ttyAMA0}. Kedua jalur komunikasi tersebut memberikan kinerja yang ekuivalen dalam pengujian integrasi kontrol otonom.
@@ -884,32 +991,61 @@ Implementasi \textit{hardware} berfokus pada integrasi komponen komputasi dan se
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
 			\includegraphics[width=0.7\textwidth]{bab3/serial_px4_rpi5_depan} 
-			\caption{Jalur serial USB Tampak Depan}
-			\label{fig:serial-px4-rpi5-depan}
+			\caption{Tampak Depan (Desain Awal)}
 		\end{subfigure}
 		\hfill
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
-			\includegraphics[width=0.9\linewidth]{bab3/serial_px4_rpi5_samping}
-			\caption{Jalur serial USB Tampak Samping}
-			\label{fig:serial-px4-rpi5-samping}
+			\includegraphics[width=0.7\textwidth]{bab3/usb_px4_rpi5_depan_desainbaru} 
+			\caption{Tampak Depan (Desain Baru)}
 		\end{subfigure}
-		\vspace{0.5cm} 
+		
+		\vspace{0.5cm}
+		
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=0.9\linewidth]{bab3/serial_px4_rpi5_samping}
+			\caption{Tampak Samping (Desain Awal)}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=0.9\linewidth]{bab3/usb_px4_rpi5_samping_desainbaru}
+			\caption{Tampak Samping (Desain Baru)}
+		\end{subfigure}
+		\caption{Jalur komunikasi serial USB antara Pixhawk dan Raspberry Pi 5}
+		\label{fig:serial-px4-rpi5-depan}
+	\end{figure}
+
+	\begin{figure}[H]
+		\centering
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
 			\includegraphics[width=0.7\textwidth]{bab3/serial_uart_px4_rpi5_depan} 
-			\caption{Jalur serial (UART) Tampak Depan}
-			\label{fig:serial-uart-px4-rpi5-depan}
+			\caption{Tampak Depan (Desain Awal)}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=0.7\textwidth]{bab3/serial_uart_px4_rpi5_depan_desainbaru} 
+			\caption{Tampak Depan (Desain Baru)}
+		\end{subfigure}
+		
+		\vspace{0.5cm}
+		
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering        
+			\includegraphics[width=0.9\linewidth]{bab3/serial_uart_px4_rpi5_samping}
+			\caption{Tampak Samping (Desain Awal)}
 		\end{subfigure}
 		\hfill
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering        
-			\includegraphics[width=0.9\linewidth]{bab3/serial_uart_px4_rpi5_samping}
-			\caption{Jalur serial (UART) Tampak Samping}
-			\label{fig:serial-uart-px4-rpi5-samping}
+			\includegraphics[width=0.9\linewidth]{bab3/serial_uart_px4_rpi5_samping_desainbaru}
+			\caption{Tampak Samping (Desain Baru)}
 		\end{subfigure}
-		\caption{Perbandingan jalur komunikasi serial USB dan UART antara Pixhawk dan Raspberry Pi 5}
-		\label{fig:komunikasi-px4-rpi5-lengkap}
+		\caption{Jalur komunikasi serial (UART) antara Pixhawk dan Raspberry Pi 5}
+		\label{fig:serial-uart-px4-rpi5-depan}
 	\end{figure}
 	
 	\item Realisasi Komponen Cetak 3D: Seluruh komponen hasil desain 3D (seperti dudukan utama kompartemen, \textit{retainer} baterai, dan casing pelindung) dicetak menggunakan material \textit{Polylactic Acid} (PLA). Berikut adalah hasil realisasi fisik dari masing-masing komponen cetak 3D sebelum dirakit:
@@ -1075,20 +1211,20 @@ Implementasi \textit{hardware} berfokus pada integrasi komponen komputasi dan se
 		\end{subfigure}
 	\end{figure}
 	
-	\item Instalasi Modem MiFi 4G: Untuk mendukung komunikasi \textit{dual-mode}, sebuah modem MiFi 4G (\textit{wireless}) ditempatkan pada ruang kosong di dalam komponen 3D pelindung modul suplai daya Raspberry Pi. Penempatan ini mempermudah tata letak dan meminimalisir risiko interferensi kabel pada sensor GPS
+	\item Instalasi Modem MiFi 4G/5G: Untuk mendukung komunikasi \textit{dual-mode}, sebuah modem MiFi 4G/5G (\textit{wireless}) ditempatkan pada ruang kosong di dalam komponen 3D pelindung modul suplai daya Raspberry Pi. Penempatan ini mempermudah tata letak dan meminimalisir risiko interferensi kabel pada sensor GPS
 	\begin{figure}[H]
 		\centering
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
 			\includegraphics[width=0.9\linewidth]{bab3/modem_mifi_4g}
-			\caption{Modem MiFi 4G yang digunakan}
+			\caption{Modem MiFi 4G/5G yang digunakan}
 			\label{fig:modem-mifi-4g}
 		\end{subfigure}
 		\hfill
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
 			\includegraphics[width=0.9\linewidth]{bab3/modem_mifi_4g_kompart}
-			\caption{Penempatan Modem MiFi 4G di dalam kompartemen pelindung daya}
+			\caption{Penempatan Modem MiFi 4G/5G di dalam kompartemen pelindung daya}
 			\label{fig:penempatan-modem-mifi-4g}
 		\end{subfigure}
 	\end{figure}
@@ -1136,7 +1272,7 @@ Modul utama (\textit{entry point}) berfungsi sebagai pusat pengatur jalannya pro
 \end{lstlisting}
 
 \subsubsection{Implementasi Telemetri dan Mekanisme Keepalive}
-Modul telemetri bertugas membaca data penerbangan seperti GPS, baterai, dan mode terbang secara rutin menggunakan pustaka \textit{MAVSDK-Python}. Bagian paling krusial di sini adalah mekanisme \textit{keepalive} (Listing \ref{lst:keepalive}). Aturan keselamatan dasar drone (Firmware PX4) mensyaratkan bahwa mode otonom (\textit{OFFBOARD}) baru bisa aktif jika komputer pendamping (Raspberry Pi 5) sudah terbukti aktif mengirimkan perintah gerak. Oleh karena itu, selama drone belum masuk mode otonom, sistem akan terus-menerus mengirimkan perintah gerak palsu bernilai nol (\texttt{set\_velocity\_ned}). Proses "detak jantung" ini dikirim sangat cepat (setiap 0,05 detik) agar kapan pun operator menekan tombol otonom, drone sudah dalam kondisi siap dan langsung merespons tanpa ditolak oleh sistem keamanan.
+Modul telemetri bertugas membaca data penerbangan seperti GPS, baterai, dan mode terbang secara rutin menggunakan pustaka \textit{MAVSDK-Python}. Bagian paling krusial di sini adalah mekanisme \textit{keepalive} (Listing \ref{lst:keepalive}). Aturan keselamatan dasar drone (Firmware PX4) mensyaratkan bahwa mode otonom (\textit{OFFBOARD}) baru bisa aktif jika \textit{companion computer} (Raspberry Pi 5) sudah terbukti aktif mengirimkan perintah gerak. Oleh karena itu, selama drone belum masuk mode otonom, sistem akan terus-menerus mengirimkan perintah gerak palsu bernilai nol (\texttt{set\_velocity\_ned}). Proses "detak jantung" ini dikirim sangat cepat (setiap 0,05 detik) agar kapan pun operator menekan tombol otonom, drone sudah dalam kondisi siap dan langsung merespons tanpa ditolak oleh sistem keamanan.
 
 \begin{lstlisting}[language=Python, caption={Rutin \textit{keepalive} untuk menjamin transisi mode penerbangan otonom}, label={lst:keepalive}]
 	async def _offboard_keepalive(self):
@@ -1215,17 +1351,17 @@ Bagian ini bertugas menerjemahkan posisi objek di dalam layar kamera menjadi per
 \end{lstlisting}
 
 \subsubsection{Implementasi Diagram Keadaan Navigasi Pencarian}
-Skenario misi pencarian (\textit{Scout Mission}) mengatur tahapan gerak drone menggunakan diagram keadaan (\textit{State Machine}) yang diintegrasikan dengan arsitektur keselamatan tiga lapis (\textit{Three-Layer Safety System}). Arsitektur keselamatan ini dirancang secara khusus untuk memitigasi risiko kegagalan fatal akibat penyimpangan sensor barometer (\textit{barometric altitude drift}) pada area penerbangan rendah di mana pembacaan ketinggian relatif (\textit{relative altitude}) Pixhawk sering kali melayang jauh lebih tinggi dari kondisi \textit{Above Ground Level} (AGL) sebenarnya (misalnya, pembacaan log menunjukkan ketinggian 1,6 meter sementara kondisi riil wahana hanya berada di bawah 60 cm). Tiga lapis sistem pengamanan keselamatan ini meliputi:
+Skenario misi pencarian (\textit{Scout Mission}) mengatur tahapan gerak drone menggunakan \textit{state machine} yang diintegrasikan dengan arsitektur keselamatan tiga lapis (\textit{Three-Layer Safety System}). Arsitektur keselamatan ini dirancang secara khusus untuk memitigasi risiko kegagalan fatal akibat penyimpangan sensor barometer (\textit{barometric altitude drift}) pada area penerbangan rendah di mana pembacaan ketinggian relatif (\textit{relative altitude}) Pixhawk sering kali melayang jauh lebih tinggi dari kondisi \textit{Above Ground Level} (AGL) sebenarnya (misalnya, pembacaan log menunjukkan ketinggian 1,6 meter sementara kondisi riil wahana hanya berada di bawah 60 cm). Tiga lapis sistem pengamanan keselamatan ini meliputi:
 
 \begin{enumerate}
-	\item \textbf{Altitude Floor (Batas Bawah Ketinggian)}: Pada saat inisialisasi awal maupun selama penerbangan otonom berlangsung, ketinggian target \texttt{\_target\_altitude\_scout} dikunci ke batas bawah keselamatan (\texttt{MIN\_SAFE\_ALTITUDE\_M} sebesar 1,2 meter) untuk mencegah drift barometer memaksa drone terbang terlalu rendah hingga membentur rintangan di permukaan tanah.
-	\item \textbf{Runtime Altitude Floor Clamp}: Pada setiap iterasi loop kontrol utama (20 Hz), target altitude drone diverifikasi secara dinamis. Apabila nilai target terdeteksi berada di bawah ambang batas aman 1,2 meter, sistem secara aktif menolak dan memaksa nilai tersebut kembali ke batas keselamatan minimum agar perintah kecepatan vertikal (\texttt{vz}) mendorong drone naik kembali ke ketinggian aman.
-	\item \textbf{Pre-RTL Safety Climb (Fase Pendakian Sebelum RTL)}: Ketika tingkat baterai drone kritis di bawah ambang batas ($< 15\%$) atau terjadi perintah darurat (\textit{emergency stop}), drone tidak diizinkan langsung beralih ke mode RTL bawaan autopilot PX4 yang akan memulangkan drone secara horizontal dengan kecepatan tinggi pada ketinggian rendah. Sebagai gantinya, sistem otonom membatalkan seluruh misi dan memasuki fase pendakian keselamatan secara paksa dengan kecepatan vertikal konstan $vz = -0,8$ m/s (ke atas dalam kerangka acuan NED Pixhawk, menghasilkan pertambahan ketinggian sekitar 2,4 meter) selama durasi \texttt{SCOUT\_PRE\_RTL\_CLIMB\_S} (3,0 detik). Setelah mencapai ketinggian aman, gerak horizontal dihentikan sementara (\textit{hold}) sebelum kendali diserahterimakan sepenuhnya ke perintah \textit{Return to Launch} (RTL) PX4.
+	\item \textit{Altitude Floor} (Batas Bawah Ketinggian): Pada saat inisialisasi awal maupun selama penerbangan otonom berlangsung, ketinggian target \texttt{\_target\_altitude\_scout} dikunci ke batas bawah keselamatan (\texttt{MIN\_SAFE\_ALTITUDE\_M} sebesar 1,2 meter) untuk mencegah drift barometer memaksa drone terbang terlalu rendah hingga membentur rintangan di permukaan tanah.
+	\item \textit{Runtime Altitude Floor Clamp}: Pada setiap iterasi loop kontrol utama (20 Hz), target altitude drone diverifikasi secara dinamis. Apabila nilai target terdeteksi berada di bawah ambang batas aman 1,2 meter, sistem secara aktif menolak dan memaksa nilai tersebut kembali ke batas keselamatan minimum agar perintah kecepatan vertikal (\texttt{vz}) mendorong drone naik kembali ke ketinggian aman.
+	\item \textit{Pre-RTL Safety Climb} (Fase Pendakian Sebelum RTL): Ketika tingkat baterai drone kritis di bawah ambang batas ($< 15\%$) atau terjadi perintah darurat (\textit{emergency stop}), drone tidak diizinkan langsung beralih ke mode RTL bawaan autopilot PX4 yang akan memulangkan drone secara horizontal dengan kecepatan tinggi pada ketinggian rendah. Sebagai gantinya, sistem otonom membatalkan seluruh misi dan memasuki fase pendakian keselamatan secara paksa dengan kecepatan vertikal konstan $vz = -0,8$ m/s (ke atas dalam kerangka acuan NED Pixhawk, menghasilkan pertambahan ketinggian sekitar 2,4 meter) selama durasi \texttt{SCOUT\_PRE\_RTL\_CLIMB\_S} (3,0 detik). Setelah mencapai ketinggian aman, gerak horizontal dihentikan sementara (\textit{hold}) sebelum kendali diserahterimakan sepenuhnya ke perintah \textit{Return to Launch} (RTL) PX4.
 \end{enumerate}
 
-Mengacu pada Listing \ref{lst:scoutstate}, integrasi diagram keadaan otonom beserta tiga lapis sistem keselamatan tersebut dijalankan di dalam loop kontrol berfrekuensi 20 Hz.
+Mengacu pada Listing \ref{lst:scoutstate}, integrasi \textit{state machine} otonom beserta tiga lapis sistem keselamatan tersebut dijalankan di dalam loop kontrol berfrekuensi 20 Hz.
 
-\begin{lstlisting}[language=Python, caption={Perpindahan diagram keadaan (\textit{State Machine}) dengan tiga lapis sistem keselamatan}, label={lst:scoutstate}]
+\begin{lstlisting}[language=Python, caption={Perpindahan \textit{state machine} dengan tiga lapis sistem keselamatan}, label={lst:scoutstate}]
 	# 1. Safety Check Baterai & Pre-RTL Climb Phase
 	battery = self.state_dict.get("battery_pct", 100)
 	if battery < self.BATTERY_RTL_THRESHOLD and not self._battery_rtl_triggered:
@@ -1257,7 +1393,7 @@ Mengacu pada Listing \ref{lst:scoutstate}, integrasi diagram keadaan otonom bese
 	# Hitung vz otonom dengan redaman saat di area stabil
 	vz = max(-self.SCOUT_MAX_VZ, min(self.SCOUT_MAX_VZ, -self.SCOUT_KP_ALT * (target_alt - alt)))
 	
-	# 3. Eksekusi Diagram Keadaan Scout
+	# 3. Eksekusi State Machine Scout
 	if self._scout_state == ScoutState.SCAN: 
 		await self._scout_state_scan(vz, loop_count)
 	elif self._scout_state == ScoutState.APPROACH: 
@@ -1319,7 +1455,7 @@ Tahap integrasi akhir memastikan seluruh subsistem—mulai dari struktur mekanik
 	Integritas misi dilindungi secara berlapis oleh sistem pengawasan (\textit{watchdog}) dan arsitektur keselamatan terpadu. Apabila terdeteksi kondisi kritis baterai rendah di bawah ambang batas ($< 15\%$) atau hilangnya koneksi telemetri, sistem secara asinkron memicu prosedur pendakian darurat (\textit{pre-RTL safety climb}) selama 3,0 detik pada kecepatan $0,8$ m/s ke atas untuk mencapai ketinggian aman sebelum mengaktifkan perintah \textit{Return to Launch} (RTL) otonom bawaan PX4. Mekanisme pendakian darurat ini krusial guna mencegah benturan akibat penyimpangan pembacaan ketinggian barometer (\textit{barometric altitude drift}) pada area penerbangan rendah. Selain itu, operator di darat memegang kendali prioritas tertinggi melalui \textit{Remote Controller} untuk melakukan pengambilalihan manual (\textit{manual override}) kapan saja demi alasan keselamatan penerbangan.
 	
 	\item Pengawasan Operator (\textit{Monitoring}) \\
-	Seluruh data operasional, status terbang, dan tangkapan visual dipancarkan secara kontinu ke \textit{frontend monitoring} melalui koneksi jaringan nirkabel (\textit{Wi-Fi} lokal atau modem \textit{MiFi 4G}), memungkinkan operator melakukan pengawasan misi pencarian secara presisi.
+	Seluruh data operasional, status terbang, dan tangkapan visual dipancarkan secara kontinu ke \textit{frontend monitoring} melalui koneksi jaringan nirkabel (\textit{Wi-Fi} lokal atau modem \textit{MiFi 4G/5G}), memungkinkan operator melakukan pengawasan misi pencarian secara presisi.
 \end{enumerate}
 
 Melalui integrasi menyeluruh ini, sistem tidak hanya mampu menjalankan proses akuisisi citra, deteksi target, dan navigasi otomatis, tetapi juga menjamin keandalan struktural, stabilitas kelistrikan, serta keselamatan operasional selama misi pencarian korban berlangsung.
