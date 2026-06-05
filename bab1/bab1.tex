@@ -14,7 +14,7 @@ Kebutuhan terhadap sistem drone yang adaptif dalam konteks kebencanaan menjadi s
 
 Meskipun potensinya besar, operasi SAR konvensional berbasis drone saat ini masih memiliki kelemahan fundamental. Drone umumnya dioperasikan secara manual dan sangat bergantung pada transmisi video mentah (\textit{video streaming}) ke \textit{Ground Control Station} (GCS) untuk dianalisis oleh mata manusia. Di lingkungan bencana, ketersediaan \textit{bandwidth} jaringan radio seringkali tidak stabil, memicu latensi transmisi yang tinggi atau hilangnya sinyal (\textit{signal loss}). Untuk mengatasi masalah ini, diperlukan pergeseran menuju pemrosesan visual langsung di atas wahana (\textit{on-board detection}) menggunakan konsep komputasi tepi (\textit{edge computing}).
 
-Berdasarkan kondisi tersebut, penelitian ini berfokus pada perancangan sistem drone otonom yang memadukan \textit{flight controller} dengan \textit{companion computer} Raspberry Pi 5. Dengan menempatkan unit pemrosesan kecerdasan buatan secara lokal, drone dapat mengeksekusi model deteksi objek \textit{state-of-the-art} seperti YOLOv8 (\textit{You Only Look Once}) tanpa bergantung pada komunikasi data ke darat. Sistem ini dirancang agar drone dapat melakukan navigasi mandiri, mendeteksi keberadaan manusia secara \textit{real-time}, serta mengambil keputusan tindak lanjut secara otomatis. Dengan demikian, penelitian ini diharapkan dapat mengatasi kendala latensi komunikasi, mempercepat proses pencarian, dan meningkatkan keselamatan tim penolong di wilayah bencana.
+Berdasarkan kondisi tersebut, penelitian ini berfokus pada perancangan sistem drone otonom yang memadukan \textit{flight controller} dengan \textit{companion computer} Raspberry Pi 5. Dengan menempatkan unit pemrosesan kecerdasan buatan secara lokal, drone dapat mengeksekusi model deteksi objek seperti YOLOv8 (\textit{You Only Look Once}) tanpa bergantung pada komunikasi data ke darat. Sistem ini dirancang agar drone dapat melakukan navigasi mandiri, mendeteksi keberadaan manusia secara \textit{real-time}, serta mengambil keputusan tindak lanjut secara otomatis. Dengan demikian, penelitian ini diharapkan dapat mengatasi kendala latensi komunikasi, mempercepat proses pencarian, dan meningkatkan keselamatan tim penolong di wilayah bencana.
 
 \section{Rumusan Masalah}
 Berdasarkan uraian latar belakang di atas, rumusan masalah dalam penelitian ini didefinisikan secara lebih spesifik sebagai berikut:
@@ -27,19 +27,20 @@ Berdasarkan uraian latar belakang di atas, rumusan masalah dalam penelitian ini 
 \section{Tujuan Penelitian}
 Sejalan dengan rumusan masalah, penelitian ini bertujuan untuk:
 \begin{enumerate}
-	\item Menghasilkan rancang bangun perangkat keras dan kelistrikan sistem drone yang mampu menyuplai daya komputasi secara stabil bagi Raspberry Pi 5 selama drone terbang.
-	\item Mengevaluasi dan memvalidasi performa iterasi model YOLOv8n hasil \textit{fine-tuning} khusus kelas manusia pada resolusi yang efisien untuk \textit{deployment} pada raspberry pi 5.
-	\item Mengembangkan dan menguji integrasi perangkat lunak navigasi berbasis MAVSDK yang memungkinkan drone mencari, mengunci, dan mendekati target secara otomatis.
+	\item Menghasilkan rancang bangun perangkat keras dan kelistrikan sistem drone otonom yang mampu menyuplai daya komputasi secara stabil bagi perangkat \textit{edge} Raspberry Pi 5 tanpa memicu \textit{voltage sag}.
+	\item Mengevaluasi performa iterasi model YOLOv8n format ONNX yang dijalankan pada sistem operasi \textit{headless} untuk meraih keseimbangan \textit{framerate} (FPS) dan latensi terbaik.
+	\item Membangun mesin logika otonom tipe \textit{Persistent Multi-Target Scouting} berbasis MAVSDK yang memampukan wahana untuk menavigasi, mendokumentasi korban, dan menghindari pelacakan target duplikat secara mandiri.
 \end{enumerate}
 
 \section{Batasan Masalah}
 Agar ruang lingkup penelitian tetap terarah dan terukur, ditetapkan batasan masalah sebagai berikut:
 \begin{enumerate}
 	\item Penelitian berfokus pada implementasi drone tunggal (\textit{single-UAV}) menggunakan \textit{frame} Holybro S500 dan \textit{flight controller} Pixhawk 6C.
-	\item Unit                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              (\textit{edge computing}) dibatasi menggunakan Raspberry Pi 5 8GB yang dioperasikan dalam lingkungan Linux \textit{headless}.
-	\item Sistem deteksi visual menggunakan kamera RGB standar tanpa stabilisasi mekanis (gimbal), dengan target identifikasi dibatasi hanya pada kelas manusia (\textit{single-class object detection}).
-	\item Skenario pengujian sistem kontrol dan deteksi dilakukan pada kondisi pencahayaan siang hari (\textit{daylight}) di luar ruangan, dengan asumsi target manusia tidak tertimbun sepenuhnya (\textit{fully occluded}).
-	\item Komunikasi antara \textit{companion computer} dan \textit{flight controller} menggunakan antarmuka MAVSDK Python melalui protokol MAVLink.
+	\item Unit komputasi tepi (\textit{edge computing}) dibatasi menggunakan Raspberry Pi 5 8GB yang dioperasikan dalam lingkungan Linux \textit{headless} tanpa penyimpanan rekaman video lokal (\textit{onboard recording}).
+	\item Sistem deteksi visual murni mengandalkan kamera RGB monokular statis (tanpa stabilisasi mekanis \textit{gimbal}), dengan target identifikasi dibatasi khusus kelas manusia.
+	\item Sistem penglihatan komputer dibatasi pada penggunaan sensor optik RGB standar tanpa kapabilitas visi malam khusus (\textit{night vision} atau kamera termal). Eksekusi pengujian pada kondisi minim cahaya (subuh, petang, atau malam hari) dilakukan murni untuk mengevaluasi batasan toleransi (\textit{environmental robustness}) algoritma deteksi.
+	\item Transmisi pemantauan jarak jauh via \textit{dashboard} menggunakan jaringan nirkabel (Wi-Fi lokal atau seluler 4G/5G) diasumsikan berada pada area \textit{Line-of-Sight}, tanpa menjamin kekebalan terhadap gangguan \textit{video stuttering} akibat rintangan fisik padat.
+	\item Mekanisme penolakan target duplikat (\textit{duplicate exclusion}) murni mengandalkan filter jarak spasial absolut berbasis GPS (\textit{Haversine formula}), tanpa mengikutsertakan algoritma pengenalan identitas visual (\textit{Person Re-identification} / ReID) untuk membedakan korban yang bergerak silang.
 \end{enumerate}
 
 \section{Manfaat Penelitian}
