@@ -50,8 +50,10 @@ Pada tahap ini dilakukan perancangan perilaku sistem kontrol drone otonom yang d
 	\label{fig:blokdiagram2}
 \end{figure}
 
+Gambar \ref{fig:blokdiagram2} menunjukkan diagram alir perencanaan perilaku sistem kontrol drone otonom yang meliputi rancangan siklus operasi, sistem deteksi, dan mesin pengambil keputusan. Berdasarkan implementasi tersebut, alur perancangan ini memandu interaksi data antara input sensor and output kontrol terbang. Dapat diamati bahwa setiap tahapan direncanakan secara terstruktur guna mewujudkan penerbangan otonom yang stabil dan responsif. Dengan demikian, diagram alir ini bertindak sebagai kerangka acuan utama dalam merancang logika kecerdasan buatan pada drone.
+
 \subsection{Perancangan Siklus Operasi Otonom}
-Perancangan siklus operasi ini direpresentasikan dalam bentuk flowchart untuk menggambarkan urutan proses yang dijalankan drone selama misi pencarian korban. Alur operasi mencakup tahap inisialisasi sistem, aktivasi mode otonom melalui mode OFFBOARD, proses pencarian dan dokumentasi target, perpindahan area pencarian, hingga mekanisme penghentian misi melalui kondisi failsafe dan Return to Launch (RTL). Pada sistem yang dirancang, pilot tetap memegang kendali utama pada tahap lepas landas untuk menjaga keselamatan penerbangan. Setelah drone berada pada kondisi terbang stabil dan mode OFFBOARD diaktifkan, sistem otonom mulai mengambil alih proses navigasi dan pencarian korban secara otomatis.
+Perancangan siklus operasi ini direpresentasikan dalam bentuk flowchart untuk menggambarkan urutan proses yang dijalankan drone selama misi pencarian korban. Alur operasi mencakup tahap inisialisasi sistem, aktivasi mode otonom melalui mode OFFBOARD, proses pencarian dan dokumentasi target, perpindahan area pencarian, hingga mekanisme penghentian misi melalui prosedur pengamanan (\textit{safety procedure}) dan Return to Launch (RTL). Pada sistem yang dirancang, pilot tetap memegang kendali utama pada tahap lepas landas untuk menjaga keselamatan penerbangan. Setelah drone berada pada kondisi terbang stabil dan mode OFFBOARD diaktifkan, sistem otonom mulai mengambil alih proses navigasi dan pencarian korban secara otomatis.
 
 \begin{figure}[H]
 	\centering
@@ -77,8 +79,8 @@ Pada tahap APPROACH, drone bergerak mendekati target berdasarkan posisi objek te
 
 Setelah proses dokumentasi selesai dilakukan, drone memasuki tahap \texttt{DISPLACING} untuk melakukan pergeseran posisi secara lateral (sejauh 2 meter ke arah kanan) guna melanjutkan pencarian di area baru. Setelah perpindahan lateral tersebut selesai, drone kembali memasuki \textit{state} \texttt{SCAN} untuk melanjutkan proses pencarian target berikutnya. Siklus ini bertujuan untuk perluasan area cakupan pengamatan secara kontinu serta pencarian korban yang persisten, sehingga misi pencarian tetap berlanjut secara otonom setelah dokumentasi berhasil diambil. Perlu dicatat bahwa prosedur pulang (\texttt{RETURN\_HOME}) tidak termasuk dalam siklus pencarian otonom normal, di mana prosedur kembali otonom akibat baterai kritis dipicu secara terpisah oleh PX4-native RTL.
 
-\subsubsection{Mekanisme Failsafe dan Override}
-Untuk menjaga keselamatan sistem selama penerbangan otonom, sistem dilengkapi dengan beberapa mekanisme failsafe dan override. Mekanisme failsafe digunakan untuk menangani kondisi kritis seperti kapasitas baterai rendah, kehilangan koneksi telemetri, kegagalan komunikasi, maupun gangguan sistem lainnya. Apabila kondisi kritis terdeteksi, sistem secara otomatis membatalkan operasi pencarian dan menjalankan prosedur Return to Launch (RTL) atau pendaratan darurat.
+\subsubsection{Mekanisme Prosedur Keselamatan dan Override}
+Untuk menjaga keselamatan platform selama penerbangan otonom, arsitektur dilengkapi dengan beberapa prosedur keselamatan (\textit{safety procedure}) dan override. Prosedur pengamanan (\textit{protective mechanism}) digunakan untuk menangani kondisi kritis seperti kapasitas baterai rendah, kehilangan koneksi telemetri, kegagalan komunikasi, maupun gangguan operasional lainnya. Apabila kondisi kritis terdeteksi, mekanisme secara otomatis membatalkan operasi pencarian dan menjalankan prosedur Return to Launch (RTL) atau pendaratan darurat.
 
 Selain mekanisme otomatis, sistem juga menyediakan fitur RC override yang memungkinkan pilot mengambil alih kendali drone kapan saja dengan mengubah mode penerbangan menggunakan remote controller. Dengan adanya mekanisme ini, keselamatan penerbangan tetap dapat dijaga meskipun sistem otonom mengalami gangguan selama operasi berlangsung.
 
@@ -91,6 +93,8 @@ Sebagai perangkat intervensi kendali utama, penelitian ini menggunakan \textit{R
 	\label{fig:rc_t10}
 \end{figure}
 
+Gambar \ref{fig:rc_t10} menunjukkan bentuk fisik unit pemancar radio kendali yang digunakan untuk mengoperasikan drone secara manual dan memicu mekanisme keselamatan. Berdasarkan implementasi tersebut, perangkat ini memegang peranan vital sebagai jembatan kendali darurat antara operator di darat dan unit autopilot PX4. Dapat diamati bahwa integrasi transmitter ini menyediakan saluran override fisik yang kebal terhadap kegagalan perangkat lunak di companion computer. Dengan demikian, keberadaan kendali radio ini menjadi lapisan pertahanan pertama dalam meminimalkan risiko kecelakaan selama misi otonom berlangsung.
+
 \subsection{Perancangan Sistem Deteksi Manusia}
 Perancangan sistem deteksi manusia dilakukan untuk menghasilkan kemampuan identifikasi korban secara otomatis menggunakan data visual dari kamera drone. Sistem deteksi manusia dirancang sebagai pipeline pemrosesan citra yang bekerja secara kontinu selama mode otonom aktif. Hasil deteksi kemudian digunakan sebagai dasar pengambilan keputusan navigasi drone selama proses pencarian berlangsung. Tahapan utama pada sistem deteksi manusia meliputi proses akuisisi citra, preprocessing, deteksi manusia, validasi target, dan distribusi informasi deteksi menuju sistem navigasi otonom dan sistem monitoring.
 
@@ -100,6 +104,8 @@ Perancangan sistem deteksi manusia dilakukan untuk menghasilkan kemampuan identi
 	\caption{Blok Diagram Alur Deteksi Orang}
 	\label{fig:blokdiagram4}
 \end{figure}
+
+Gambar \ref{fig:blokdiagram4} menunjukkan diagram alur pemrosesan data visual dari sensor webcam hingga menjadi informasi deteksi korban. Berdasarkan implementasi tersebut, aliran data citra mentah diolah melalui beberapa tahap fungsional untuk menghasilkan estimasi spasial target. Dapat diamati bahwa pembagian tahapan ini memastikan setiap proses mulai dari akuisisi hingga validasi berjalan secara teratur dan berulang. Dengan demikian, alur pemrosesan deteksi ini mampu memasok koordinat target secara konsisten ke modul pengendali otonom.
 
 \subsubsection{Akuisisi Citra}
 Akuisisi citra dilakukan menggunakan kamera webcam yang dipasang pada drone. Kamera mengambil frame citra secara kontinu selama sistem berjalan untuk menyediakan data visual bagi sistem deteksi manusia. Frame yang diperoleh kemudian dikirimkan menuju modul pemrosesan citra untuk dianalisis lebih lanjut oleh model deteksi. Proses akuisisi citra dirancang agar mampu menyediakan aliran data visual secara stabil sehingga sistem tetap dapat melakukan deteksi secara real-time selama drone bergerak dan menjalankan misi pencarian korban.
@@ -126,6 +132,8 @@ Mesin pengambil keputusan merupakan bagian utama sistem otonom yang bertugas men
 	\label{fig:blokdiagram5}
 \end{figure}
 
+Gambar \ref{fig:blokdiagram5} menunjukkan arsitektur mesin pengambil keputusan otonom yang bekerja berdasarkan evaluasi kondisi sistem dan kejadian dinamis. Berdasarkan implementasi tersebut, drone dapat menentukan tindakan navigasi yang sesuai dengan prioritas misi dan status keselamatan. Dapat diamati bahwa pembagian logika ini menghasilkan transisi keputusan yang andal saat menangani kejadian tak terduga di lapangan. Dengan demikian, mesin pengambil keputusan ini menjamin kelancaran misi otonom dengan tetap mengutamakan aspek keselamatan terbang.
+
 \subsubsection{Monitoring Kondisi Sistem}
 Tahap monitoring kondisi sistem dilakukan secara kontinu selama mode otonom aktif. Sistem memantau beberapa parameter penting seperti status baterai, posisi drone, ketinggian penerbangan, kualitas GPS, dan mode penerbangan. Informasi tersebut digunakan untuk memastikan drone tetap berada pada kondisi operasional yang aman selama misi berlangsung. Selain itu, data telemetri yang diperoleh juga digunakan sebagai dasar evaluasi kondisi sistem sebelum drone menentukan tindakan navigasi berikutnya.
 
@@ -133,7 +141,7 @@ Tahap monitoring kondisi sistem dilakukan secara kontinu selama mode otonom akti
 Pada tahap evaluasi event, sistem melakukan identifikasi dan prioritas terhadap berbagai kondisi yang terjadi selama penerbangan. Sistem mengevaluasi keberadaan target manusia, kondisi baterai, kehilangan koneksi, serta perubahan status penerbangan yang dapat memengaruhi perilaku drone. Berdasarkan tingkat prioritasnya, sistem menentukan event mana yang harus diproses terlebih dahulu agar perilaku drone tetap stabil dan aman selama mode otonom aktif.
 
 \subsubsection{Pemilihan Tindakan Otonom}
-Setelah proses evaluasi selesai dilakukan, sistem menentukan tindakan navigasi yang akan dijalankan drone. Tindakan yang dapat dipilih meliputi rotasi pencarian, pendekatan target, dokumentasi korban, pergeseran posisi otonom, maupun prosedur failsafe seperti Return to Launch (RTL). Pemilihan tindakan dilakukan secara otomatis berdasarkan kondisi sistem dan state aktif pada state machine sehingga drone mampu menyesuaikan perilaku secara dinamis selama operasi berlangsung.
+Setelah proses evaluasi selesai dilakukan, sistem menentukan tindakan navigasi yang akan dijalankan drone. Tindakan yang dapat dipilih meliputi rotasi pencarian, pendekatan target, dokumentasi korban, pergeseran posisi otonom, maupun prosedur keselamatan (\textit{safety procedure}) seperti Return to Launch (RTL). Pemilihan tindakan dilakukan secara otomatis berdasarkan kondisi sistem dan state aktif pada state machine sehingga drone mampu menyesuaikan perilaku secara dinamis selama operasi berlangsung.
 
 \subsubsection{Siklus Pergeseran Posisi dan Kelanjutan Pencarian}
 Tahap pergeseran posisi otonom (\texttt{DISPLACING}) secara lateral dilakukan setelah drone menyelesaikan proses dokumentasi target (\texttt{DOCUMENT}). Langkah ini bertujuan untuk melanjutkan misi pencarian korban secara persisten dengan memperluas cakupan area pengamatan. Setelah perpindahan lateral selesai atau jika drone kehilangan target yang sedang diamati, sistem akan kembali memasuki \textit{state} \texttt{SCAN} untuk memulai siklus pencarian baru. Logika otonom ini dirancang agar misi tetap berlanjut dan tidak melakukan pemulangan (\texttt{RETURN\_HOME}) dalam kondisi normal, karena skenario pulang akibat baterai kritis ditangani terpisah oleh fitur RTL bawaan PX4.
@@ -147,6 +155,8 @@ Tahap perencanaan dan desain sistem merupakan tahap lanjutan setelah perancangan
 	\caption{Blok Diagram Alur Perencanaan dan Desain Sistem}
 	\label{fig:blokdiagram6}
 \end{figure}
+
+Gambar \ref{fig:blokdiagram6} menunjukkan alur integratif dari perancangan arsitektur fisik, perangkat lunak, dan interkoneksi sistem secara keseluruhan. Berdasarkan implementasi tersebut, pembagian tugas rekayasa dapat direncanakan secara paralel untuk mempercepat perakitan dan pemrograman drone. Dapat diamati bahwa integrasi seluruh komponen pendukung dikelompokkan ke dalam tiga pilar desain utama guna menyederhanakan pelacakan kegagalan. Dengan demikian, rancangan terpadu ini menjadi dasar teknis dalam memproduksi purwarupa fisik drone otonom.
 
 \subsection{Desain Hardware}
 Tahap desain hardware berfokus pada perancangan komponen fisik yang mendukung operasional sistem drone. Sebelum merancang struktur mekanik dan kelistrikan pendukung, ditentukan terlebih dahulu dua perangkat keras utama yang menjadi pusat komputasi dan akuisisi data otonom.
@@ -292,6 +302,8 @@ Desain elektrikal bertujuan untuk mengatur skema aliran daya ke seluruh komponen
 	\end{figure}
 	
 \end{enumerate}
+
+Gambar \ref{fig:blokdiagram7} dan Gambar \ref{fig:blokdiagram8} menunjukkan skema distribusi daya masing-masing untuk konfigurasi baterai tunggal dan baterai ganda. Berdasarkan implementasi tersebut, perbedaan utama terletak pada isolasi jalur catu daya komputasi dari fluktuasi arus motor propulsi. Dapat diamati bahwa konfigurasi baterai ganda meminimalkan gangguan kelistrikan, sedangkan konfigurasi baterai tunggal mengoptimalkan bobot terbang drone. Dengan demikian, pemilihan skema catu daya ini disesuaikan dengan kebutuhan misi dan kapasitas angkut wahana.
 
 \subsubsection{Desain Mekanik}
 
@@ -734,6 +746,8 @@ Desain final hasil iterasi inilah yang kemudian diproduksi, diimplementasikan se
 	\label{fig:perakitan_final_real}
 \end{figure}
 
+Gambar \ref{fig:perakitan_final_real} menunjukkan hasil realisasi perakitan fisik dari keseluruhan sistem drone berdasarkan desain final yang dirancang. Berdasarkan implementasi tersebut, seluruh komponen cetak 3D dan sirkuit daya telah terpasang secara kokoh pada rangka Holybro S500. Dapat diamati bahwa konfigurasi ini menghasilkan struktur yang ringkas dengan pusat massa yang terdistribusi secara seimbang. Dengan demikian, realisasi fisik drone ini telah siap digunakan sebagai platform uji coba penerbangan otonom.
+
 \subsection{Desain Software}
 Desain perangkat lunak pada sistem drone otonom ini dirancang untuk menangani tingkat kompleksitas yang tinggi, mencakup navigasi otomatis, deteksi manusia secara \textit{real-time}, pengolahan data telemetri, dan pemantauan sistem. Sistem ini mengimplementasikan arsitektur \textit{multi-thread} dan \textit{asynchronous} terdistribusi untuk memastikan bahwa pemrosesan berat seperti inferensi kecerdasan buatan tidak memblokir atau mengganggu \textit{loop} kontrol penerbangan kritis.
 
@@ -808,12 +822,12 @@ Sistem telemetri dirancang untuk memfasilitasi pertukaran data kecepatan tinggi 
 
 Keseluruhan informasi tersebut diperbarui secara terpusat pada kamus \textit{state} internal. Sebuah \textit{loop} penyiaran (\textit{broadcast loop}) berjalan membelah sistem secara periodik pada frekuensi 5Hz, mengambil cuplikan (\textit{snapshot}) matriks data telemetri terkini, dan memancarkannya (\textit{emit}) melalui \textit{SocketIO} di bawah \textit{event} \texttt{drone:status}. Selain disiarkan, matriks telemetri ini juga direkam secara persisten ke dalam sistem \textit{rotating log} internal dengan pembatasan laju (\textit{rate limit}) 5Hz untuk memfasilitasi kebutuhan analisis misi pasca-penerbangan tanpa menghambat performa inti pemrosesan. Pada ujung antarmuka (React), pembaruan data yang sangat responsif ini ditangkap dan merender dasbor operator secara instan.
 
-\subsubsection{Sistem Watchdog dan Failsafe}
-Sebagai sistem udara tanpa awak yang didesain untuk ranah pencarian korban di area bencana, integritas dan keamanan misi ditangani secara ketat lewat \textit{watchdog} perangkat lunak dan arsitektur \textit{failsafe}:
+\subsubsection{Sistem Watchdog dan Prosedur Keselamatan}
+Sebagai sistem udara tanpa awak yang didesain untuk ranah pencarian korban di area bencana, integritas dan keamanan misi ditangani secara ketat lewat \textit{watchdog} perangkat lunak dan arsitektur keselamatan (\textit{safety procedure}):
 \begin{itemize}
 	\item OFFBOARD Keepalive: Mengingat batasan keamanan internal \textit{firmware} PX4, sistem secara konstan menembakkan setpoint instruksi kendali bernilai netral (\textit{keepalive}) sebanyak 20 kali per detik bahkan saat drone masih di darat. Ini adalah mitigasi agar PX4 mengizinkan perpindahan \textit{mode} penerbangan ke \textit{OFFBOARD} kapan pun pilot pada kendali radio menginginkannya.
 	\item Connection Watchdog: Mengawasi kontinuitas koneksi dari MAVSDK. Apabila putus dalam durasi tertentu, sistem seketika memicu perintah berhenti darurat (\textit{emergency stop}).
-	\item Battery Failsafe: Telemetri baterai dipantau secara kontinu. Apabila tingkat kapasitas baterai menyentuh ambang batas kritis sebesar $< 15\%$, sistem secara otomatis membatalkan seluruh tugas navigasi dan memicu fase pengamanan berupa pendakian paksa vertikal (\textit{pre-RTL safety climb}) selama 3,0 detik ke atas pada kecepatan $vz = -0,8$ m/s guna memitigasi efek penyimpangan barometer (\textit{barometric drift}). Setelah fase pendakian keselamatan selesai, drone mengirimkan perintah mode \textit{Return to Launch} (RTL) bawaan PX4 secara aman untuk menghentikan misi dan pulang ke titik asal lepas landas.
+	\item Battery RTL Mechanism: Telemetri baterai dipantau secara kontinu. Apabila tingkat kapasitas baterai menyentuh ambang batas kritis sebesar $< 15\%$, sistem secara otomatis membatalkan seluruh tugas navigasi dan memicu fase pengamanan berupa pendakian paksa vertikal (\textit{pre-RTL safety climb}) selama 3,0 detik ke atas pada kecepatan $vz = -0,8$ m/s guna memitigasi efek penyimpangan barometer (\textit{barometric drift}). Setelah fase pendakian keselamatan selesai, drone mengirimkan perintah mode \textit{Return to Launch} (RTL) bawaan PX4 secara aman untuk menghentikan misi dan pulang ke titik asal lepas landas.
 
 	Mekanisme \textit{Battery Return-to-Launch} (RTL) yang diimplementasikan pada penelitian ini murni merupakan mekanisme keselamatan pada perangkat lunak otonom di \textit{companion computer} Raspberry Pi 5 dan sama sekali tidak menggunakan estimasi energi penerbangan. Sistem tidak menghitung kebutuhan energi berdasarkan jarak spasial menuju titik asal (\textit{home position}), tidak melakukan prediksi sisa waktu terbang (\textit{remaining flight time}), serta tidak mengestimasi konsumsi daya motor propulsi. Keputusan aktivasi Battery RTL menggunakan pendekatan \textit{fixed threshold} sebesar 15\% berdasarkan persentase baterai yang diterima melalui telemetri MAVSDK.
 
@@ -858,6 +872,9 @@ Seluruh perilaku drone di angkasa secara mendasar diorkestrasi oleh dua arus dat
 		\caption{Blok Diagram Visual to Control}
 		\label{fig:blokvisualtocontrol}
 	\end{figure}
+	
+	Gambar \ref{fig:blokvisualtocontrol} menunjukkan alur transmisi data dari kamera hingga perintah kontrol yaw dan kecepatan otonom dihasilkan. Berdasarkan implementasi tersebut, terdapat pemrosesan beruntun yang mengolah data piksel menjadi keputusan navigasi. Dapat diamati bahwa setiap tahap pemrosesan bekerja secara berurutan guna menjaga waktu respons sistem. Dengan demikian, diagram visual ini memvisualisasikan bagaimana feedback visual diterjemahkan menjadi aksi navigasi fisik. Rincian tahapan pada alur visual tersebut diuraikan sebagai berikut:
+	
 	\begin{itemize}
 		\item Webcam USB menangkap aliran data optik mentah ke GStreamer.
 		\item GStreamer mereduksi ukuran piksel citra sesuai kapabilitas komputasi CPU Raspberry Pi 5 dan menampungnya ke dalam Frame Queue.
@@ -872,6 +889,9 @@ Seluruh perilaku drone di angkasa secara mendasar diorkestrasi oleh dua arus dat
 		\caption{Blok Diagram Telemetry to React}
 		\label{fig:bloktelemtoreact}
 	\end{figure}
+	
+	Gambar \ref{fig:bloktelemtoreact} menunjukkan alur pemrosesan data telemetri dari flight controller Pixhawk hingga dirender pada antarmuka operator. Berdasarkan implementasi tersebut, data dikirim secara asinkron menggunakan protokol WebSockets untuk menghindari kelambatan render visual. Dapat diamati bahwa pemisahan alur telemetri ini menjaga kestabilan data telemetri yang ditampilkan ke pengguna. Dengan demikian, alur komunikasi ini menjamin operator selalu menerima metrik penerbangan aktual secara real-time. Rincian tahapan pada alur telemetri tersebut diuraikan sebagai berikut:
+	
 	\begin{itemize}
 		\item PX4 Flight Controller secara internal menata sinyal fisik sensor (IMU, Barometer, GPS) menjadi kumpulan data paket status.
 		\item MAVSDK Listener yang bersiaga pada Raspberry Pi terus-menerus berlangganan paket dari drone lalu memperbarui matriks pusat State Dictionary.
@@ -888,11 +908,16 @@ Menjadikan Raspberry Pi 5 sebagai pusat kendalinya, subsistem ini bertindak laya
 
 \subsubsection{Arsitektur Subsistem Monitoring}
 Subsistem pemantauan dirancang dengan prinsip transparansi data namun tidak memiliki akses untuk mengintervensi kendali terbang (\textit{read-only by design}). Subsistem ini dibangun menggunakan teknologi web mutakhir seperti Vite dan React. Desain antarmukanya dibuat sangat ringan agar tidak membebani komputasi \textit{companion computer}, sehingga proses pemantauan secara \textit{real-time} dapat berjalan lancar bagi operator di lapangan. Aliran komunikasi data memanfaatkan protokol \textit{WebSocket} yang andal dan responsif. Melalui dasbor antarmuka, operator dapat memantau berbagai metrik penerbangan (koordinat geospasial dan baterai), siaran langsung video kamera, serta melacak tahapan logika otonom drone (seperti laporan perubahan status dari mode \texttt{SCAN} beralih ke mode \texttt{APPROACH}).
+
+Seluruh tahapan pemodelan yang telah diuraikan sebelumnya menghasilkan rancangan komprehensif yang meliputi perilaku sistem kontrol, arsitektur perangkat keras, arsitektur perangkat lunak, sistem komunikasi data, serta model transisi keadaan state machine. Rancangan terstruktur tersebut menjadi landasan teori dan cetak biru teknis yang sangat krusial dalam tahap pengembangan sistem otonom drone ini. Pada tahapan berikutnya, rancangan tersebut direalisasikan menjadi bentuk fisik purwarupa wahana terbang beserta seluruh modul program yang mendukung operasinya secara otonom. Dengan demikian, implementasi fisik drone dan pengembangan perangkat lunak dapat berjalan secara sinergis dan terarah guna mencapai kinerja sistem yang optimal. Hubungan integratif antara desain konseptual dan realisasi fisik ini dibahas secara mendalam pada bagian integrasi dan implementasi berikut.
+
 \section{Integrasi dan Implementasi Sistem}
 Tahap integrasi dan implementasi sistem merupakan tahap akhir dalam metodologi penelitian yang bertujuan untuk merealisasikan seluruh rancangan perilaku sistem, desain \textit{software}, dan arsitektur sistem menjadi sebuah sistem drone otonom yang dapat beroperasi secara utuh. Pada tahap ini dilakukan implementasi perangkat keras dan perangkat lunak serta integrasi antar subsistem agar seluruh komponen dapat bekerja secara sinkron selama operasi pencarian berlangsung. Integrasi dilakukan dengan menggabungkan subsistem penerbangan, subsistem komputasi otonom, dan subsistem \textit{monitoring} ke dalam satu sistem terkoordinasi.
 
 \subsection{Implementasi Hardware}
 Implementasi \textit{hardware} berfokus pada integrasi komponen komputasi dan sensor tambahan ke dalam drone drone yang telah terakit. Fokus utama pada tahap ini adalah memastikan distribusi daya dan jalur komunikasi antar perangkat tambahan berjalan stabil tanpa mengganggu stabilitas drone.
+
+Realisasi fisik dari purwarupa drone otonom ini dilakukan dengan mewujudkan hasil desain mekanik, sistem distribusi daya, konfigurasi komunikasi data, serta konfigurasi sensor ke dalam wujud fisik wahana yang aktual. Integrasi perangkat keras ini bertujuan untuk memvalidasi bahwa seluruh rancangan teoritis yang telah disusun dapat berfungsi secara harmonis pada kondisi lingkungan nyata. Oleh karena itu, tahap perwujudan fisik ini menghubungkan seluruh rancangan konseptual CAD 3D dan skema kelistrikan menjadi sistem penunjang penerbangan yang terintegrasi secara utuh.
 
 \begin{itemize}
 	\item Konfigurasi drone dan Propulsi: Penelitian ini menggunakan drone Holybro S500 yang secara basis telah terakit secara \textit{custom} pada bagian rangka, motor \textit{brushless}, \textit{Electronic Speed Controller} (ESC), PDB, serta \textit{Flight Controller} Pixhawk 6C. Implementasi fisik difokuskan pada penempatan dan pemasangan komponen otonom tambahan yang belum tersedia pada drone dasar.
@@ -1249,10 +1274,14 @@ Implementasi \textit{hardware} berfokus pada integrasi komponen komputasi dan se
 	\end{figure}
 \end{itemize}
 
+Gambar \ref{fig:modem-mifi-4g} dan Gambar \ref{fig:penempatan-modem-mifi-4g} menunjukkan wujud fisik modem MiFi 4G/5G beserta penempatannya di dalam kompartemen pelindung drone. Berdasarkan implementasi tersebut, integrasi modem ini menyediakan konektivitas internet nirkabel yang stabil untuk pengiriman data telemetri. Dapat diamati bahwa rancangan penempatan modem ini memanfaatkan ruang kosong secara efisien tanpa mengganggu penempatan sensor lainnya. Dengan demikian, seluruh perakitan perangkat keras tambahan telah diselesaikan secara terintegrasi dan siap mendukung fungsionalitas sistem otonom drone.
+
 \subsection{Implementasi Backend System}
 Implementasi \textit{backend system} direalisasikan menggunakan bahasa pemrograman Python dengan kerangka kerja Flask. Sistem ini mengadopsi arsitektur \textit{split-brain} dan didistribusikan ke dalam beberapa modul spesifik (telemetri, visi komputer, dan navigasi) yang dikerjakan secara konkuren.
 
 Untuk memberikan gambaran menyeluruh terhadap ruang lingkup pengembangan, perangkat lunak disusun dalam struktur direktori fungsional sebagai berikut:
+
+Arsitektur perangkat lunak pada sistem otonom ini disusun secara modular guna meningkatkan tingkat pemeliharaan (\textit{maintainability}) serta keterkembangan (\textit{scalability}) sistem secara berkelanjutan. Melalui pendekatan modularitas ini, pemisahan tanggung jawab antar-modul (\textit{separation of concerns}) dapat terjaga dengan baik sekaligus memberikan kemudahan bagi pengembangan fitur tambahan di masa depan. Struktur pengorganisasian kode program yang modular tersebut direpresentasikan melalui pembagian direktori kerja yang sistematis.
 
 \begin{lstlisting}[language=bash, caption={Struktur direktori fungsional perangkat lunak sistem drone otonom}]
 	/otonom
@@ -1470,7 +1499,7 @@ Tahap integrasi akhir memastikan seluruh subsistem—mulai dari struktur mekanik
 	\item Eksekusi Navigasi Penerbangan \\
 	Keputusan dari \textit{State Machine} diterjemahkan menjadi perintah kecepatan (vektor \texttt{VelocityNedYaw}) dan dikirimkan kembali ke \textit{Pixhawk}. Selama mode penerbangan \textit{OFFBOARD} aktif, \textit{Pixhawk} akan mengeksekusi perintah tersebut menjadi pergerakan motor fisik secara otomatis.
 	
-	\item Sistem Keselamatan dan \textit{Failsafe} \\
+	\item Sistem Keselamatan dan Prosedur Pengamanan (\textit{Safety Procedure}) \\
 	Integritas misi dilindungi secara berlapis oleh sistem pengawasan (\textit{watchdog}) dan arsitektur keselamatan terpadu. Apabila terdeteksi kondisi kritis baterai rendah di bawah ambang batas ($< 15\%$) atau hilangnya koneksi telemetri, sistem secara asinkron memicu prosedur pendakian darurat (\textit{pre-RTL safety climb}) selama 3,0 detik pada kecepatan $0,8$ m/s ke atas untuk mencapai ketinggian aman sebelum mengaktifkan perintah \textit{Return to Launch} (RTL) otonom bawaan PX4. Mekanisme pendakian darurat ini krusial guna mencegah benturan akibat penyimpangan pembacaan ketinggian barometer (\textit{barometric altitude drift}) pada area penerbangan rendah. Selain itu, operator di darat memegang kendali prioritas tertinggi melalui \textit{Remote Controller} untuk melakukan pengambilalihan manual (\textit{manual override}) kapan saja demi alasan keselamatan penerbangan.
 	
 	\item Pengawasan Operator (\textit{Monitoring}) \\

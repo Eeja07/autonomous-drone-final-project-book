@@ -40,7 +40,7 @@ Hasil pengujian kemudian dianalisis secara komparatif untuk menentukan konfigura
 
 \section{Lingkungan dan Konfigurasi Pengujian}
 
-Pengujian dilakukan pada dua kondisi lingkungan, yaitu lingkungan laboratorium untuk pengujian integrasi perangkat lunak dan perangkat keras, serta area terbuka untuk validasi sistem deteksi manusia dan navigasi drone otonom.
+Pengujian dilakukan pada dua kondisi lingkungan, yaitu lingkungan laboratorium untuk pengujian integrasi perangkat lunak dan perangkat keras, serta area terbuka untuk validasi sistem deteksi manusia dan navigasi drone otonom. Lingkungan laboratorium digunakan untuk memastikan fungsionalitas dasar dan kestabilan komunikasi data antar-komponen terjamin sebelum diterjunkan ke lapangan. Sementara itu, uji coba di lapangan terbuka bertujuan untuk memverifikasi performa navigasi dan keandalan visi komputer drone di bawah kondisi dinamika atmosfer nyata.
 
 \subsection{Perangkat Keras Pengujian}
 
@@ -78,9 +78,11 @@ Spesifikasi perangkat keras yang digunakan pada penelitian ini ditunjukkan pada 
 	\end{tabular}
 \end{table}
 
+Tabel \ref{tab:hardware_testing} merangkum spesifikasi perangkat keras yang digunakan dalam proses pengujian sistem. Berdasarkan konfigurasi tersebut, interkoneksi fisik antar-perangkat dirancang untuk menahan getaran dan beban terbang drone secara dinamis. Dapat diamati bahwa pemilihan komponen ini memenuhi standar keandalan sistem tertanam (\textit{embedded system}) yang dibutuhkan di lapangan. Dengan demikian, ketersediaan perangkat keras yang andal ini menjadi fondasi utama dalam melaksanakan pengujian perangkat lunak sistem.
+
 \subsection{Perangkat Lunak Pengujian}
 
-Lingkungan perangkat lunak yang digunakan pada sistem ditunjukkan pada Tabel \ref{tab:software_testing}.
+Lingkungan perangkat lunak yang digunakan pada platform ditunjukkan pada Tabel \ref{tab:software_testing}. Konfigurasi sistem operasi, pustaka visi komputer, dan dependensi telemetri disesuaikan dengan arsitektur komputasi edge Raspberry Pi 5. Penyelarasan versi perangkat lunak ini penting untuk menghindari kendala kompatibilitas runtime selama pengujian berlangsung.
 
 \begin{table}[H]
 	\centering
@@ -117,13 +119,15 @@ Lingkungan perangkat lunak yang digunakan pada sistem ditunjukkan pada Tabel \re
 	\end{tabular}
 \end{table}
 
+Konfigurasi perangkat keras dan arsitektur lunak yang telah dirinci tersebut selanjutnya dijadikan acuan dalam mempersiapkan seluruh komponen sebelum diuji. Kesiapan ini menjadi landasan penting untuk mengevaluasi kinerja operasional dan stabilitas platform pada pengujian kelistrikan serta daya di tahapan berikutnya.
+
 \section{Pengujian Sistem Kelistrikan dan Stabilitas Daya}
 
-Pengujian dilakukan untuk memastikan Raspberry Pi 5 memperoleh suplai daya stabil selama seluruh subsistem drone aktif secara bersamaan.
+Pengujian dilakukan untuk memastikan Raspberry Pi 5 memperoleh suplai daya stabil selama seluruh subsistem drone aktif secara bersamaan. Evaluasi ini mencakup kondisi dinamis saat motor propulsi dan modul komputasi edge bekerja secara paralel pada beban puncak. Melalui tahapan ini, kestabilan tegangan input companion computer dapat diverifikasi guna mencegah terjadinya insiden mati mendadak saat misi otonom.
 
 \subsection{Iterasi Pengembangan Sistem Catu Daya}
 
-Beberapa iterasi desain dilakukan untuk memperoleh konfigurasi suplai daya yang stabil sebagaimana ditunjukkan pada Tabel \ref{tab:iterasi_daya}.
+Beberapa iterasi desain dilakukan untuk memperoleh konfigurasi suplai daya yang stabil sebagaimana ditunjukkan pada Tabel \ref{tab:iterasi_daya}. Tahapan perbaikan rancangan ini dilakukan secara bertahap untuk mengidentifikasi kelemahan dari setiap jenis modul regulator daya yang diuji. Pengamatan dari setiap iterasi menjadi masukan krusial untuk menyempurnakan keandalan kelistrikan platform otonom drone.
 
 \begin{table}[H]
 	\centering
@@ -156,6 +160,8 @@ Beberapa iterasi desain dilakukan untuk memperoleh konfigurasi suplai daya yang 
 	\end{tabular}
 \end{table}
 
+Data perbandingan iterasi daya pada Tabel \ref{tab:iterasi_daya} menunjukkan evolusi desain catu daya dari model awal hingga model final yang stabil. Berdasarkan pengujian tersebut, perubahan konfigurasi dilakukan untuk mengatasi kendala listrik yang dapat menghentikan operasi Raspberry Pi 5. Dapat diamati bahwa penggunaan UBEC 5A memberikan stabilitas tegangan terbaik saat sistem mengalami lonjakan beban komputasi. Dengan demikian, konfigurasi daya ini dipilih sebagai standar catu daya utama untuk mendukung penerbangan otonom drone.
+
 \subsection{Analisis Kegagalan Sistem Daya}
 
 Berdasarkan iterasi pengujian yang dilakukan, ditemukan beberapa permasalahan teknis terkait suplai daya untuk komputasi \textit{edge} pada Raspberry Pi 5. Rincian analisis kegagalan pada masing-masing konfigurasi adalah sebagai berikut:
@@ -186,11 +192,11 @@ Berdasarkan iterasi pengujian yang dilakukan, ditemukan beberapa permasalahan te
 Sebagai solusi akhir untuk mengatasi seluruh kendala tersebut, sistem direvisi menggunakan UBEC 5A yang dihubungkan langsung ke baterai LiPo utama drone melalui konektor XT60 \textit{Y-Splitter}. Konfigurasi ini terbukti berhasil mempertahankan tegangan suplai secara stabil meskipun inferensi AI dan operasi penerbangan drone berlangsung secara bersamaan.
 \section{Optimasi Lingkungan Sistem Operasi Edge Computing}
 
-Pengujian dilakukan untuk mengevaluasi pengaruh lingkungan sistem operasi terhadap performa inferensi AI pada Raspberry Pi 5.
+Pengujian dilakukan untuk mengevaluasi pengaruh lingkungan sistem operasi terhadap performa inferensi AI pada Raspberry Pi 5. Pemilihan konfigurasi sistem operasi yang tepat menjadi parameter krusial untuk meminimalisir penggunaan RAM dan CPU oleh proses latar belakang. Dengan demikian, alokasi sumber daya komputasi dapat diprioritaskan secara penuh untuk pemrosesan citra real-time dan komunikasi navigasi.
 
 \subsection{Perbandingan Mode Desktop dan Headless}
 
-Perbandingan penggunaan sistem operasi desktop dan headless ditunjukkan pada Tabel \ref{tab:headless_compare}.
+Perbandingan penggunaan sistem operasi desktop dan headless ditunjukkan pada Tabel \ref{tab:headless_compare}. Pengukuran dilakukan pada parameter utilisasi memori, kestabilan frame rate, serta beban CPU saat platform berada pada kondisi idle maupun beban kerja penuh. Hasil komparasi ini digunakan untuk meningkatkan efisiensi runtime arsitektur otonom drone.
 
 \begin{table}[H]
 	\centering
@@ -219,6 +225,8 @@ Hasil pengujian menunjukkan bahwa mode headless menghasilkan konsumsi sumber day
 Penghapusan graphical environment memungkinkan inferensi ONNX Runtime berjalan lebih stabil pada Raspberry Pi 5.
 Selain itu, penggunaan mode headless juga mengurangi proses latar belakang sistem operasi sehingga sumber daya CPU dan RAM dapat lebih difokuskan untuk proses inferensi, telemetry MAVSDK, dan streaming video secara simultan.
 
+Optimasi sirkuit operasi pada level sistem operasi ini memberikan fondasi penting bagi efisiensi komputasi visual. Selanjutnya, performa platform diuji menggunakan beberapa variasi model kecerdasan buatan untuk menentukan arsitektur pendeteksi yang paling optimal sebelum memasuki tahapan pelatihan khusus.
+
 \section{Pengujian Komparatif Model Deteksi Manusia}
 
 Sebelum melakukan proses \textit{fine-tuning} model, penelitian ini terlebih dahulu melakukan pengujian komparatif terhadap beberapa konfigurasi model deteksi manusia untuk menentukan base model yang paling sesuai digunakan pada Raspberry Pi 5.
@@ -244,7 +252,7 @@ Namun demikian, kompleksitas tambahan pada proses inferensi menyebabkan beban ko
 Selain itu, kebutuhan utama sistem drone otonom pada penelitian ini berfokus pada deteksi keberadaan manusia secara \textit{real-time}, bukan analisis pose tubuh secara detail.
 Oleh karena itu, penggunaan model pose estimation dinilai menghasilkan beban komputasi tambahan yang kurang efisien untuk platform \textit{edge computing} berbasis Raspberry Pi 5.
 
-Pengujian awal dilakukan menggunakan empat konfigurasi model ONNX sebagaimana ditunjukkan pada Tabel \ref{tab:model_compare_awal}.
+Pengujian awal dilakukan menggunakan empat konfigurasi model ONNX sebagaimana ditunjukkan pada Tabel \ref{tab:model_compare_awal}. Skenario pengujian ini mengukur performa kecepatan pemrosesan dalam satuan frame per second (FPS) dan waktu latensi inferensi. Data awal ini menjadi parameter dasar untuk mengevaluasi efisiensi komputasi visual pada companion computer.
 
 \begin{table}[H]
 	\centering
@@ -378,8 +386,7 @@ Setelah proses seleksi model selesai dilakukan, penelitian kemudian melanjutkan 
 
 \subsection{Konfigurasi Pelatihan Model}
 
-Pelatihan model dilakukan menggunakan YOLOv8n pretrained dengan dataset COCO2017 kelas \textit{person-only}.
-Konfigurasi pelatihan ditunjukkan pada Tabel \ref{tab:training_config}.
+Pelatihan model dilakukan menggunakan YOLOv8n pretrained dengan dataset COCO2017 kelas \textit{person-only}. Pemanfaatan bobot awal (pretrained) ini bertujuan untuk mempercepat proses konvergensi model pada kelas spesifik manusia. Adapun seluruh pengaturan hiperparameter dan lingkungan komputasi yang diterapkan selama proses ini ditunjukkan pada Tabel \ref{tab:training_config}.
 
 \begin{table}[H]
 	\centering
@@ -399,6 +406,8 @@ Konfigurasi pelatihan ditunjukkan pada Tabel \ref{tab:training_config}.
 		AMP & Enabled \\ \hline
 	\end{tabular}
 \end{table}
+
+Seluruh parameter pelatihan yang telah terangkum dalam Tabel~\ref{tab:training_config} menjadi pedoman dasar dalam melakukan proses pembaruan bobot model. Hasil luaran dari proses komputasi pelatihan tersebut selanjutnya dianalisis secara mendalam pada bagian berikutnya guna mengevaluasi tingkat akurasi dan konvergensi model.
 
 \section{Analisis Hasil Pelatihan dan Validasi Model YOLOv8n}
 
@@ -432,6 +441,8 @@ Precision, recall, dan mAP juga meningkat secara bertahap hingga mendekati konve
 Penurunan \textit{train loss} dan \textit{validation loss} yang relatif konsisten menunjukkan bahwa proses pelatihan berjalan stabil tanpa divergensi signifikan.
 Selain itu, tidak terlihat peningkatan \textit{validation loss} secara ekstrem pada epoch akhir sehingga indikasi overfitting berat tidak ditemukan pada model hasil \textit{fine-tuning}.
 
+Melalui perolehan grafik evaluasi training yang menunjukkan kestabilan nilai \textit{loss} serta peningkatan nilai mAP yang konvergen, model deteksi YOLOv8n ini dinilai telah matang dan siap diintegrasikan. Kestabilan kurva performa tersebut memberikan jaminan bahwa model tidak mengalami gejala \textit{overfitting} maupun \textit{underfitting} selama proses pembelajaran berlangsung. Dengan ukuran bobot model yang kompak hasil pemangkasan kelas target, model ini memiliki kesiapan optimal untuk dieksekusi pada lingkungan komputasi terbatas di dalam \textit{companion computer} Raspberry Pi 5. Oleh karena itu, bobot model final ini dapat langsung dideploy untuk mendukung proses inferensi visual secara \textit{real-time} pada sistem navigasi otonom.
+
 \subsection{Hasil Evaluasi Model}
 
 \begin{table}[H]
@@ -453,6 +464,8 @@ Selain itu, tidak terlihat peningkatan \textit{validation loss} secara ekstrem p
 \end{table}
 
 Nilai precision yang tinggi menunjukkan bahwa model mampu meminimalkan false positive, sedangkan nilai recall menunjukkan masih terdapat beberapa objek manusia kecil yang belum terdeteksi secara optimal.
+
+Nilai metrik evaluasi yang disajikan pada Tabel~\ref{tab:metric_result} memiliki dampak langsung terhadap efisiensi eksekusi secara \textit{real-time} pada Raspberry Pi 5. Keandalan komputasi dalam menghasilkan nilai latensi rendah dan \textit{frame rate} (FPS) tinggi pada unit \textit{companion computer} sangat dipengaruhi oleh tingkat kompleksitas arsitektur jaringan saraf tiruan yang digunakan. Melalui penyederhanaan arsitektur model YOLOv8n kelas tunggal dan pembatasan resolusi input sebesar 320x320 piksel, beban pemrosesan dapat diredam secara signifikan tanpa mengorbankan akurasi secara drastis. Dengan demikian, optimasi parameter arsitektur model ini menjadi prasyarat krusial agar sirkuit asinkron pendeteksi target mampu bersinkronisasi secara tepat dengan frekuensi kontrol otonom.
 
 \subsection{Analisis Precision, Recall, dan F1-Score}
 
@@ -497,7 +510,7 @@ Nilai false positive yang relatif rendah menunjukkan bahwa model cukup baik dala
 
 \subsection{Analisis Hasil Prediksi Validasi}
 
-Untuk mengevaluasi kualitas deteksi model, dilakukan perbandingan antara ground truth dataset dan hasil prediksi model pada batch validasi sebagaimana ditunjukkan pada Gambar \ref{fig:val_compare0}.
+Untuk mengevaluasi kualitas deteksi model, dilakukan perbandingan antara ground truth dataset dan hasil prediksi model pada batch validasi sebagaimana ditunjukkan pada Gambar \ref{fig:val_compare0}. Visualisasi ini menyandingkan label anotasi asli dengan kotak pembatas prediktif beserta tingkat kepercayaannya. Perbandingan visual ini penting untuk mengamati kemampuan model dalam menangani variasi bentuk tubuh manusia secara spasial.
 
 \begin{figure}[H]
 	\centering
@@ -573,9 +586,14 @@ Berdasarkan hasil benchmark tersebut, peningkatan resolusi input memberikan peng
 Sebaliknya, resolusi 640×640 menghasilkan kualitas visual yang lebih baik namun menyebabkan beban komputasi pada CPU meningkat tajam sehingga latency membengkak hingga sekitar 171.22 ms dan performa menurun signifikan hingga hanya mencapai sekitar 5.84 FPS. Kondisi ini dinilai tidak memenuhi kebutuhan sistem navigasi drone otonom \textit{real-time} karena delay inferensi terlalu tinggi untuk proses pengambilan keputusan secara langsung.
 
 Resolusi 320×320 menghasilkan kompromi terbaik antara performa \textit{real-time} dan kualitas deteksi objek manusia. Dengan rata-rata latency sekitar 42.17 ms dan FPS sekitar 23.72 FPS, sistem masih mampu mempertahankan operasi \textit{real-time} sambil menghasilkan bounding box yang stabil. Selain itu, resolusi ini juga memberikan hasil deteksi yang lebih baik pada kondisi lingkungan kompleks dengan variasi pencahayaan dan ukuran objek manusia yang beragam. Berdasarkan hasil pengujian komparatif tersebut, resolusi 320×320 dipilih sebagai konfigurasi inferensi final yang diimplementasikan pada platform \textit{edge computing} drone otonom secara \textit{real-time}.
+
+Justifikasi pemilihan resolusi 320x320 piksel ini juga didasarkan pada aspek pengelolaan termal dan efisiensi sumber daya komputasi Raspberry Pi 5. Penggunaan resolusi yang lebih rendah dari 640x640 piksel mampu menekan utilisasi CPU dan RAM tetap berada pada batas aman, sehingga mencegah terjadinya peningkatan suhu berlebih (\textit{thermal throttling}) pada sirkuit \textit{edge computing}. Melalui efisiensi beban kerja tersebut, sistem otonom drone dapat mempertahankan latensi end-to-end yang rendah secara konstan selama misi berlangsung. Dengan demikian, konfigurasi ini tidak hanya menjamin stabilitas performa sistem tetapi juga menghasilkan respons navigasi otonom yang aman dan andal.
+
+Hasil perbandingan performa inferensi dan parameter komputasi tersebut selanjutnya diintegrasikan ke dalam subsistem utama pendukung. Sinergi antarmuka komputasi edge ini akan dievaluasi secara terintegrasi dengan modul telemetri dan kendali otonom pada tahapan pengujian berikutnya.
+
 \section{Pengujian Integrasi Sistem Backend, MAVSDK, dan Frontend}
 
-Pengujian ini dilakukan untuk memastikan seluruh arsitektur perangkat lunak mampu berjalan secara bersamaan tanpa saling memblokir (blocking) pada Raspberry Pi 5 selama operasi drone berlangsung.
+Pengujian ini dilakukan untuk memastikan seluruh arsitektur perangkat lunak mampu berjalan secara bersamaan tanpa saling memblokir (blocking) pada Raspberry Pi 5 selama operasi drone berlangsung. Fokus utama diarahkan pada sinkronisasi pembagian memori antar-thread untuk menghindari race condition. Dengan demikian, keandalan fungsional dari seluruh sistem asinkron backend-frontend dapat dipastikan aman sebelum uji terbang otonom.
 
 \subsection{Pengujian Integrasi Backend dan Multi-Threading}
 
@@ -607,6 +625,8 @@ Pengujian integrasi perangkat lunak dilakukan untuk memastikan arsitektur \texti
 	\label{fig:logyolo}
 \end{figure}
 
+Gambar \ref{fig:loggstreamer} dan Gambar \ref{fig:logyolo} menunjukkan bahwa integrasi pemrosesan video dan inferensi YOLOv8n dapat berjalan secara paralel tanpa mengalami kemacetan antrean data. Berdasarkan hasil log tersebut, thread konsumen visual mampu memproses setiap frame gambar dengan waktu inferensi yang stabil. Dapat diamati bahwa waktu komputasi inferensi ini tetap berada dalam batas toleransi real-time yang aman. Dengan demikian, sinkronisasi aliran data video ini siap dihubungkan dengan modul pengiriman telemetri sistem.
+
 \subsection{Pengujian Aliran Telemetri MAVSDK ke Frontend}
 
 Validasi komunikasi asinkron diuji dengan mengamati aliran data dari \textit{Flight Controller} menuju antarmuka web. Seperti yang terlihat pada log terminal (Gambar \ref{fig:logtelemmavsdk}), kelas \texttt{MAVSDKListener} berhasil membaca status parameter terbang (mode penerbangan, baterai, altitudo, kecepatan) melalui \textit{event loop} \texttt{asyncio}. Data tersebut kemudian dipancarkan (\textit{broadcast}) secara kontinu menggunakan \textit{event} \texttt{drone:status}. Keberhasilan transmisi ini dikonfirmasi pada antarmuka operator (Gambar \ref{fig:logsocket}), di mana \textit{tab} Developer Tools pada peramban web menunjukkan klien React berhasil menerima muatan JSON dari server setiap interval 200 ms (5 Hz) melalui modul \texttt{socket.js}.
@@ -624,6 +644,8 @@ Validasi komunikasi asinkron diuji dengan mengamati aliran data dari \textit{Fli
 	\label{fig:logsocket}
 \end{figure}
 
+Gambar \ref{fig:logtelemmavsdk} dan Gambar \ref{fig:logsocket} memvalidasi kelancaran transmisi telemetri nirkabel dari flight controller hingga ke dashboard pemantauan operator. Berdasarkan hasil log SocketIO tersebut, pembaruan status parameter terbang dikirim secara berkala tanpa adanya kehilangan paket data. Dapat diamati bahwa latensi pengiriman data telemetri ini sangat minimal sehingga mendukung pemantauan real-time yang responsif. Dengan demikian, sistem komunikasi backend ini siap diintegrasikan dengan komponen penampil antarmuka pengguna.
+
 \subsection{Pengujian Fungsional Antarmuka Dashboard}
 
 Pengujian fungsional \textit{dashboard} dilakukan untuk memvalidasi performa antarmuka berbasis React dalam merender data secara \textit{real-time}. Pada Gambar \ref{fig:uiweb1}, Gambar \ref{fig:uiweb2}, komponen \texttt{DroneStatus.jsx} berhasil memvisualisasikan seluruh metrik absolut drone dengan latensi yang minimal. Komponen \texttt{VideoControl.jsx} juga berhasil merender kotak pembatas (\textit{bounding box}) target secara dinamis beserta nilai \textit{confidence} dari algoritma YOLOv8. Sistem pelaporan keadaan (\textit{state machine}) juga berjalan sesuai skenario \textit{Scout Mission}, di mana status transisi dari \texttt{SCAN} menuju \texttt{APPROACH} yard \texttt{DOCUMENT} terpantau langsung oleh operator.
@@ -639,7 +661,10 @@ Pengujian fungsional \textit{dashboard} dilakukan untuk memvalidasi performa ant
 	\includegraphics[width=\textwidth]{bab4/screenshot_ui_dashboard_2} 
 	\caption{Tampilan antarmuka dashboard monitoring operator 2}
 	\label{fig:uiweb2}
+\dots
 \end{figure}
+
+Gambar \ref{fig:uiweb1} dan Gambar \ref{fig:uiweb2} membuktikan bahwa dasbor React 19 mampu merender aliran video dan status penerbangan drone secara dinamis. Berdasarkan implementasi visual tersebut, operator dapat memantau posisi spasial dan status state machine drone secara real-time. Dapat diamati bahwa responsivitas antarmuka tetap terjaga meskipun drone sedang melakukan manuver otonom yang kompleks. Dengan demikian, keandalan fungsional dasbor ini siap diuji di bawah pengaruh variasi kualitas sinyal jaringan nirkabel.
 
 \subsection{Evaluasi Stabilitas Jaringan MiFi 4G/5G dan Transmisi Video}
 
@@ -647,15 +672,17 @@ Selain pengujian fungsionalitas antarmuka, penelitian ini juga mengevaluasi kean
 
 Namun demikian, ketika lintasan sinyal seluler terhalang oleh struktur fisik seperti area pepohonan atau dinding bangunan luar ruang, antarmuka pemantauan web mulai mengalami degradasi performa. Masalah ini paling terlihat pada aliran video UDP yang seketika mengalami penumpukan \textit{frame} (\textit{stuttering} atau patah-patah) hingga \textit{freeze} di pihak peramban operator akibat redaman sinyal. Menariknya, meskipun antarmuka pengawasan mengalami \textit{lag} visual yang cukup parah, rekaman \textit{log} di dalam wahana membuktikan bahwa pemrosesan inferensi YOLOv8n, eksekusi \textit{state machine} otonom, dan pergerakan aktual drone (\textit{edge processing}) sama sekali tidak terganggu dan tetap berjalan mulus. Fenomena ini mengonfirmasi bahwa arsitektur \textit{edge computing} berhasil mengamankan stabilitas komputasi kritis di atas wahana secara independen tanpa bergantung pada \textit{bandwidth} jaringan, memvalidasi bahwa isu patah-patah visual murni merupakan limitasi daya pancar gelombang seluler dalam menembus rintangan ruang.
 
+Hasil pengujian dan evaluasi fungsional dari seluruh subsistem perangkat lunak serta perangkat keras di atas wahana tersebut menjadi landasan penting dalam menguji keandalan sistem secara terpadu. Selanjutnya, integrasi sistem drone otonom ini divalidasi secara menyeluruh melalui serangkaian skenario misi penerbangan nyata di lapangan.
+
 \section{Validasi Integrasi Sistem Drone Otonom}
 
-Pengujian akhir dilakukan pada skenario operasi drone otonom secara menyeluruh.
+Pengujian akhir dilakukan pada skenario operasi drone otonom secara menyeluruh. Tahap penutupan pengujian ini bertujuan untuk memvalidasi performa terintegrasi dari seluruh modul yang telah dikembangkan secara parsial. Melalui skenario misi terpadu di lapangan terbuka, keandalan platform dalam mengeksekusi misi pencarian korban secara utuh dapat diukur secara kuantitatif.
 
 \subsection{Metodologi dan Pemetaan Sesi Penerbangan}
 
 Validasi integrasi sistem drone otonom secara menyeluruh dirancang ke dalam sembilan skenario pengujian spesifik (Skenario A hingga I) yang mencakup evaluasi \textit{state machine}, akurasi deteksi, navigasi, performa komputasi, hingga keselamatan terbang. Untuk mencapai efisiensi operasional dan menghemat alokasi baterai, keseluruhan skenario pengujian tersebut diimplementasikan secara komprehensif dan dipetakan ke dalam lima sesi penerbangan nyata (Flight~1 hingga Flight~5). 
 
-Pemetaan antara skenario pengujian yang dirancang dengan sesi penerbangan yang mengeksekusinya ditunjukkan pada Tabel \ref{tab:pemetaan_skenario}.
+Pemetaan antara skenario pengujian yang dirancang dengan sesi penerbangan yang mengeksekusinya ditunjukkan pada Tabel \ref{tab:pemetaan_skenario}. Setiap skenario uji ditandai dengan kode huruf alfabet dari A hingga I untuk mempermudah kategorisasi fokus pengamatan. Pembagian sesi penerbangan nyata ini disesuaikan dengan kondisi baterai dan alokasi prioritas pengujian lapangan.
 
 \begin{table}[H]
 	\centering
@@ -669,7 +696,7 @@ Pemetaan antara skenario pengujian yang dirancang dengan sesi penerbangan yang m
 		B & Pengujian Akurasi Deteksi In-Flight & Flight~3 \\ \hline
 		C & Pengujian Latency Pipeline End-to-End & Flight~1 \\ \hline
 		D & Pengujian Akurasi Navigasi Otonom & Flight~1, Flight~2 \\ \hline
-		E & Pengujian Respons Failsafe dan Safety System & Flight~1, Flight~2 \\ \hline
+		E & Pengujian Respons Safety Override dan Safety System & Flight~1, Flight~2 \\ \hline
 		F & Pengujian Persistent Multi-Target Scouting & Flight~1, Flight~2, Flight~5 \\ \hline
 		G & Pengujian Target Lock Stability \& EMA Smoothing & Flight~4 \\ \hline
 		H & Pengujian Performa Termal dan Resource & Flight~4 \\ \hline
@@ -677,7 +704,7 @@ Pemetaan antara skenario pengujian yang dirancang dengan sesi penerbangan yang m
 	\end{tabular}
 \end{table}
 
-Kondisi operasional dan hasil observasi umum dari kelima sesi penerbangan tersebut dirangkum pada Tabel \ref{tab:skenario_validasi}.
+Kondisi operasional dan hasil observasi umum dari kelima sesi penerbangan tersebut dirangkum pada Tabel \ref{tab:skenario_validasi}. Rangkuman ini mencakup jumlah target yang diidentifikasi, intervensi pengendali jarak jauh (RC Override), serta pemicu keselamatan baterai otomatis. Log observasi ini menjadi basis data kuantitatif utama untuk mengevaluasi keandalan misi di lapangan.
 
 \begin{table}[H]
 	\centering
@@ -710,6 +737,9 @@ Kondisi operasional dan hasil observasi umum dari kelima sesi penerbangan terseb
 		Siklus SCAN$\to$DOCUMENT terkonfirmasi; RC Override terjadi beberapa kali \\ \hline
 	\end{tabular}
 \end{table}
+
+Data operasional penerbangan yang terangkum dalam Tabel~\ref{tab:skenario_validasi} menjadi basis empiris untuk memvalidasi performa sistem otonom pada Skenario A hingga F. Setiap baris data dalam tabel tersebut merepresentasikan eksekusi sekuensial misi pencarian korban secara otonom yang dimulai sejak fase lepas landas (\textit{takeoff}) hingga pendaratan (\textit{landing}). Dari pencatatan penerbangan nyata ini, interaksi dinamis antara model deteksi dan pengambil keputusan dapat dievaluasi secara komprehensif pada berbagai skenario uji. Dengan demikian, rekam jejak operasional dari kelima penerbangan tersebut memberikan bukti konkret mengenai keandalan integrasi sistem dalam kondisi lingkungan dinamis di lapangan.
+
 \subsection{Skenario A: Pengujian Validasi State Machine (FSM) Scout Mission}
 
 Validasi transisi \textit{Finite State Machine} (FSM) dilakukan berdasarkan data log dari lima sesi penerbangan (Flight~1 hingga Flight~5). Pengujian bertujuan untuk memverifikasi bahwa seluruh transisi state yang dirancang pada Bab~3 dapat dieksekusi sesuai urutan operasi misi, serta mengevaluasi kemampuan sistem dalam menangani kondisi kegagalan selama proses pencarian dan pendekatan target.
@@ -770,6 +800,8 @@ Pengujian validasi FSM sebelumnya dilakukan menggunakan target dengan posisi ber
 	\caption{Hasil pengujian validasi FSM pada posisi target tidur}
 	\label{fig:fsm_tidur}
 \end{figure}
+
+Gambar~\ref{fig:fsm_duduk} dan Gambar~\ref{fig:fsm_tidur} mendemonstrasikan stabilitas deteksi model YOLOv8n hasil \textit{fine-tuning} terhadap variasi orientasi target manusia yang meliputi posisi berdiri, duduk, berjalan, dan tidur. Berdasarkan hasil visualisasi tersebut, kestabilan kotak pembatas (\textit{bounding box}) bervariasi bergantung pada kelengkapan fitur visual tubuh korban yang tertangkap oleh sensor kamera. Pada orientasi tegak seperti berdiri dan berjalan, deteksi menunjukkan konsistensi tinggi karena pola geometris tubuh manusia sangat selaras dengan dataset pelatihan. Sebaliknya, pada posisi duduk dan terutama tidur, stabilitas deteksi dipengaruhi oleh sudut datang (\textit{angle of attack}) kamera drone yang berpotensi menimbulkan oklusi parsial pada bagian ekstremitas tubuh korban. Dengan demikian, meskipun terdapat variasi orientasi target, model hasil optimasi ini tetap mampu mempertahankan kestabilan deteksi yang memadai untuk mentransisikan keadaan otonom secara tepat.
 
 \begin{table}[H]
 	\centering
@@ -892,7 +924,7 @@ Secara keseluruhan, rata-rata latency end-to-end dari penangkapan frame hingga p
 	\end{tabular}
 \end{table}
 
-Untuk memberikan gambaran distribusi latency yang lebih representatif, dilakukan pula analisis persentil terhadap latency end-to-end sebagaimana ditunjukkan pada Tabel \ref{tab:e2e_percentile}.
+Untuk memberikan gambaran distribusi latency yang lebih representatif, dilakukan pula analisis persentil terhadap latency end-to-end sebagaimana ditunjukkan pada Tabel \ref{tab:e2e_percentile}. Pembagian persentil ini membantu memetakan batas atas waktu tunggu (latency) pada sebagian besar sampel data pengujian. Melalui analisis statistik sebaran data ini, stabilitas pemrosesan asinkron drone otonom dapat dibuktikan secara lebih valid.
 
 \begin{table}[H]
 	\centering
@@ -909,6 +941,7 @@ Untuk memberikan gambaran distribusi latency yang lebih representatif, dilakukan
 	\end{tabular}
 \end{table}
 
+Data persentil pada Tabel \ref{tab:e2e_percentile} menunjukkan sebaran latensi pemrosesan sistem dari hulu ke hilir secara komprehensif. Berdasarkan analisis distribusi tersebut, mayoritas siklus pemrosesan terkonsentrasi pada rentang waktu yang aman di bawah batasan kritis 200 ms. Dapat diamati bahwa nilai pencilan ekstrem hanya terjadi pada persentil tertinggi akibat beban komputasi transien dari sistem operasi. Dengan demikian, karakteristik latensi yang stabil ini memberikan jaminan responsivitas kendali navigasi otonom yang presisi. Kestabilan waktu tanggap ini menjadi parameter penentu keberhasilan manuver kendali drone. Selanjutnya, stabilitas respons navigasi tersebut dievaluasi secara geometris melalui skenario penentuan akurasi pendekatan dan perpindahan spasial drone otonom.
 
 \subsection{Skenario D: Pengujian Akurasi Navigasi Otonom (Approach \& Displacement Accuracy)}
 
@@ -959,10 +992,11 @@ Selain kualitas pendekatan, akurasi manuver perpindahan lateral dievaluasi mengg
 
 Sistem terbukti mampu melakukan manuver perpindahan lateral dengan tingkat akurasi yang tinggi dan konsisten, menghasilkan deviasi marjinal di bawah 5\% sebagaimana ditunjukkan pada Tabel \ref{tab:displacement_accuracy}. Presisi ini sangat krusial untuk mendukung proses pencarian target berikutnya tanpa mengakumulasi simpangan posisi spasial.
 
+Tingkat keberhasilan relokasi (\textit{displacement accuracy}) otonom yang tinggi ini secara langsung berdampak positif pada efisiensi perluasan area pencarian korban. Dengan simpangan lateral yang sangat minim, drone dapat menyapu area bencana secara sistematis tanpa mengalami penumpukan area observasi yang redundan. Efektivitas pencarian taktis ini memastikan bahwa sumber daya energi baterai dapat dialokasikan secara optimal untuk menjangkau radius pencarian yang lebih luas. Oleh karena itu, presisi navigasi otonom pada fase \textit{displacement} ini terbukti menjadi kunci utama dalam mempercepat penemuan korban SAR. Untuk mengimbangi agresivitas manuver otonom tersebut, jaminan keselamatan penerbangan menjadi prioritas mutlak. Skenario berikutnya membahas keandalan mekanisme perlindungan wahana dalam menghadapi berbagai kondisi anomali operasional.
 
-\subsection{Skenario E: Pengujian Respons Failsafe dan Safety System}
+\subsection{Skenario E: Pengujian Respons Safety Override dan Safety System}
 
-Pengujian ini bertujuan untuk memvalidasi efektivitas mekanisme keselamatan dan \textit{failsafe} yang diimplementasikan pada sistem otonom. Validasi dilakukan menggunakan data log penerbangan aktual yang mencakup aktivasi \textit{Battery RTL}, \textit{Pre-RTL Safety Climb}, \textit{RC Override}, dan \textit{OFFBOARD Exit Handling}. Hasil pengujian menunjukkan bahwa seluruh mekanisme keselamatan berhasil terpicu sesuai kondisi yang dirancang dan mampu mencegah kondisi operasi yang berpotensi membahayakan wahana.
+Pengujian ini bertujuan untuk memvalidasi efektivitas mekanisme keselamatan dan prosedur respons darurat (\textit{emergency response procedure}) yang diimplementasikan pada platform otonom. Validasi dilakukan menggunakan data log penerbangan aktual yang mencakup aktivasi \textit{Battery RTL}, \textit{Pre-RTL Safety Climb}, \textit{RC Override}, dan \textit{OFFBOARD Exit Handling}. Hasil pengujian menunjukkan bahwa seluruh mekanisme keselamatan berhasil terpicu sesuai kondisi yang dirancang dan mampu mencegah kondisi operasi yang berpotensi membahayakan wahana.
 
 \begin{enumerate}
 	\item \textit{Battery RTL}: Sistem secara otomatis mengaktifkan prosedur pemulangan ketika kapasitas baterai mencapai ambang kritis. Mekanisme ini berhasil terpicu pada Flight~1, Flight~2, dan Flight~3.
@@ -974,7 +1008,7 @@ Pengujian ini bertujuan untuk memvalidasi efektivitas mekanisme keselamatan dan 
 	\item \textit{OFFBOARD Exit Handling}: Saat sistem keluar dari mode OFFBOARD, proses otonom langsung dihentikan sehingga tidak ada perintah navigasi yang tetap berjalan tanpa pengawasan operator.
 \end{enumerate}
 
-Sebelum memaparkan hasil pengujian pada Tabel~\ref{tab:safety_pre_rtl}, perlu ditegaskan bahwa pengujian fitur \textit{Battery RTL} ini sama sekali tidak bertujuan untuk mengevaluasi kinerja algoritma estimasi energi UAV yang adaptif. Penelitian ini murni menggunakan nilai batas tetap (\textit{fixed threshold}) yang ditetapkan secara konstan sebesar 15\% baterai. Oleh karena itu, pengujian yang dilakukan difokuskan untuk memvalidasi keberhasilan aktivasi \textit{failsafe} baterai kritis, yang meliputi keberhasilan penghentian misi aktif (\textit{mission abortion}), eksekusi manuver \textit{Pre-RTL Safety Climb}, transisi menuju mode penerbangan RTL bawaan PX4, serta jaminan keamanan operasional wahana secara keseluruhan selama proses penyelamatan darurat berlangsung.
+Sebelum memaparkan hasil pengujian pada Tabel~\ref{tab:safety_pre_rtl}, perlu ditegaskan bahwa pengujian fitur \textit{Battery RTL} ini sama sekali tidak bertujuan untuk mengevaluasi kinerja algoritma estimasi energi UAV yang adaptif. Pengembangan ini murni menggunakan nilai batas tetap (\textit{fixed threshold}) yang ditetapkan secara konstan sebesar 15\% baterai. Oleh karena itu, pengujian yang dilakukan difokuskan untuk memvalidasi keberhasilan aktivasi mekanisme pemulangan otomatis (\textit{Battery RTL Mechanism}) baterai kritis, yang meliputi keberhasilan penghentian misi aktif (\textit{mission abortion}), eksekusi manuver \textit{Pre-RTL Safety Climb}, transisi menuju mode penerbangan RTL bawaan PX4, serta jaminan keamanan operasional wahana secara keseluruhan selama proses penyelamatan darurat berlangsung.
 
 \begin{table}[H]
 	\centering
@@ -1068,6 +1102,7 @@ Berdasarkan hasil pengujian kuantitatif dan bukti kualitatif yang diperoleh dari
 	\label{fig:rc_override}
 \end{figure}
 
+Gambar \ref{fig:battery_rtl}, Gambar \ref{fig:pre_rtl_exit}, dan Gambar \ref{fig:rc_override} menunjukkan log keberhasilan aktivasi sistem keselamatan saat terjadi kondisi darurat maupun intervensi manual. Berdasarkan log tersebut, drone secara andal menghentikan misi otonom dan mengembalikan kendali penuh kepada pilot keselamatan. Dapat diamati bahwa transisi mode terbang ini berjalan secara instan tanpa adanya penundaan kontrol yang membahayakan. Dengan demikian, keandalan sistem pengaman ini memberikan jaminan keselamatan tingkat tinggi selama pengujian misi pencarian korban secara berkelanjutan.
 
 \subsection{Skenario F: Pengujian Persistent Multi-Target Scouting}
 
@@ -1180,6 +1215,8 @@ Hasil pengujian menunjukkan bahwa mekanisme \textit{persistent scouting} berhasi
 	\label{fig:persistent_scout}
 \end{figure}
 
+Gambar \ref{fig:persistent_scout} memperlihatkan dokumentasi korban yang berhasil diidentifikasi selama pengujian misi pencarian otonom yang berkelanjutan. Berdasarkan hasil dokumentasi visual tersebut, sistem terbukti mampu mengenali target manusia pada berbagai pose dan kondisi pencahayaan alami di lapangan. Dapat diamati bahwa kualitas gambar hasil dokumentasi cukup jelas untuk keperluan verifikasi identitas korban oleh tim penyelamat. Dengan demikian, keberhasilan perekaman visual ini melandasi pengujian kestabilan pelacakan target yang dinamis. Pelacakan dinamis ini membutuhkan algoritma smoothing agar koordinat target tidak memicu getaran pada motor servo gimbal atau respon navigasi. Oleh karena itu, kestabilan penguncian target dan peredaman fluktuasi dievaluasi secara khusus pada bagian berikutnya.
+
 \subsection{Skenario G: Pengujian Target Lock Stability \& EMA Smoothing}
 
 Pengujian ini bertujuan untuk memvalidasi kestabilan mekanisme \textit{target locking} serta implementasi \textit{Exponential Moving Average} (EMA) yang digunakan untuk meredam fluktuasi posisi target selama penerbangan. Pengujian dilakukan pada beberapa sesi penerbangan yang melibatkan target bergerak, kemunculan beberapa target secara bersamaan, serta kondisi hilangnya target dari bidang pandang kamera.
@@ -1220,7 +1257,7 @@ Selain kestabilan penguncian target, sistem juga menerapkan \textit{Exponential 
 
 Pengamatan terhadap log menunjukkan bahwa koordinat hasil EMA selalu tersedia dan digunakan selama proses pelacakan berlangsung. Meskipun data log yang tersedia belum cukup rapat untuk melakukan evaluasi statistik jitter secara menyeluruh pada seluruh sesi penerbangan, implementasi EMA berhasil beroperasi secara konsisten tanpa menyebabkan hilangnya target maupun perpindahan kunci target yang tidak diperlukan.
 
-Secara keseluruhan, hasil pengujian menunjukkan bahwa mekanisme \textit{target locking} mampu mempertahankan target secara stabil selama operasi nyata, termasuk ketika terdapat lebih dari satu kandidat target pada bidang pandang kamera. Tidak ditemukan kejadian \textit{unnecessary lock switching} selama pengujian, sehingga sistem mampu menjaga konsistensi pemilihan target sepanjang siklus navigasi otonom.
+Secara keseluruhan, hasil pengujian menunjukkan bahwa mekanisme \textit{target locking} mampu mempertahankan target secara stabil selama operasi nyata, termasuk ketika terdapat lebih dari satu kandidat target pada bidang pandang kamera. Tidak ditemukan kejadian \textit{unnecessary lock switching} selama pengujian, sehingga sistem mampu menjaga konsistensi pemilihan target sepanjang siklus navigasi otonom. Konsistensi pemrosesan target yang stabil ini membutuhkan kinerja komputasi yang intensif pada unit onboard. Untuk memastikan kontinuitas operasi tersebut, konsumsi memori dan suhu operasional perangkat keras dievaluasi secara berkala pada skenario pengujian berikutnya.
 
 \subsection{Skenario H: Pengujian Performa Termal dan Resource saat Penerbangan}
 
@@ -1280,7 +1317,7 @@ Analisis performa termal dilakukan secara kualitatif berdasarkan pemantauan stat
 	}
 \end{table}
 
-Hasil pengujian menunjukkan bahwa Raspberry Pi 5 mampu menjalankan seluruh komponen sistem otonom secara bersamaan tanpa mengalami kegagalan proses maupun kejadian \textit{throttling} yang terdeteksi. Meskipun beban CPU relatif tinggi akibat inferensi visi komputer yang berjalan terus-menerus selama misi, penggunaan RAM tetap rendah dibandingkan kapasitas total sistem, sehingga masih tersedia ruang sumber daya yang cukup untuk pengembangan fitur tambahan pada implementasi berikutnya.
+Hasil pengujian menunjukkan bahwa Raspberry Pi 5 mampu menjalankan seluruh komponen sistem otonom secara bersamaan tanpa mengalami kegagalan proses maupun kejadian \textit{throttling} yang terdeteksi. Meskipun beban CPU relatif tinggi akibat inferensi visi komputer yang berjalan terus-menerus selama misi, penggunaan RAM tetap rendah dibandingkan kapasitas total sistem, sehingga masih tersedia ruang sumber daya yang cukup untuk pengembangan fitur tambahan pada implementasi berikutnya. Kestabilan performa termal ini menjamin keberlanjutan operasi komputasi di bawah berbagai kondisi lingkungan. Skenario pengujian terakhir mengevaluasi ketahanan deteksi visual di bawah pengaruh fluktuasi intensitas cahaya matahari dan kegelapan malam.
 
 \subsection{Skenario I: Pengujian Kondisi Lingkungan Bervariasi (Environmental Robustness)}
 
@@ -1338,6 +1375,8 @@ Hasil ini menunjukkan bahwa sistem mampu beroperasi dengan baik pada kondisi \te
 	\end{tabular}
 \end{table}
 
+Berdasarkan data pada Tabel~\ref{tab:env_light}, tingkat keberhasilan deteksi YOLOv8n hasil \textit{fine-tuning} menunjukkan variasi performa yang signifikan pada kondisi pencahayaan pagi, siang, dan sore hari. Performa deteksi mencapai titik paling optimal pada siang hari karena intensitas cahaya yang merata meminimalisir bayangan dan derau (\textit{noise}) visual pada citra. Namun, tantangan utama muncul pada kondisi malam hari di mana sistem dihadapkan pada limitasi pencahayaan yang ekstrem. Pada kondisi malam gelap tanpa bantuan cahaya buatan, model sama sekali tidak mampu mengidentifikasi target akibat hilangnya fitur visual manusia secara total. Sebaliknya, pada kondisi malam dengan iluminasi lampu sorot atau lampu penerangan jalan, tingkat deteksi mengalami peningkatan kembali meskipun masih berada di bawah performa siang hari. Dengan demikian, ketersediaan intensitas cahaya yang cukup terbukti menjadi parameter krusial dalam menjamin stabilitas dan akurasi sistem visi komputer pada drone.
+
 Berdasarkan hasil pengujian, kondisi siang hari memberikan performa terbaik dengan tingkat deteksi tertinggi, sedangkan kondisi subuh dan sore menunjukkan penurunan kemampuan deteksi akibat keterbatasan pencahayaan. Walaupun demikian, sistem tetap mampu mempertahankan nilai \textit{confidence} yang relatif tinggi pada seluruh kondisi pengujian. Hasil ini menunjukkan bahwa sistem memenuhi tujuan perancangan untuk beroperasi pada lingkungan luar ruang dengan pencahayaan memadai (\textit{daylight condition}), namun belum optimal untuk kondisi minim cahaya tanpa dukungan sumber pencahayaan tambahan.
 
 \begin{figure}[H]
@@ -1384,6 +1423,8 @@ Berdasarkan hasil pengujian, kondisi siang hari memberikan performa terbaik deng
 	\end{subfigure}
 	\caption{Perbandingan deteksi pada berbagai kondisi pencahayaan (Lanjutan)}
 \end{figure}
+
+Seluruh hasil pengamatan terhadap ketahanan visual model deteksi di bawah berbagai tingkat iluminasi cahaya luar ruang tersebut menyimpulkan rangkaian aktivitas validasi sistem drone otonom. Hasil observasi dan analisis komparatif ini selanjutnya dikumpulkan untuk mengevaluasi tingkat keberhasilan sistem secara menyeluruh terhadap tujuan penelitian.
 
 \section{Evaluasi Keberhasilan Sistem}
 
