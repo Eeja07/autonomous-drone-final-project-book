@@ -41,6 +41,7 @@ Agar ruang lingkup penelitian tetap terarah dan terukur, ditetapkan batasan masa
 	\item Sistem penglihatan komputer dibatasi pada penggunaan sensor optik RGB standar tanpa kapabilitas visi malam khusus (\textit{night vision} atau kamera termal). Eksekusi pengujian pada kondisi minim cahaya (subuh, petang, atau malam hari) dilakukan murni untuk mengevaluasi batasan toleransi (\textit{environmental robustness}) algoritma deteksi.
 	\item Transmisi pemantauan jarak jauh via \textit{dashboard} menggunakan jaringan nirkabel (Wi-Fi lokal atau seluler 4G/5G) diasumsikan berada pada area \textit{Line-of-Sight}, tanpa menjamin kekebalan terhadap gangguan \textit{video stuttering} akibat rintangan fisik padat.
 	\item Mekanisme penolakan target duplikat (\textit{duplicate exclusion}) murni mengandalkan filter jarak spasial absolut berbasis GPS (\textit{Haversine formula}), tanpa mengikutsertakan algoritma pengenalan identitas visual (\textit{Person Re-identification} / ReID) untuk membedakan korban yang bergerak silang.
+	\item Sistem tidak mengimplementasikan estimasi kebutuhan energi berdasarkan jarak tempuh menuju \textit{home position}, prediksi sisa waktu terbang, maupun estimasi konsumsi daya motor, serta tidak menerapkan \textit{energy-aware path planning}. Aktivasi fitur \textit{Return-to-Launch} (RTL) dilakukan menggunakan ambang batas baterai tetap (\textit{fixed threshold}) sebesar 15\% dengan nilai persentase baterai yang diperoleh langsung dari telemetri \textit{flight controller} PX4.
 \end{enumerate}
 
 \section{Manfaat Penelitian}

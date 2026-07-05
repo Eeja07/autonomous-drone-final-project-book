@@ -741,10 +741,53 @@ Secara keseluruhan, hasil pengujian membuktikan bahwa implementasi FSM mampu men
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\linewidth]{bab4/fsm_berjalan}
+	\includegraphics[width=\textwidth]{bab4/fsm_berjalan}
 	\caption{Transisi Finite State Machine selama operasi penerbangan}
 	\label{fig:fsm_berjalan}
 \end{figure}
+
+\subsubsection{Pengujian FSM pada Variasi Posisi Target}
+
+Pengujian validasi FSM sebelumnya dilakukan menggunakan target dengan posisi berdiri. Sebagai pengujian tambahan, pengujian juga dilakukan dengan menggunakan variasi target dalam posisi duduk dan tidur. Pengujian ini bertujuan untuk memvalidasi bahwa transisi state machine dari SCAN $\rightarrow$ DETECT $\rightarrow$ APPROACH $\rightarrow$ DOCUMENT $\rightarrow$ DISPLACING $\rightarrow$ RTL tetap berjalan dengan valid tanpa terpengaruh oleh variasi posisi tubuh target.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{bab4/fsm_berdiri.png}
+	\caption{Hasil pengujian validasi FSM pada posisi target berdiri}
+	\label{fig:fsm_berdiri}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{bab4/fsm_duduk.png}
+	\caption{Hasil pengujian validasi FSM pada posisi target duduk}
+	\label{fig:fsm_duduk}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{bab4/fsm_tiduran.png}
+	\caption{Hasil pengujian validasi FSM pada posisi target tidur}
+	\label{fig:fsm_tidur}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\caption{Hasil Pengujian Validasi State Machine pada Variasi Posisi Target}
+	\label{tab:fsm_variasi_posisi}
+	\renewcommand{\arraystretch}{1.0}
+	\begin{tabular}{|l|c|c|c|c|c|p{3.5cm}|}
+		\hline
+		\textbf{Posisi Target} & \textbf{Scan} & \textbf{Approach} & \textbf{Document} & \textbf{Displacing} & \textbf{RTL} & \textbf{Keterangan} \\ \hline
+		Berdiri & Ya & Ya & Ya & Ya & Ya & Seluruh tahapan FSM berhasil dijalankan tanpa kendala. \\ \hline
+		Duduk & Ya & Ya & Ya & Ya & Ya & Seluruh tahapan FSM berhasil dijalankan tanpa kendala. \\ \hline
+		Tidur & Ya & Ya & Ya & Ya & Ya & Deteksi berhasil ketika tubuh terlihat dari sisi kanan atau kiri sehingga kepala, badan, dan kaki dapat diamati secara bersamaan. \\ \hline
+	\end{tabular}
+\end{table}
+
+Pengujian menunjukkan bahwa sistem mampu menyelesaikan seluruh rangkaian \textit{state} misi pada target dengan posisi berdiri maupun duduk. Pada kedua kondisi tersebut, tubuh manusia masih terlihat dengan proporsi yang cukup lengkap dari sudut pandang kamera sehingga objek dapat dideteksi secara konsisten oleh model. Setelah target terdeteksi, FSM berhasil melakukan transisi dari \texttt{SCAN} menuju \texttt{APPROACH}, \texttt{DOCUMENT}, \texttt{DISPLACING}, hingga \texttt{RTL} tanpa kendala yang berarti.
+
+Pada posisi tidur ditemukan karakteristik yang berbeda. Deteksi manusia cenderung berhasil apabila kamera dapat menangkap sebagian besar bentuk tubuh manusia, mulai dari kepala hingga kaki, terutama ketika drone mengamati target dari sisi kanan atau sisi kiri tubuh. Sebaliknya, ketika drone berada pada orientasi yang hampir sejajar dengan sumbu tubuh target, misalnya tepat di belakang kepala atau tepat di depan kaki, objek manusia sering kali tidak terdeteksi karena bentuk tubuh yang terlihat pada citra menjadi sangat terbatas dan tidak menyerupai representasi manusia yang umum dipelajari model. Seiring pergerakan drone selama proses pencarian, sudut pandang kamera berubah sehingga bagian kepala, badan, dan kaki mulai terlihat secara bersamaan dari sisi tubuh target. Pada kondisi tersebut deteksi kembali berhasil dilakukan dan FSM dapat melanjutkan transisi ke tahapan misi berikutnya. Hasil ini menunjukkan bahwa keberhasilan sistem tidak hanya dipengaruhi oleh posisi tubuh target, tetapi juga oleh sudut pengamatan kamera terhadap target selama proses pencarian berlangsung.
 
 
 \subsection{Skenario B: Pengujian Akurasi Deteksi In-Flight (Airborne Detection Performance)}
@@ -759,15 +802,15 @@ Meskipun nilai \textit{confidence} deteksi tetap berada pada kisaran 0,74--0,82,
 
 \begin{figure}[H]
 	\centering
-	\begin{subfigure}{0.48\linewidth}
+	\begin{subfigure}{\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{bab4/deteksi5m}
+		\includegraphics[width=\textwidth]{bab4/deteksi5m}
 		\caption{Deteksi pada jarak 5 meter}
 	\end{subfigure}
 	\hfill
-	\begin{subfigure}{0.48\linewidth}
+	\begin{subfigure}{\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{bab4/deteksi20m}
+		\includegraphics[width=\textwidth]{bab4/deteksi20m}
 		\caption{Deteksi pada jarak 20 meter}
 	\end{subfigure}
 	\caption{Perbandingan deteksi target pada jarak 5 meter dan 20 meter}
@@ -891,7 +934,7 @@ Hasil pengujian menunjukkan bahwa sistem mampu membawa target ke area terpusat p
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\linewidth]{bab4/document_triggered}
+	\includegraphics[width=\textwidth]{bab4/document_triggered}
 	\caption{Tangkapan layar saat \textit{document trigger} dieksekusi}
 	\label{fig:document_triggered}
 \end{figure}
@@ -930,6 +973,8 @@ Pengujian ini bertujuan untuk memvalidasi efektivitas mekanisme keselamatan dan 
 	
 	\item \textit{OFFBOARD Exit Handling}: Saat sistem keluar dari mode OFFBOARD, proses otonom langsung dihentikan sehingga tidak ada perintah navigasi yang tetap berjalan tanpa pengawasan operator.
 \end{enumerate}
+
+Sebelum memaparkan hasil pengujian pada Tabel~\ref{tab:safety_pre_rtl}, perlu ditegaskan bahwa pengujian fitur \textit{Battery RTL} ini sama sekali tidak bertujuan untuk mengevaluasi kinerja algoritma estimasi energi UAV yang adaptif. Penelitian ini murni menggunakan nilai batas tetap (\textit{fixed threshold}) yang ditetapkan secara konstan sebesar 15\% baterai. Oleh karena itu, pengujian yang dilakukan difokuskan untuk memvalidasi keberhasilan aktivasi \textit{failsafe} baterai kritis, yang meliputi keberhasilan penghentian misi aktif (\textit{mission abortion}), eksekusi manuver \textit{Pre-RTL Safety Climb}, transisi menuju mode penerbangan RTL bawaan PX4, serta jaminan keamanan operasional wahana secara keseluruhan selama proses penyelamatan darurat berlangsung.
 
 \begin{table}[H]
 	\centering
@@ -1005,20 +1050,20 @@ Berdasarkan hasil pengujian kuantitatif dan bukti kualitatif yang diperoleh dari
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{bab4/battery_rtl_trigggered}
+	\includegraphics[width=\textwidth]{bab4/battery_rtl_trigggered}
 	\caption{Pemicu Battery RTL}
 	\label{fig:battery_rtl}
 	
 	\vspace{0.5cm}
 	
-	\includegraphics[width=0.8\linewidth]{bab4/preRTLdone_offboardExit}
+	\includegraphics[width=\textwidth]{bab4/preRTLdone_offboardExit}
 	\caption{Status Pre-RTL dan OFFBOARD Exit}
 	\label{fig:pre_rtl_exit}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{bab4/rc_override}
+	\includegraphics[width=\textwidth]{bab4/rc_override}
 	\caption{Intervensi operator (RC Override)}
 	\label{fig:rc_override}
 \end{figure}
@@ -1297,41 +1342,47 @@ Berdasarkan hasil pengujian, kondisi siang hari memberikan performa terbaik deng
 
 \begin{figure}[H]
 	\centering
-	\begin{subfigure}{0.48\linewidth}
+	\begin{subfigure}{\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{bab4/terbang_pagi}
+		\includegraphics[width=\textwidth]{bab4/terbang_pagi}
 		\caption{Kondisi Pagi}
 	\end{subfigure}
 	\hfill
-	\begin{subfigure}{0.48\linewidth}
+	\begin{subfigure}{\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{bab4/terbang_siang}
+		\includegraphics[width=\textwidth]{bab4/terbang_siang}
 		\caption{Kondisi Siang}
-	\end{subfigure}
-	
-	\vspace{0.5cm}
-	
-	\begin{subfigure}{0.48\linewidth}
-		\centering
-		\includegraphics[width=\linewidth]{bab4/terbang_sore}
-		\caption{Kondisi Sore}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}{0.48\linewidth}
-		\centering
-		\includegraphics[width=\linewidth]{bab4/terbang_malam_manusia}
-		\caption{Kondisi Malam (dengan iluminasi lampu)}
-	\end{subfigure}
-	
-	\vspace{0.5cm}
-	
-	\begin{subfigure}{0.48\linewidth}
-		\centering
-		\includegraphics[width=\linewidth]{bab4/terbang_malam_gelap}
-		\caption{Kondisi Malam Gelap}
 	\end{subfigure}
 	\caption{Perbandingan deteksi pada berbagai kondisi pencahayaan}
 	\label{fig:environmental_robustness}
+\end{figure}
+
+\begin{figure}[H]
+	\ContinuedFloat
+	\centering
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{bab4/terbang_sore}
+		\caption{Kondisi Sore}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{bab4/terbang_malam_manusia}
+		\caption{Kondisi Malam (dengan iluminasi lampu)}
+	\end{subfigure}
+	\caption{Perbandingan deteksi pada berbagai kondisi pencahayaan (Lanjutan)}
+\end{figure}
+
+\begin{figure}[H]
+	\ContinuedFloat
+	\centering
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{bab4/terbang_malam_gelap}
+		\caption{Kondisi Malam Gelap}
+	\end{subfigure}
+	\caption{Perbandingan deteksi pada berbagai kondisi pencahayaan (Lanjutan)}
 \end{figure}
 
 \section{Evaluasi Keberhasilan Sistem}
