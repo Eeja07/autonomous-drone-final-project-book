@@ -242,8 +242,7 @@ Model yang dibandingkan meliputi:
 	\item dan resolusi inferensi 640×640.
 \end{itemize}
 
-Pengujian dilakukan pada kondisi indoor dan outdoor dengan jarak deteksi manusia sekitar 2--5 meter.
-Evaluasi dilakukan terhadap performa inferensi \textit{real-time}, latency, FPS, stabilitas sistem, kestabilan bounding box, konsistensi deteksi antar frame, serta kualitas deteksi manusia pada Raspberry Pi 5.
+Pengujian performa model deteksi manusia ini dilakukan pada kondisi \textit{indoor} dan \textit{outdoor} dengan membatasi jarak deteksi antara 2 hingga 5 meter. Evaluasi difokuskan terhadap parameter inferensi \textit{real-time}, latensi komputasi, kestabilan kotak pembatas (\textit{bounding box}), konsistensi deteksi antar-frame, serta pemanfaatan sumber daya komputasi Raspberry Pi 5.
 
 \subsection{Perbandingan YOLOv8n dan YOLOv8n-Pose}
 
@@ -415,6 +414,8 @@ Bagian ini membahas hasil pelatihan (\textit{training}), validasi, dan evaluasi 
 
 \subsection{Visualisasi Distribusi Dataset dan Bounding Box}
 
+Sebelum mengevaluasi hasil pelatihan model secara numerik, karakteristik sebaran data visual pada dataset dianalisis terlebih dahulu. Visualisasi terhadap persebaran spasial dan ukuran kotak pembatas (\textit{bounding box}) yang merepresentasikan target manusia disajikan pada Gambar \ref{fig:labels_distribution}.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{bab4/labels}
@@ -428,6 +429,8 @@ Hal ini sesuai dengan karakteristik dataset umum COCO yang banyak berisi objek m
 
 
 \subsection{Analisis Proses Training Model}
+
+Proses konvergensi selama pelatihan model dipantau secara berkala melalui evaluasi nilai \textit{loss} dan peningkatan metrik akurasi pada setiap \textit{epoch}. Grafik perkembangan parameter pelatihan dan validasi tersebut digambarkan pada Gambar \ref{fig:training_results}.
 
 \begin{figure}[H]
 	\centering
@@ -444,6 +447,8 @@ Selain itu, tidak terlihat peningkatan \textit{validation loss} secara ekstrem p
 Melalui perolehan grafik evaluasi training yang menunjukkan kestabilan nilai \textit{loss} serta peningkatan nilai mAP yang konvergen, model deteksi YOLOv8n ini dinilai telah matang dan siap diintegrasikan. Kestabilan kurva performa tersebut memberikan jaminan bahwa model tidak mengalami gejala \textit{overfitting} maupun \textit{underfitting} selama proses pembelajaran berlangsung. Dengan ukuran bobot model yang kompak hasil pemangkasan kelas target, model ini memiliki kesiapan optimal untuk dieksekusi pada lingkungan komputasi terbatas di dalam \textit{companion computer} Raspberry Pi 5. Oleh karena itu, bobot model final ini dapat langsung dideploy untuk mendukung proses inferensi visual secara \textit{real-time} pada sistem navigasi otonom.
 
 \subsection{Hasil Evaluasi Model}
+
+Setelah proses pelatihan selesai, performa model deteksi YOLOv8n hasil \textit{fine-tuning} dievaluasi menggunakan data pengujian yang tidak terlihat sebelumnya. Rincian nilai metrik evaluasi akhir dari model tersebut ditunjukkan pada Tabel \ref{tab:metric_result}.
 
 \begin{table}[H]
 	\centering
@@ -496,6 +501,8 @@ Kurva Precision-Recall menunjukkan bahwa model masih mampu mempertahankan tingka
 Hal ini menunjukkan bahwa model cukup efektif dalam mengurangi false positive pada sebagian besar kondisi pengujian.
 
 \subsection{Analisis Confusion Matrix}
+
+Untuk memetakan distribusi klasifikasi benar dan kesalahan deteksi model secara spesifik, matriks kebingungan (\textit{confusion matrix}) diekstraksi dari hasil validasi. Distribusi persentase klasifikasi tersebut divisualisasikan pada Gambar \ref{fig:conf_matrix_norm}.
 
 \begin{figure}[H]
 	\centering
@@ -593,7 +600,7 @@ Hasil perbandingan performa inferensi dan parameter komputasi tersebut selanjutn
 
 \section{Pengujian Integrasi Sistem Backend, MAVSDK, dan Frontend}
 
-Pengujian ini dilakukan untuk memastikan seluruh arsitektur perangkat lunak mampu berjalan secara bersamaan tanpa saling memblokir (blocking) pada Raspberry Pi 5 selama operasi drone berlangsung. Fokus utama diarahkan pada sinkronisasi pembagian memori antar-thread untuk menghindari race condition. Dengan demikian, keandalan fungsional dari seluruh sistem asinkron backend-frontend dapat dipastikan aman sebelum uji terbang otonom.
+Pengujian ini dilakukan untuk memastikan seluruh arsitektur perangkat lunak mampu berjalan secara bersamaan tanpa saling memblokir (blocking) pada Raspberry Pi 5 selama operasi drone berlangsung. Fokus utama diarahkan pada sinkronisasi pembagian memori antar-thread untuk menghindari race condition. Melalui sinergi antar-proses ini, keandalan fungsional dari seluruh arsitektur asinkron backend-frontend dapat dipastikan aman sebelum uji terbang otonom.
 
 \subsection{Pengujian Integrasi Backend dan Multi-Threading}
 
@@ -625,7 +632,7 @@ Pengujian integrasi perangkat lunak dilakukan untuk memastikan arsitektur \texti
 	\label{fig:logyolo}
 \end{figure}
 
-Gambar \ref{fig:loggstreamer} dan Gambar \ref{fig:logyolo} menunjukkan bahwa integrasi pemrosesan video dan inferensi YOLOv8n dapat berjalan secara paralel tanpa mengalami kemacetan antrean data. Berdasarkan hasil log tersebut, thread konsumen visual mampu memproses setiap frame gambar dengan waktu inferensi yang stabil. Dapat diamati bahwa waktu komputasi inferensi ini tetap berada dalam batas toleransi real-time yang aman. Dengan demikian, sinkronisasi aliran data video ini siap dihubungkan dengan modul pengiriman telemetri sistem.
+Gambar \ref{fig:loggstreamer} dan Gambar \ref{fig:logyolo} menunjukkan bahwa integrasi pemrosesan video dan inferensi YOLOv8n dapat berjalan secara paralel tanpa mengalami kemacetan antrean data. Berdasarkan hasil log tersebut, thread konsumen visual mampu memproses setiap frame gambar dengan waktu inferensi yang stabil. Dapat diamati bahwa waktu komputasi inferensi ini tetap berada dalam batas toleransi real-time yang aman. Pengujian mengonfirmasi bahwa sinkronisasi aliran data video ini siap dihubungkan dengan modul pengiriman telemetri platform.
 
 \subsection{Pengujian Aliran Telemetri MAVSDK ke Frontend}
 
@@ -644,7 +651,7 @@ Validasi komunikasi asinkron diuji dengan mengamati aliran data dari \textit{Fli
 	\label{fig:logsocket}
 \end{figure}
 
-Gambar \ref{fig:logtelemmavsdk} dan Gambar \ref{fig:logsocket} memvalidasi kelancaran transmisi telemetri nirkabel dari flight controller hingga ke dashboard pemantauan operator. Berdasarkan hasil log SocketIO tersebut, pembaruan status parameter terbang dikirim secara berkala tanpa adanya kehilangan paket data. Dapat diamati bahwa latensi pengiriman data telemetri ini sangat minimal sehingga mendukung pemantauan real-time yang responsif. Dengan demikian, sistem komunikasi backend ini siap diintegrasikan dengan komponen penampil antarmuka pengguna.
+Gambar \ref{fig:logtelemmavsdk} dan Gambar \ref{fig:logsocket} memvalidasi kelancaran transmisi telemetri nirkabel dari flight controller hingga ke dashboard pemantauan operator. Berdasarkan hasil log SocketIO tersebut, pembaruan status parameter terbang dikirim secara berkala tanpa adanya kehilangan paket data. Dapat diamati bahwa latensi pengiriman data telemetri ini sangat minimal sehingga mendukung pemantauan real-time yang responsif. Analisis data memperlihatkan bahwa sistem komunikasi backend ini siap diintegrasikan dengan komponen penampil antarmuka pengguna.
 
 \subsection{Pengujian Fungsional Antarmuka Dashboard}
 
@@ -664,7 +671,7 @@ Pengujian fungsional \textit{dashboard} dilakukan untuk memvalidasi performa ant
 \dots
 \end{figure}
 
-Gambar \ref{fig:uiweb1} dan Gambar \ref{fig:uiweb2} membuktikan bahwa dasbor React 19 mampu merender aliran video dan status penerbangan drone secara dinamis. Berdasarkan implementasi visual tersebut, operator dapat memantau posisi spasial dan status state machine drone secara real-time. Dapat diamati bahwa responsivitas antarmuka tetap terjaga meskipun drone sedang melakukan manuver otonom yang kompleks. Dengan demikian, keandalan fungsional dasbor ini siap diuji di bawah pengaruh variasi kualitas sinyal jaringan nirkabel.
+Gambar \ref{fig:uiweb1} dan Gambar \ref{fig:uiweb2} membuktikan bahwa dasbor React 19 mampu merender aliran video dan status penerbangan drone secara dinamis. Berdasarkan implementasi visual tersebut, operator dapat memantau posisi spasial dan status state machine drone secara real-time. Dapat diamati bahwa responsivitas antarmuka tetap terjaga meskipun drone sedang melakukan manuver otonom yang kompleks. Evaluasi memperlihatkan bahwa keandalan fungsional dasbor ini siap diuji di bawah pengaruh variasi kualitas sinyal jaringan nirkabel.
 
 \subsection{Evaluasi Stabilitas Jaringan MiFi 4G/5G dan Transmisi Video}
 
@@ -819,7 +826,9 @@ Gambar~\ref{fig:fsm_duduk} dan Gambar~\ref{fig:fsm_tidur} mendemonstrasikan stab
 
 Pengujian menunjukkan bahwa sistem mampu menyelesaikan seluruh rangkaian \textit{state} misi pada target dengan posisi berdiri maupun duduk. Pada kedua kondisi tersebut, tubuh manusia masih terlihat dengan proporsi yang cukup lengkap dari sudut pandang kamera sehingga objek dapat dideteksi secara konsisten oleh model. Setelah target terdeteksi, FSM berhasil melakukan transisi dari \texttt{SCAN} menuju \texttt{APPROACH}, \texttt{DOCUMENT}, \texttt{DISPLACING}, hingga \texttt{RTL} tanpa kendala yang berarti.
 
-Pada posisi tidur ditemukan karakteristik yang berbeda. Deteksi manusia cenderung berhasil apabila kamera dapat menangkap sebagian besar bentuk tubuh manusia, mulai dari kepala hingga kaki, terutama ketika drone mengamati target dari sisi kanan atau sisi kiri tubuh. Sebaliknya, ketika drone berada pada orientasi yang hampir sejajar dengan sumbu tubuh target, misalnya tepat di belakang kepala atau tepat di depan kaki, objek manusia sering kali tidak terdeteksi karena bentuk tubuh yang terlihat pada citra menjadi sangat terbatas dan tidak menyerupai representasi manusia yang umum dipelajari model. Seiring pergerakan drone selama proses pencarian, sudut pandang kamera berubah sehingga bagian kepala, badan, dan kaki mulai terlihat secara bersamaan dari sisi tubuh target. Pada kondisi tersebut deteksi kembali berhasil dilakukan dan FSM dapat melanjutkan transisi ke tahapan misi berikutnya. Hasil ini menunjukkan bahwa keberhasilan sistem tidak hanya dipengaruhi oleh posisi tubuh target, tetapi juga oleh sudut pengamatan kamera terhadap target selama proses pencarian berlangsung.
+Pada posisi tidur ditemukan karakteristik yang berbeda. Deteksi manusia cenderung berhasil apabila kamera dapat menangkap sebagian besar bentuk tubuh manusia, mulai dari kepala hingga kaki, terutama ketika drone mengamati target dari sisi kanan atau sisi kiri tubuh. Sebaliknya, ketika drone berada pada orientasi yang hampir sejajar dengan sumbu tubuh target, misalnya tepat di belakang kepala atau tepat di depan kaki, objek manusia sering kali tidak terdeteksi karena bentuk tubuh yang terlihat pada citra menjadi sangat terbatas dan tidak menyerupai representasi manusia yang umum dipelajari model.
+
+Seiring pergerakan drone selama proses pencarian, sudut pandang kamera berubah sehingga bagian kepala, badan, dan kaki mulai terlihat secara bersamaan dari sisi tubuh target. Pada kondisi tersebut deteksi kembali berhasil dilakukan dan FSM dapat melanjutkan transisi ke tahapan misi berikutnya. Hasil ini menunjukkan bahwa keberhasilan sistem tidak hanya dipengaruhi oleh posisi tubuh target, tetapi juga oleh sudut pengamatan kamera terhadap target selama proses pencarian berlangsung.
 
 
 \subsection{Skenario B: Pengujian Akurasi Deteksi In-Flight (Airborne Detection Performance)}
@@ -1168,7 +1177,7 @@ Berdasarkan hasil pengujian pada beberapa sesi penerbangan, sistem berhasil mend
 	}
 \end{table}
 
-Hasil pengujian menunjukkan bahwa mekanisme \textit{persistent scouting} berhasil beroperasi sesuai rancangan. Sistem tidak berhenti setelah menemukan target pertama, melainkan terus melanjutkan siklus SCAN$\rightarrow$APPROACH$\rightarrow$DOCUMENT$\rightarrow$DISPLACING$\rightarrow$SCAN untuk mencari target berikutnya. Selain itu, keberhasilan mekanisme \textit{duplicate skip} yang tercatat sebanyak 19 kali menunjukkan bahwa \textit{visited target memory} dan \textit{exclusion radius} mampu mencegah dokumentasi berulang terhadap target yang telah dikunjungi sebelumnya. Dengan demikian, sistem dapat memprioritaskan eksplorasi area baru dan meningkatkan efisiensi proses pencarian target selama misi berlangsung.
+Hasil pengujian menunjukkan bahwa mekanisme \textit{persistent scouting} berhasil beroperasi sesuai rancangan. Sistem tidak berhenti setelah menemukan target pertama, melainkan terus melanjutkan siklus SCAN$\rightarrow$APPROACH$\rightarrow$DOCUMENT$\rightarrow$DISPLACING$\rightarrow$SCAN untuk mencari target berikutnya. Selain itu, keberhasilan mekanisme \textit{duplicate skip} yang tercatat sebanyak 19 kali menunjukkan bahwa \textit{visited target memory} dan \textit{exclusion radius} mampu mencegah dokumentasi berulang terhadap target yang telah dikunjungi sebelumnya. Kondisi tersebut menunjukkan bahwa sistem dapat memprioritaskan eksplorasi area baru dan meningkatkan efisiensi proses pencarian target selama misi berlangsung.
 
 \begin{figure}[H]
 	\centering
@@ -1215,7 +1224,7 @@ Hasil pengujian menunjukkan bahwa mekanisme \textit{persistent scouting} berhasi
 	\label{fig:persistent_scout}
 \end{figure}
 
-Gambar \ref{fig:persistent_scout} memperlihatkan dokumentasi korban yang berhasil diidentifikasi selama pengujian misi pencarian otonom yang berkelanjutan. Berdasarkan hasil dokumentasi visual tersebut, sistem terbukti mampu mengenali target manusia pada berbagai pose dan kondisi pencahayaan alami di lapangan. Dapat diamati bahwa kualitas gambar hasil dokumentasi cukup jelas untuk keperluan verifikasi identitas korban oleh tim penyelamat. Dengan demikian, keberhasilan perekaman visual ini melandasi pengujian kestabilan pelacakan target yang dinamis. Pelacakan dinamis ini membutuhkan algoritma smoothing agar koordinat target tidak memicu getaran pada motor servo gimbal atau respon navigasi. Oleh karena itu, kestabilan penguncian target dan peredaman fluktuasi dievaluasi secara khusus pada bagian berikutnya.
+Gambar \ref{fig:persistent_scout} memperlihatkan dokumentasi korban yang berhasil diidentifikasi selama pengujian misi pencarian otonom yang berkelanjutan. Berdasarkan hasil dokumentasi visual tersebut, sistem terbukti mampu mengenali target manusia pada berbagai pose dan kondisi pencahayaan alami di lapangan. Dapat diamati bahwa kualitas gambar hasil dokumentasi cukup jelas untuk keperluan verifikasi identitas korban oleh tim penyelamat. Temuan ini mengindikasikan bahwa keberhasilan perekaman visual tersebut melandasi pengujian kestabilan pelacakan target secara dinamis. Pelacakan dinamis ini membutuhkan algoritma smoothing agar koordinat target tidak memicu getaran pada motor servo gimbal atau respon navigasi. Oleh karena itu, kestabilan penguncian target dan peredaman fluktuasi dievaluasi secara khusus pada bagian berikutnya.
 
 \subsection{Skenario G: Pengujian Target Lock Stability \& EMA Smoothing}
 
@@ -1375,7 +1384,7 @@ Hasil ini menunjukkan bahwa sistem mampu beroperasi dengan baik pada kondisi \te
 	\end{tabular}
 \end{table}
 
-Berdasarkan data pada Tabel~\ref{tab:env_light}, tingkat keberhasilan deteksi YOLOv8n hasil \textit{fine-tuning} menunjukkan variasi performa yang signifikan pada kondisi pencahayaan pagi, siang, dan sore hari. Performa deteksi mencapai titik paling optimal pada siang hari karena intensitas cahaya yang merata meminimalisir bayangan dan derau (\textit{noise}) visual pada citra. Namun, tantangan utama muncul pada kondisi malam hari di mana sistem dihadapkan pada limitasi pencahayaan yang ekstrem. Pada kondisi malam gelap tanpa bantuan cahaya buatan, model sama sekali tidak mampu mengidentifikasi target akibat hilangnya fitur visual manusia secara total. Sebaliknya, pada kondisi malam dengan iluminasi lampu sorot atau lampu penerangan jalan, tingkat deteksi mengalami peningkatan kembali meskipun masih berada di bawah performa siang hari. Dengan demikian, ketersediaan intensitas cahaya yang cukup terbukti menjadi parameter krusial dalam menjamin stabilitas dan akurasi sistem visi komputer pada drone.
+Berdasarkan data pada Tabel~\ref{tab:env_light}, tingkat keberhasilan deteksi YOLOv8n hasil \textit{fine-tuning} menunjukkan variasi performa yang signifikan pada kondisi pencahayaan pagi, siang, dan sore hari. Performa deteksi mencapai titik paling optimal pada siang hari karena intensitas cahaya yang merata meminimalisir bayangan dan derau (\textit{noise}) visual pada citra. Namun, tantangan utama muncul pada kondisi malam hari di mana sistem dihadapkan pada limitasi pencahayaan yang ekstrem. Pada kondisi malam gelap tanpa bantuan cahaya buatan, model sama sekali tidak mampu mengidentifikasi target akibat hilangnya fitur visual manusia secara total. Sebaliknya, pada kondisi malam dengan iluminasi lampu sorot atau lampu penerangan jalan, tingkat deteksi mengalami peningkatan kembali meskipun masih berada di bawah performa siang hari. Analisis data memperlihatkan bahwa ketersediaan intensitas cahaya yang cukup menjadi parameter krusial dalam menjamin stabilitas dan akurasi sistem visi komputer pada drone.
 
 Berdasarkan hasil pengujian, kondisi siang hari memberikan performa terbaik dengan tingkat deteksi tertinggi, sedangkan kondisi subuh dan sore menunjukkan penurunan kemampuan deteksi akibat keterbatasan pencahayaan. Walaupun demikian, sistem tetap mampu mempertahankan nilai \textit{confidence} yang relatif tinggi pada seluruh kondisi pengujian. Hasil ini menunjukkan bahwa sistem memenuhi tujuan perancangan untuk beroperasi pada lingkungan luar ruang dengan pencahayaan memadai (\textit{daylight condition}), namun belum optimal untuk kondisi minim cahaya tanpa dukungan sumber pencahayaan tambahan.
 
