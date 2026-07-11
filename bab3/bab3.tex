@@ -311,155 +311,34 @@ Tahap desain mekanik berfokus pada perancangan struktur pendukung untuk menginte
 
 Seluruh proses perancangan geometri komponen mekanik dilakukan menggunakan metode pemodelan parametrik (\textit{parametric modeling}) pada perangkat lunak Autodesk Fusion 360. Pendekatan parametrik dipilih untuk mempermudah penyesuaian dimensi secara konsisten apabila terjadi perubahan spesifikasi komponen elektronik. Konfigurasi lubang pengikat pada perangkat lunak dirancang menggunakan fitur \textit{Hole} dengan spesifikasi \textit{Hole Type} berupa \textit{Simple} dan \textit{Counterbore} (untuk menyembunyikan kepala baut), \textit{Hole Tap Type} berjenis \textit{Simple}, serta bentuk ujung mata bor (\textit{Drill Point}) bertipe \textit{Flat} agar sesuai dengan karakteristik deposisi \textit{layer} cetak 3D.
 
-Dalam perancangan sirkuit pengikat, dimensi lubang baut (\textit{clearance holes}) dan ketebalan dinding tiang baut (\textit{standoff/boss}) disesuaikan dengan presisi untuk mengantisipasi efek penyusutan (\textit{shrinkage}) material plastik \textit{Fused Deposition Modeling} (FDM). Secara spesifik, perancangan dimensi lubang ditetapkan sebagai berikut:
-\begin{itemize}[noitemsep]
-	\item Pada kompartemen penutup Raspberry Pi 5, pelindung baterai, dan pelindung modul suplai daya (UBEC), desain tiang baut memiliki dimensi diameter luar (\textit{outer diameter}) 4,0 mm dengan diameter dalam (\textit{inner diameter}) 1,7 mm guna memastikan cengkeraman ulir baut yang solid.
-	\item Dimensi diameter dalam 1,7 mm tersebut juga diterapkan pada komponen penutup (\textit{cover}) dudukan kamera.
-	\item Pada struktur penjepit badan kamera, lubang pengikat dirancang dengan diameter 2,7 mm.
-	\item Sementara itu, pada penutup kompartemen utama, digunakan fitur permukaan datar (\textit{flat top}) dengan struktur tiang berdiameter luar 6,0 mm dan diameter dalam 3,7 mm.
-\end{itemize}
+Dalam perancangan sirkuit pengikat, dimensi lubang baut (\textit{clearance holes}) dan ketebalan dinding tiang baut (\textit{standoff/boss}) disesuaikan dengan presisi untuk mengantisipasi efek penyusutan (\textit{shrinkage}) material plastik \textit{Fused Deposition Modeling} (FDM). Secara spesifik, perancangan dimensi lubang ditetapkan pada rentang diameter dalam (\textit{inner diameter}) 1,7 mm guna memastikan cengkeraman ulir baut M2 yang solid. Dimensi lubang berdiameter dalam 1,7 mm ini diterapkan secara seragam pada bagian tiang baut di Tutup casing Raspberry Pi, Casing baterai, Tutup casing baterai, Tutup casing modem, Casing modem, Tutup kamera, Casing kamera, serta komponen Tutup clamp depan dan Tutup clamp belakang.
 
-Selain pengaturan diameter lubang, celah antar sambungan (\textit{assembly clearance}) pada komponen modular diatur pada rentang 0,1 mm hingga 0,2 mm. Nilai toleransi ini diterapkan untuk menjamin kelancaran proses perakitan fisik (\textit{fitment}) sekaligus mencegah adanya kelonggaran (\textit{play}) mekanis yang dapat memperparah getaran (\textit{vibration propagation}) dari motor drone ke sensor kamera.
+Selain pengaturan diameter lubang, celah antar sambungan (\textit{assembly clearance}) pada komponen modular diatur pada rentang 0,1 mm hingga 0,2 mm. Nilai toleransi ini diterapkan untuk menjamin kelancaran proses perakitan fisik (\textit{fitment}) sekaligus mencegah adanya kelonggaran (\textit{play}) mekanis yang dapat memperparah perambatan getaran (\textit{vibration propagation}) dari motor drone ke Casing kamera.
 
-Dalam perancangan mekanik ini, proses penyatuan antar komponen hasil cetak 3D maupun integrasi dengan rangka utama dilakukan menggunakan pengikat mekanis (\textit{fasteners}) berupa baut baja metrik dan mur pengunci. Penggunaan baut M3 $\times$ 15 mm diaplikasikan pada struktur utama untuk meningkatkan kekakuan dan kestabilan sambungan mekanik. Sementara itu, baut M2 dengan variasi panjang 8 mm, 12 mm, dan 15 mm digunakan untuk mengunci kompartemen baterai, pelindung regulator daya, \textit{casing} Raspberry Pi, serta dudukan kamera.
+Dalam perancangan mekanik ini, proses penyatuan antar komponen hasil cetak 3D maupun integrasi dengan rangka utama dilakukan menggunakan satu jenis pengikat mekanis (\textit{fasteners}) berupa baut baja metrik M2. Penggunaan satu jenis baut M2 ini secara spesifik bertujuan untuk mempermudah perakitan (\textit{assembly}), mempermudah perawatan (\textit{maintenance}), serta mempertahankan modularitas sistem. Baut M2 digunakan untuk menghubungkan Tutup kamera dengan Casing kamera, menyatukan Tutup casing baterai dengan Casing baterai, mengunci Tutup casing modem pada Casing modem, merapatkan Tutup casing Raspberry Pi dengan Casing Raspberry Pi, menghubungkan sambungan Casing modem dengan Casing baterai, menyambungkan Casing modem dengan Casing Raspberry Pi, serta mengencangkan Tutup clamp depan dan Tutup clamp belakang ke frame drone.
 \begin{table}[H]
 	\centering
 	\caption{Spesifikasi pengikat mekanis (\textit{fasteners})}
 	\label{tab:fasteners}
 	\renewcommand{\arraystretch}{1.2}
-	\begin{tabular}{|c|c|c|}
+	\begin{tabular}{|c|c|p{8cm}|}
 		\hline
 		Jenis Fastener & Ukuran & Fungsi \\ \hline
-		Baut struktural utama & M3 $\times$ 15 mm & Pengikat struktur utama drone \\ \hline
-		Baut kompartemen & M2 $\times$ 8 mm & Pengikat kompartemen pelindung \\ \hline
-		Baut kompartemen & M2 $\times$ 12 mm & Pengikat dudukan dan pelindung modul \\ \hline
-		Baut kompartemen & M2 $\times$ 15 mm & Pengunci struktur kompartemen tambahan \\ \hline
-		Mur pengunci & M2 $\times$ 15 mm & Pengunci sambungan mekanik \\ \hline
+		Baut metrik & M2 & Mengikat Tutup kamera ke Casing kamera \\ \hline
+		Baut metrik & M2 & Mengikat Tutup casing baterai ke Casing baterai \\ \hline
+		Baut metrik & M2 & Mengikat Tutup casing modem ke Casing modem \\ \hline
+		Baut metrik & M2 & Mengikat Tutup casing Raspberry Pi ke Casing Raspberry Pi \\ \hline
+		Baut metrik & M2 & Menyambungkan Casing modem dengan Casing baterai \\ \hline
+		Baut metrik & M2 & Menyambungkan Casing modem dengan Casing Raspberry Pi \\ \hline
+		Baut metrik & M2 & Mengencangkan Tutup clamp depan dan Tutup clamp belakang ke frame drone \\ \hline
 	\end{tabular}
 \end{table}
 
 
-\begin{figure}[H]
-	\centering
-	
-	%================ ROW 1 ================
-	
-	\begin{subfigure}[b]{0.22\textwidth}
-		\centering
-		\includegraphics[
-		width=3cm,
-		height=3cm,
-		keepaspectratio,
-		trim=1.5cm 1.5cm 1.5cm 1.5cm,
-		clip
-		]{bab3/m3_atas}
-		\caption{Baut M3 atas}
-		\label{fig:baut_m3_atas}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}[b]{0.22\textwidth}
-		\centering
-		\includegraphics[
-		width=3cm,
-		height=3cm,
-		keepaspectratio,
-		trim=1.5cm 1.5cm 1.5cm 1.5cm,
-		clip
-		]{bab3/m3_depan}
-		\caption{Baut M3 depan}
-		\label{fig:baut_m3_depan}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}[b]{0.22\textwidth}
-		\centering
-		\includegraphics[
-		width=3cm,
-		height=3cm,
-		keepaspectratio,
-		trim=1.5cm 1.5cm 1.5cm 1.5cm,
-		clip
-		]{bab3/m2_8_atas}
-		\caption{Baut M2 8 mm atas}
-		\label{fig:baut_m2_8_atas}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}[b]{0.22\textwidth}
-		\centering
-		\includegraphics[
-		width=3cm,
-		height=3cm,
-		keepaspectratio,
-		trim=1.5cm 1.5cm 1.5cm 1.5cm,
-		clip
-		]{bab3/m2_8_depan}
-		\caption{Baut M2 8 mm depan}
-		\label{fig:baut_m2_8_depan}
-	\end{subfigure}
-	
-	\vspace{0.3cm}
-	
-	%================ ROW 2 ================
-	
-	\begin{subfigure}[b]{0.22\textwidth}
-		\centering
-		\includegraphics[
-		width=3cm,
-		height=3cm,
-		keepaspectratio,
-		trim=1.5cm 1.5cm 1.5cm 1.5cm,
-		clip
-		]{bab3/m2_10_atas}
-		\caption{Baut M2 12 mm atas}
-		\label{fig:baut_m2_12_atas}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}[b]{0.22\textwidth}
-		\centering
-		\includegraphics[
-		width=3cm,
-		height=3cm,
-		keepaspectratio,
-		trim=1.5cm 1.5cm 1.5cm 1.5cm,
-		clip
-		]{bab3/m2_10_depan}
-		\caption{Baut M2 12 mm depan}
-		\label{fig:baut_m2_12_depan}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}[b]{0.22\textwidth}
-		\centering
-		\includegraphics[
-		width=3cm,
-		height=3cm,
-		keepaspectratio,
-		trim=1.5cm 1.5cm 1.5cm 1.5cm,
-		clip
-		]{bab3/mur_m2_16}
-		\caption{Baut dan mur M2 15 mm}
-		\label{fig:baut_m2_15_mur}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}[b]{0.22\textwidth}
-		\centering
-		\includegraphics[
-		width=3cm,
-		height=3cm,
-		keepaspectratio,
-		trim=1.5cm 1.5cm 1.5cm 1.5cm,
-		clip
-		]{bab3/mur}
-		\caption{Mur pengunci}
-		\label{fig:mur_pengunci}
-	\end{subfigure}
-	
-	\caption{Komponen pengikat mekanis (\textit{fasteners}) yang digunakan pada integrasi struktural drone}
-	\label{fig:komponen_fasteners}
-\end{figure}
-
 Seluruh komponen mekanik dirancang menggunakan perangkat lunak pemodelan 3D berbasis CAD untuk memastikan kompatibilitas dimensi, kemudahan manufaktur, serta integrasi dengan rangka utama drone. Berdasarkan hasil perancangan tersebut, dihasilkan tujuh komponen mekanik modular yang mendukung integrasi sistem secara keseluruhan. 7 Komponennya ialah berikut:
 \begin{enumerate}
 	\item Dudukan Utama Kompartemen (\textit{Main Base})\\
-	Komponen ini dirancang sebagai struktur dasar untuk menampung baterai utama drone, Raspberry Pi 5, dan unit catu daya. Dudukan ini diletakkan tepat di bagian tengah bawah rangka S500 secara simetris untuk memastikan distribusi beban yang merata pada keempat motor penggerak.
+	Komponen ini dirancang sebagai struktur dasar untuk menampung baterai utama drone, Raspberry Pi 5, dan casing power supply. Dudukan ini diletakkan tepat di bagian tengah bawah rangka S500 secara simetris untuk memastikan distribusi beban yang merata pada keempat motor penggerak.
 	
 	\begin{figure}[H]
 		\centering
@@ -512,220 +391,222 @@ Seluruh komponen mekanik dirancang menggunakan perangkat lunak pemodelan 3D berb
 		\label{fig:top-plate-2d}
 	\end{figure}
 	
-	\item Retainer Baterai LiPo\\
+	\item Casing baterai (Desain Awal)\\
 	Struktur pelindung baterai LiPo 4S yang dilengkapi dengan lubang baut pengunci. Komponen ini memastikan baterai tetap berada pada posisi tengah bawah drone untuk menjaga kestabilan sumbu \textit{pitch} dan \textit{roll}.
 	
 	\begin{figure}[H]
 		\centering
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
-			\includegraphics[width=0.9\linewidth]{bab3/retainer_baterai_3d_1}
-			\caption{Desain 3D Retainer Baterai LiPo 1 (Desain Awal)}
-			\label{fig:retainer-baterai-3d-1}
+			\includegraphics[width=0.9\linewidth]{bab3/casing_baterai_3d_1}
+			\caption{Desain 3D Casing baterai 1 (Desain Awal)}
+			\label{fig:casing-baterai-awal-3d-1}
 		\end{subfigure}
 		\hfill
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
-			\includegraphics[width=0.9\linewidth]{bab3/retainer_baterai_3d_2}
-			\caption{Desain 3D Retainer Baterai LiPo 2 (Desain Awal)}
-			\label{fig:retainer-baterai-3d-2}
+			\includegraphics[width=0.9\linewidth]{bab3/casing_baterai_3d_2}
+			\caption{Desain 3D Casing baterai 2 (Desain Awal)}
+			\label{fig:casing-baterai-awal-3d-2}
 		\end{subfigure}
 	\end{figure}
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.9\linewidth]{bab3/retainer_baterai_2d}
-		\caption{Desain 2D dan Dimensi Retainer Baterai LiPo (Desain Awal)}
-		\label{fig:retainer-baterai-2d}
+		\includegraphics[width=0.9\linewidth]{bab3/casing_baterai_2d}
+		\caption{Desain 2D dan Dimensi Casing baterai (Desain Awal)}
+		\label{fig:casing-baterai-awal-2d}
 	\end{figure}
 	
-	\item Casing Pelindung Companion Computer\\
+	\item Casing Raspberry Pi (Desain Awal)\\
 	Casing pelindung untuk \textit{companion computer} yang dirancang dengan presisi sesuai dimensi Raspberry Pi 5. Komponen ini memiliki lubang baut pengikat untuk stabilitas mekanis serta celah ventilasi untuk menjaga efisiensi termal prosesor.
 	
 	\begin{figure}[H]
 		\centering
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
-			\includegraphics[width=0.9\linewidth]{bab3/rpi5_cover_3d_1}
-			\caption{Desain 3D Casing Pelindung Companion Computer 1 (Desain Awal)}
-			\label{fig:rpi5-cover-3d-1}
+			\includegraphics[width=0.9\linewidth]{bab3/casing_raspberry_pi_3d_1}
+			\caption{Desain 3D Casing Raspberry Pi 1 (Desain Awal)}
+			\label{fig:casing-raspberry-pi-awal-3d-1}
 		\end{subfigure}
 		\hfill
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
-			\includegraphics[width=0.9\linewidth]{bab3/rpi5_cover_3d_2}
-			\caption{Desain 3D Casing Pelindung Companion Computer 2 (Desain Awal)}
-			\label{fig:rpi5-cover-3d-2}
+			\includegraphics[width=0.9\linewidth]{bab3/casing_raspberry_pi_3d_2}
+			\caption{Desain 3D Casing Raspberry Pi 2 (Desain Awal)}
+			\label{fig:casing-raspberry-pi-awal-3d-2}
 		\end{subfigure}
 	\end{figure}
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.9\linewidth]{bab3/rpi5_cover_2d}
-		\caption{Desain 2D dan Dimensi Casing Pelindung Companion Computer (Desain Awal)}
-		\label{fig:rpi5-cover-2d}
+		\includegraphics[width=0.9\linewidth]{bab3/casing_raspberry_pi_2d}
+		\caption{Desain 2D dan Dimensi Casing Raspberry Pi (Desain Awal)}
+		\label{fig:casing-raspberry-pi-awal-2d}
 	\end{figure}
 	
-	\item Pelindung Modul Regulator Daya (UBEC)\\
-	Struktur pelindung untuk modul regulasi daya (UBEC 5A) guna mencegah kontak fisik langsung dan melindungi sirkuit dari debu maupun kelembapan saat operasional di lapangan.
+	\item Casing power supply (Desain Awal)\\
+	Struktur pelindung untuk modul regulator daya (UBEC 5A) guna mencegah kontak fisik langsung dan melindungi sirkuit dari debu maupun kelembapan saat operasional di lapangan.
 	
 	\begin{figure}[H]
 		\centering
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
-			\includegraphics[width=0.9\linewidth]{bab3/ubec_cover_3d_1}
-			\caption{Desain 3D Pelindung Modul Regulator Daya 1 (Desain Awal)}
-			\label{fig:ubec-cover-3d-1}
+			\includegraphics[width=0.9\linewidth]{bab3/casing_power_supply_3d_1}
+			\caption{Desain 3D Casing power supply 1 (Desain Awal)}
+			\label{fig:casing-power-supply-awal-3d-1}
 		\end{subfigure}
 		\hfill
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
-			\includegraphics[width=0.9\linewidth]{bab3/ubec_cover_3d_2}
-			\caption{Desain 3D Pelindung Modul Regulator Daya 2 (Desain Awal)}
-			\label{fig:ubec-cover-3d-2}
+			\includegraphics[width=0.9\linewidth]{bab3/casing_power_supply_3d_2}
+			\caption{Desain 3D Casing power supply 2 (Desain Awal)}
+			\label{fig:casing-power-supply-awal-3d-2}
 		\end{subfigure}
 	\end{figure}
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.9\linewidth]{bab3/ubec_cover_2d}
-		\caption{Desain 2D dan Dimensi Pelindung Modul Regulator Daya (Desain Awal)}
-		\label{fig:ubec-cover-2d}
+		\includegraphics[width=0.9\linewidth]{bab3/casing_power_supply_2d}
+		\caption{Desain 2D dan Dimensi Casing power supply (Desain Awal)}
+		\label{fig:casing-power-supply-awal-2d}
 	\end{figure}
 	
-	\item Dudukan Belakang Kamera\\
+	\item Casing kamera (Desain Awal)\\
 	Dudukan statis yang merekatkan sensor visual (Logitech C922) pada struktur \textit{board} drone. Bracket ini dirancang untuk menahan getaran frekuensi tinggi agar kualitas citra tetap terjaga untuk proses deteksi manusia.
 	
 	\begin{figure}[H]
 		\centering
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
-			\includegraphics[width=0.9\linewidth]{bab3/webcam_back_cover_3d_1}
-			\caption{Desain 3D Dudukan Belakang Kamera 1 (Desain Awal)}
-			\label{fig:webcam-back-3d-1}
+			\includegraphics[width=0.9\linewidth]{bab3/casing_kamera_3d_1}
+			\caption{Desain 3D Casing kamera 1 (Desain Awal)}
+			\label{fig:casing-kamera-awal-3d-1}
 		\end{subfigure}
 		\hfill
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
-			\includegraphics[width=0.9\linewidth]{bab3/webcam_back_cover_3d_2}
-			\caption{Desain 3D Dudukan Belakang Kamera 2 (Desain Awal)}
-			\label{fig:webcam-back-3d-2}
+			\includegraphics[width=0.9\linewidth]{bab3/casing_kamera_3d_2}
+			\caption{Desain 3D Casing kamera 2 (Desain Awal)}
+			\label{fig:casing-kamera-awal-3d-2}
 		\end{subfigure}
 	\end{figure}
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.9\linewidth]{bab3/webcam_back_cover_2d}
-		\caption{Desain 2D dan Dimensi Dudukan Belakang Kamera (Desain Awal)}
-		\label{fig:webcam-back-2d}
+		\includegraphics[width=0.9\linewidth]{bab3/casing_kamera_2d}
+		\caption{Desain 2D dan Dimensi Casing kamera (Desain Awal)}
+		\label{fig:casing-kamera-awal-2d}
 	\end{figure}
 	
-	\item Penjepit Depan Kamera\\
-	Komponen penjepit yang mengunci badan kamera pada dudukan belakang melalui sambungan baut. Desain simetris pada bracket kamera ini memastikan sensor visual tetap berada pada garis tengah drone untuk memudahkan perhitungan geometri pada sistem visi komputer.
+	\item Tutup kamera (Desain Awal)\\
+	Komponen penjepit yang mengunci badan kamera pada Casing kamera melalui sambungan baut. Desain simetris pada bracket kamera ini memastikan sensor visual tetap berada pada garis tengah drone untuk memudahkan perhitungan geometri pada sistem visi komputer.
 	
 	\begin{figure}[H]
 		\centering
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
-			\includegraphics[width=0.9\linewidth]{bab3/webcam_front_cover_3d_1}
-			\caption{Desain 3D Penjepit Depan Kamera 1 (Desain Awal)}
-			\label{fig:webcam-front-3d-1}
+			\includegraphics[width=0.9\linewidth]{bab3/tutup_kamera_3d_1}
+			\caption{Desain 3D Tutup kamera 1 (Desain Awal)}
+			\label{fig:tutup-kamera-awal-3d-1}
 		\end{subfigure}
 		\hfill
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
-			\includegraphics[width=0.9\linewidth]{bab3/webcam_front_cover_3d_2}
-			\caption{Desain 3D Penjepit Depan Kamera 2 (Desain Awal)}
-			\label{fig:webcam-front-3d-2}
+			\includegraphics[width=0.9\linewidth]{bab3/tutup_kamera_3d_2}
+			\caption{Desain 3D Tutup kamera 2 (Desain Awal)}
+			\label{fig:tutup-kamera-awal-3d-2}
 		\end{subfigure}
 	\end{figure}
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.9\linewidth]{bab3/webcam_front_cover_2d}
-		\caption{Desain 2D dan Dimensi Penjepit Depan Kamera (Desain Awal)}
-		\label{fig:webcam-front-2d}
+		\includegraphics[width=0.9\linewidth]{bab3/tutup_kamera_2d}
+		\caption{Desain 2D dan Dimensi Tutup kamera (Desain Awal)}
+		\label{fig:tutup-kamera-awal-2d}
 	\end{figure}
 	
 \end{enumerate}
 Dengan integrasi ketujuh komponen tersebut, drone memiliki konfigurasi beban yang terpusat dan simetris, sehingga beban kerja pada setiap motor menjadi seimbang dan efisiensi konsumsi daya baterai dapat terjaga selama otonom berlangsung.
 
 \subsubsection{Revisi dan Iterasi Desain Mekanik}
-Pada tahap awal pengembangan, beberapa \textit{flight trial}, integrasi \textit{hardware}, dan \textit{debugging} program dilakukan menggunakan desain mekanik generasi awal sebagaimana yang telah diuraikan pada tujuh komponen di atas. Desain awal tersebut memiliki karakteristik khusus, yaitu masih mengakomodasi kompartemen suplai daya Raspberry Pi 5 (seperti dudukan modul Mini UPS atau baterai terpisah), belum menyediakan ruang untuk perangkat komunikasi Modem/MiFi 4G/5G, dan secara keseluruhan memiliki konfigurasi mekanik yang belum final.
+Pada tahap awal pengembangan, beberapa \textit{flight trial}, integrasi \textit{hardware}, dan \textit{debugging} program dilakukan menggunakan desain mekanik generasi awal (Desain 1) sebagaimana yang telah diuraikan pada tujuh komponen di atas. Karakteristik khusus dari Desain 1 ini adalah sebagian besar komponen utamanya masih dirancang menyatu secara fisik, menggunakan casing power supply terpisah untuk mewadahi modul regulator daya, serta dicetak menggunakan parameter densitas infill sebesar 30\% dengan pola Grid, sehingga menghasilkan bobot wahana yang relatif besar.
 
-Setelah proses integrasi sistem selesai dan pengujian kelistrikan membuktikan bahwa Raspberry Pi 5 dapat disuplai secara langsung dan stabil menggunakan modul UBEC 5A yang dihubungkan ke baterai utama, struktur mekanik drone direvisi secara komprehensif. Perubahan utama pada iterasi desain akhir ini meliputi:
+Setelah proses integrasi sistem kelistrikan selesai dan pengujian membuktikan kestabilan suplai daya, struktur mekanik drone direvisi secara komprehensif menjadi desain modular yang lebih efisien (Desain 2). Perubahan utama pada Desain 2 ini meliputi:
 \begin{itemize}
-	\item Penghilangan kompartemen suplai daya Raspberry Pi 5 yang terpisah, sehingga beban \textit{payload} berkurang dan desain menjadi lebih ringkas.
-	\item Desain ulang pada sebagian komponen penyusun lama agar lebih presisi.
-	\item Pemecahan beberapa komponen lama menjadi beberapa bagian mekanik baru guna mempermudah proses perakitan (\textit{assembly}) dan perawatan.
-	\item Penambahan ruang dan dudukan khusus untuk menempatkan Modem/MiFi 4G/5G secara aman.
-	\item Penyederhanaan \textit{routing} kabel antar komponen elektronik.
+	\item Desain ulang komponen menjadi beberapa unit mekanik modular terpisah, yaitu Casing baterai, Tutup casing baterai, Casing modem, Tutup casing modem, Casing Raspberry Pi, Tutup casing Raspberry Pi, Tutup clamp depan, serta Tutup clamp belakang.
+	\item Penghilangan casing power supply terpisah yang kemudian digantikan oleh Casing modem guna menghemat ruang dan mengurangi beban \textit{payload}.
+	\item Pengurangan densitas pencetakan menjadi infill 10\% dengan menerapkan pola cetak Gyroid untuk meminimalkan bobot tanpa mengorbankan kekuatan struktural.
 \end{itemize}
+
+Meskipun Desain 2 telah modular, dalam fase pengujian awal ditemukan bahwa Konektor dudukan ke frame drone yang dibuat sebagai komponen terpisah memiliki ukuran penampang yang terlalu kecil, sehingga mudah patah ketika menopang payload wahana saat terbang. Sebagai langkah refinement (penyempurnaan), Konektor dudukan ke frame drone tersebut kemudian diintegrasikan langsung menjadi satu dengan Casing baterai. Penyempurnaan akhir ini dilakukan tanpa mengubah layout komponen, arsitektur sistem, posisi kamera, posisi Raspberry Pi, posisi modem, konsep modular, infill 10\%, maupun pola cetak Gyroid. Seluruh pengujian sistem otonom pada Bab 4 dilakukan menggunakan hasil refinement dari desain mekanik final ini.
 
 Desain final hasil iterasi inilah yang kemudian diproduksi, diimplementasikan secara permanen, dan digunakan pada seluruh pengujian resmi sistem otonom yang dibahas pada Bab 4. Berikut adalah lokasi penyisipan dan pengelompokan komponen CAD final baru yang merepresentasikan iterasi desain mekanik tersebut:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{bab3/casingbateraidesainbaru}
-	\caption{Casing baterai utama (Iterasi Desain Baru)}
+	\includegraphics[width=0.8\linewidth]{bab3/casing_baterai}
+	\caption{Casing baterai dengan Konektor dudukan ke frame drone terintegrasi (Desain Final)}
 	\label{fig:casing_baterai_baru}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{bab3/casingraspidesainbaru}
-	\caption{Casing pelindung Raspberry Pi 5 (Iterasi Desain Baru)}
+	\includegraphics[width=0.8\linewidth]{bab3/casing_raspberry_pi}
+	\caption{Casing Raspberry Pi (Desain Final)}
 	\label{fig:casing_raspi_baru}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{bab3/casingmodemdesainbaru}
-	\caption{Dudukan kompartemen Modem/MiFi 4G/5G (Iterasi Desain Baru)}
+	\includegraphics[width=0.8\linewidth]{bab3/casing_modem}
+	\caption{Casing modem (Desain Final)}
 	\label{fig:casing_modem_baru}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{bab3/tampaksampingusbdesainbaru}
-	\caption{Tampak samping penyederhanaan manajemen kabel (Iterasi Desain Baru)}
+	\includegraphics[width=0.8\linewidth]{bab3/tampak_samping_manajemen_kabel}
+	\caption{Tampak samping penyederhanaan manajemen kabel (Desain Final)}
 	\label{fig:tampak_samping_usb_baru}
 \end{figure}
+
+Visualisasi CAD di atas merepresentasikan seluruh komponen hasil revisi desain mekanik modular, termasuk Casing baterai yang telah disatukan dengan Konektor dudukan ke frame drone sebagai hasil akhir dari tahap penyempurnaan.
 
 \begin{figure}[H]
 	\centering
 	\begin{subfigure}[b]{0.3\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{bab3/tutupclampdesainbaru}
-		\caption{Tutup clamp atas}
+		\includegraphics[width=\linewidth]{bab3/tutup_clamp}
+		\caption{Tutup clamp}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{0.3\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{bab3/depanbawahclampkiri}
-		\caption{Clamp depan kiri}
+		\includegraphics[width=\linewidth]{bab3/tutup_clamp_depan_kiri}
+		\caption{Tutup clamp depan kiri}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{0.3\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{bab3/depanbawahclampkanan}
-		\caption{Clamp depan kanan}
+		\includegraphics[width=\linewidth]{bab3/tutup_clamp_depan_kanan}
+		\caption{Tutup clamp depan kanan}
 	\end{subfigure}
 	
 	\vspace{0.5cm}
 	
 	\begin{subfigure}[b]{0.3\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{bab3/belakangbawahclampkiri}
-		\caption{Clamp belakang kiri}
+		\includegraphics[width=\linewidth]{bab3/tutup_clamp_belakang_kiri}
+		\caption{Tutup clamp belakang kiri}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{0.3\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{bab3/belakangbawahclampkanan}
-		\caption{Clamp belakang kanan}
+		\includegraphics[width=\linewidth]{bab3/tutup_clamp_belakang_kanan}
+		\caption{Tutup clamp belakang kanan}
 	\end{subfigure}
-	\caption{Revisi penjepit dudukan kamera (Iterasi Desain Baru)}
+	\caption{Tutup clamp depan dan Tutup clamp belakang (Desain Final)}
 	\label{fig:tutup_clamp_baru}
 \end{figure}
 
@@ -746,7 +627,7 @@ Desain final hasil iterasi inilah yang kemudian diproduksi, diimplementasikan se
 	\label{fig:perakitan_final_real}
 \end{figure}
 
-Gambar \ref{fig:perakitan_final_real} menunjukkan hasil realisasi perakitan fisik dari keseluruhan sistem drone berdasarkan desain final yang dirancang. Berdasarkan implementasi tersebut, seluruh komponen cetak 3D dan sirkuit daya telah terpasang secara kokoh pada rangka Holybro S500. Dapat diamati bahwa konfigurasi ini menghasilkan struktur yang ringkas dengan pusat massa yang terdistribusi secara seimbang. Dengan demikian, realisasi fisik drone ini telah siap digunakan sebagai platform uji coba penerbangan otonom.
+Gambar \ref{fig:perakitan_final_real} menunjukkan hasil realisasi perakitan fisik dari keseluruhan sistem drone berdasarkan desain final yang dirancang. Berdasarkan implementasi tersebut, seluruh komponen cetak 3D telah terpasang secara kokoh pada rangka Holybro S500. Dapat diamati bahwa konfigurasi ini menghasilkan struktur yang ringkas dengan pusat massa yang terdistribusi secara seimbang. Dengan demikian, realisasi fisik drone ini telah siap digunakan sebagai platform uji coba penerbangan otonom. Komponen Casing baterai yang terpasang pada bagian bawah rangka tersebut telah menggunakan rancangan dengan Konektor dudukan ke frame drone terintegrasi untuk menjamin kekuatan struktural wahana.
 
 \subsection{Desain Software}
 Desain perangkat lunak pada sistem drone otonom ini dirancang untuk menangani tingkat kompleksitas yang tinggi, mencakup navigasi otomatis, deteksi manusia secara \textit{real-time}, pengolahan data telemetri, dan pemantauan sistem. Sistem ini mengimplementasikan arsitektur \textit{multi-thread} dan \textit{asynchronous} terdistribusi untuk memastikan bahwa pemrosesan berat seperti inferensi kecerdasan buatan tidak memblokir atau mengganggu \textit{loop} kontrol penerbangan kritis.
@@ -841,7 +722,7 @@ Sebagai sistem udara tanpa awak yang didesain untuk ranah pencarian korban di ar
 	Urutan kerja operasional dari mekanisme keselamatan \textit{Battery RTL} ini berjalan secara sekuensial. Awalnya, \textit{Battery Sensor} mengukur status fisik daya baterai, lalu mengirimkannya ke \textit{PX4 Battery Estimator} untuk diestimasi persentasenya. Data persentase baterai ini ditransmisikan melalui \textit{MAVSDK Telemetry} ke \textit{companion computer} Raspberry Pi 5. Raspberry Pi 5 memonitor nilai persentase baterai ini secara terus-menerus. Ketika kapasitas baterai berada di atas batas kritis ($> 15\%$), misi penerbangan otonom tetap dilanjutkan (\textit{Continue Mission}). Namun, jika nilai persentase baterai mencapai atau kurang dari ambang batas ($\le 15\%$), Raspberry Pi 5 akan segera mengambil keputusan untuk menghentikan misi secara aktif (\textit{Abort Mission}). Selanjutnya, Raspberry Pi 5 memicu fase pengamanan \textit{Pre-RTL Safety Climb} dengan melakukan pendakian vertikal selama 3 detik pada kecepatan $vz = -0,8$ m/s. Setelah fase pendakian keselamatan selesai, Raspberry Pi 5 memanggil fungsi \texttt{return\_to\_launch()} secara terprogram melalui perintah aksi MAVSDK (\textit{MAVSDK Action}), sehingga autopilot PX4 kemudian mengeksekusi prosedur kepulangan otomatis (\textit{PX4 RTL}).
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.65\linewidth]{gambar/battery_rtl_flowchart.pdf}
+		\includegraphics[width=0.65\linewidth]{bab3/battery_rtl_flowchart.pdf}
 		\caption{Mekanisme Battery RTL Berbasis Fixed Threshold}
 		\label{fig:battery_rtl_flowchart}
 	\end{figure}
@@ -1135,95 +1016,95 @@ Realisasi fisik dari purwarupa drone otonom ini dilakukan dengan mewujudkan hasi
 				\label{fig:top-plate-real-2}
 			\end{subfigure}
 		\end{figure}
-		\item Retainer Baterai LiPo\\
+		\item Casing baterai (Desain Awal)\\
 		\begin{figure}[H]
 			\centering
 			\begin{subfigure}[b]{0.45\textwidth}
 				\centering
-				\includegraphics[width=0.7\linewidth]{bab3/retainer_baterai_real1}
-				\caption{Hasil Realisasi Retainer Baterai LiPo Tampak Perspektif 1}
+				\includegraphics[width=0.7\linewidth]{bab3/casing_baterai_real1}
+				\caption{Hasil Realisasi Casing baterai Tampak Perspektif 1 (Desain Awal)}
 				\label{fig:retainer-baterai-real-1}
 			\end{subfigure}
 			\hfill
 			\begin{subfigure}[b]{0.45\textwidth}
 				\centering
-				\includegraphics[width=0.7\linewidth]{bab3/retainer_baterai_real2}
-				\caption{Hasil Realisasi Retainer Baterai LiPo Tampak Perspektif 2}
+				\includegraphics[width=0.7\linewidth]{bab3/casing_baterai_real2}
+				\caption{Hasil Realisasi Casing baterai Tampak Perspektif 2 (Desain Awal)}
 				\label{fig:retainer-baterai-real-2}
 			\end{subfigure}
 		\end{figure}
-		\item Casing Pelindung Companion Computer\\
+		\item Casing Raspberry Pi (Desain Awal)\\
 		\begin{figure}[H]
 			\centering
 			\begin{subfigure}[b]{0.45\textwidth}
 				\centering
-				\includegraphics[width=0.7\linewidth]{bab3/rpi5_cover_real1}
-				\caption{Hasil Realisasi Casing Pelindung Companion Computer Tampak Perspektif 1}
+				\includegraphics[width=0.7\linewidth]{bab3/casing_raspberry_pi_real1}
+				\caption{Hasil Realisasi Casing Raspberry Pi Tampak Perspektif 1 (Desain Awal)}
 				\label{fig:rpi5-cover-real-1}
 			\end{subfigure}
 			\hfill
 			\begin{subfigure}[b]{0.45\textwidth}
 				\centering
-				\includegraphics[width=0.7\linewidth]{bab3/rpi5_cover_real2}
-				\caption{Hasil Realisasi Casing Pelindung Companion Computer Tampak Perspektif 2}
+				\includegraphics[width=0.7\linewidth]{bab3/casing_raspberry_pi_real2}
+				\caption{Hasil Realisasi Casing Raspberry Pi Tampak Perspektif 2 (Desain Awal)}
 				\label{fig:rpi5-cover-real-2}
 			\end{subfigure}
 		\end{figure}
-		\item Pelindung Modul Regulator Daya (UBEC)\\
+		\item Casing power supply (Desain Awal)\\
 		\begin{figure}[H]
 			\centering
 			\begin{subfigure}[b]{0.45\textwidth}
 				\centering
-				\includegraphics[width=0.7\linewidth]{bab3/ubec_cover_real1}
-				\caption{Hasil Realisasi Pelindung Modul Regulator Daya Tampak Perspektif 1}
+				\includegraphics[width=0.7\linewidth]{bab3/casing_power_supply_real1}
+				\caption{Hasil Realisasi Casing power supply Tampak Perspektif 1 (Desain Awal)}
 				\label{fig:ubec-cover-real-1}
 			\end{subfigure}
 			\hfill
 			\begin{subfigure}[b]{0.45\textwidth}
 				\centering
-				\includegraphics[width=0.7\linewidth]{bab3/ubec_cover_real2}
-				\caption{Hasil Realisasi Pelindung Modul Regulator Daya Tampak Perspektif 2}
+				\includegraphics[width=0.7\linewidth]{bab3/casing_power_supply_real2}
+				\caption{Hasil Realisasi Casing power supply Tampak Perspektif 2 (Desain Awal)}
 				\label{fig:ubec-cover-real-2}
 			\end{subfigure}
 		\end{figure}
-		\item Dudukan Belakang Kamera\\
+		\item Casing kamera (Desain Awal)\\
 		\begin{figure}[H]
 			\centering
 			\begin{subfigure}[b]{0.3\textwidth}
 				\centering
-				\includegraphics[width=0.7\linewidth]{bab3/webcam_back_cover_real1}
-				\caption{Hasil Realisasi Dudukan Belakang Kamera Tampak Perspektif 1}
+				\includegraphics[width=0.7\linewidth]{bab3/casing_kamera_real1}
+				\caption{Hasil Realisasi Casing kamera Tampak Perspektif 1 (Desain Awal)}
 				\label{fig:webcam-back-real-1}
 			\end{subfigure}
 			\hfill
 			\begin{subfigure}[b]{0.3\textwidth}
 				\centering
-				\includegraphics[width=0.7\linewidth]{bab3/webcam_back_cover_real2}
-				\caption{Hasil Realisasi Dudukan Belakang Kamera Tampak Perspektif 2}
+				\includegraphics[width=0.7\linewidth]{bab3/casing_kamera_real2}
+				\caption{Hasil Realisasi Casing kamera Tampak Perspektif 2 (Desain Awal)}
 				\label{fig:webcam-back-real-2}
 			\end{subfigure}
 			\hfill
 			\begin{subfigure}[b]{0.3\textwidth}
 				\centering
-				\includegraphics[width=0.7\linewidth]{bab3/webcam_back_cover_real3}
-				\caption{Hasil Realisasi Dudukan Belakang Kamera Tampak Perspektif 3}
+				\includegraphics[width=0.7\linewidth]{bab3/casing_kamera_real3}
+				\caption{Hasil Realisasi Casing kamera Tampak Perspektif 3 (Desain Awal)}
 				\label{fig:webcam-back-real-3}
 			\end{subfigure}
 		\end{figure}
-		\item Penjepit Depan Kamera\\
+		\item Tutup kamera (Desain Awal)\\
 		\begin{figure}[H]
 			\centering
 			\begin{subfigure}[b]{0.45\textwidth}
 				\centering
-				\includegraphics[width=0.7\linewidth]{bab3/webcam_front_cover_real1}
-				\caption{Hasil Realisasi Penjepit Depan Kamera Tampak Perspektif 1}
+				\includegraphics[width=0.7\linewidth]{bab3/tutup_kamera_real1}
+				\caption{Hasil Realisasi Tutup kamera Tampak Perspektif 1 (Desain Awal)}
 				\label{fig:webcam-front-real-1}
 			\end{subfigure}
 			\hfill
 			\begin{subfigure}[b]{0.45\textwidth}
 				\centering
-				\includegraphics[width=0.7\linewidth]{bab3/webcam_front_cover_real2}
-				\caption{Hasil Realisasi Penjepit Depan Kamera Tampak Perspektif 2}
+				\includegraphics[width=0.7\linewidth]{bab3/tutup_kamera_real2}
+				\caption{Hasil Realisasi Tutup kamera Tampak Perspektif 2 (Desain Awal)}
 				\label{fig:webcam-front-real-2}
 			\end{subfigure}
 		\end{figure}
@@ -1255,7 +1136,7 @@ Realisasi fisik dari purwarupa drone otonom ini dilakukan dengan mewujudkan hasi
 		\end{subfigure}
 	\end{figure}
 	
-	\item Instalasi Modem MiFi 4G/5G: Untuk mendukung komunikasi \textit{dual-mode}, sebuah modem MiFi 4G/5G (\textit{wireless}) ditempatkan pada ruang kosong di dalam komponen 3D pelindung modul suplai daya Raspberry Pi. Penempatan ini mempermudah tata letak dan meminimalisir risiko interferensi kabel pada sensor GPS
+	\item Instalasi Modem MiFi 4G/5G: Untuk mendukung komunikasi \textit{dual-mode}, sebuah modem MiFi 4G/5G (\textit{wireless}) ditempatkan di dalam Casing modem. Penempatan ini mempermudah tata letak dan meminimalisir risiko interferensi kabel pada sensor GPS
 	\begin{figure}[H]
 		\centering
 		\begin{subfigure}[b]{0.45\textwidth}
@@ -1267,14 +1148,14 @@ Realisasi fisik dari purwarupa drone otonom ini dilakukan dengan mewujudkan hasi
 		\hfill
 		\begin{subfigure}[b]{0.45\textwidth}
 			\centering
-			\includegraphics[width=0.9\linewidth]{bab3/modem_mifi_4g_kompart}
-			\caption{Penempatan Modem MiFi 4G/5G di dalam kompartemen pelindung daya}
+			\includegraphics[width=0.9\linewidth]{bab3/modem_mifi_4g_casing}
+			\caption{Penempatan Modem MiFi 4G/5G di dalam Casing modem}
 			\label{fig:penempatan-modem-mifi-4g}
 		\end{subfigure}
 	\end{figure}
 \end{itemize}
 
-Gambar \ref{fig:modem-mifi-4g} dan Gambar \ref{fig:penempatan-modem-mifi-4g} menunjukkan wujud fisik modem MiFi 4G/5G beserta penempatannya di dalam kompartemen pelindung drone. Berdasarkan implementasi tersebut, integrasi modem ini menyediakan konektivitas internet nirkabel yang stabil untuk pengiriman data telemetri. Dapat diamati bahwa rancangan penempatan modem ini memanfaatkan ruang kosong secara efisien tanpa mengganggu penempatan sensor lainnya. Dengan demikian, seluruh perakitan perangkat keras tambahan telah diselesaikan secara terintegrasi dan siap mendukung fungsionalitas sistem otonom drone.
+Gambar \ref{fig:modem-mifi-4g} dan Gambar \ref{fig:penempatan-modem-mifi-4g} menunjukkan wujud fisik modem MiFi 4G/5G beserta penempatannya di dalam Casing modem. Berdasarkan implementasi tersebut, integrasi modem ini menyediakan konektivitas internet nirkabel yang stabil untuk pengiriman data telemetri. Dapat diamati bahwa rancangan penempatan modem ini memanfaatkan ruang kosong secara efisien tanpa mengganggu penempatan sensor lainnya. Dengan demikian, seluruh perakitan perangkat keras tambahan telah diselesaikan secara terintegrasi dan siap mendukung fungsionalitas sistem otonom drone.
 
 \subsection{Implementasi Backend System}
 Implementasi \textit{backend system} direalisasikan menggunakan bahasa pemrograman Python dengan kerangka kerja Flask. Sistem ini mengadopsi arsitektur \textit{split-brain} dan didistribusikan ke dalam beberapa modul spesifik (telemetri, visi komputer, dan navigasi) yang dikerjakan secara konkuren.
@@ -1506,4 +1387,4 @@ Tahap integrasi akhir memastikan seluruh subsistem—mulai dari struktur mekanik
 	Seluruh data operasional, status terbang, dan tangkapan visual dipancarkan secara kontinu ke \textit{frontend monitoring} melalui koneksi jaringan nirkabel (\textit{Wi-Fi} lokal atau modem \textit{MiFi 4G/5G}), memungkinkan operator melakukan pengawasan misi pencarian secara presisi.
 \end{enumerate}
 
-Melalui integrasi menyeluruh ini, sistem tidak hanya mampu menjalankan proses akuisisi citra, deteksi target, dan navigasi otomatis, tetapi juga menjamin keandalan struktural, stabilitas kelistrikan, serta keselamatan operasional selama misi pencarian korban berlangsung.
+Melalui integrasi menyeluruh ini, sistem tidak hanya mampu menjalankan proses akuisisi citra, deteksi target, dan navigasi otomatis, tetapi juga menjamin keandalan struktural, stabilitas kelistrikan, serta keselamatan operasional selama misi pencarian korban berlangsung. Seluruh konfigurasi mekanik akhir hasil penyempurnaan pada bagian konektor dudukan ini selanjutnya digunakan secara penuh pada seluruh tahapan pengujian sistem otonom yang dijabarkan pada Bab IV.
