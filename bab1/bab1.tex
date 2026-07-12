@@ -12,16 +12,16 @@ Tinjauan sistematik yang dilakukan oleh Lyu et al. (2023) menunjukkan bahwa pema
 
 Kebutuhan terhadap sistem drone yang adaptif dalam konteks kebencanaan menjadi semakin mendesak bila melihat kondisi faktual di Indonesia. Berdasarkan data dari Badan Nasional Penanggulangan Bencana (BNPB, 2025), sepanjang tahun 2024 tercatat 3.472 kejadian bencana yang menyebabkan 540 korban meninggal dunia, 63 orang hilang, dan lebih dari 8 juta orang mengungsi. Meskipun frekuensi bencana menurun dibandingkan tahun sebelumnya, tingkat fatalitas dan kerusakan meningkat hampir 96\%, menandakan masih terbatasnya sistem deteksi dini dan pencarian korban di lapangan\cite{BNPB2024}. Penelitian oleh Sopha, Asih, dan Agriawan (2024) juga menegaskan bahwa adopsi drone dalam operasi kemanusiaan di Indonesia masih rendah, dipengaruhi oleh keterbatasan teknologi di kondisi ekstrem \cite{Sopha2024DronesHumanitarian}.
 
-Meskipun potensinya besar, operasi SAR konvensional berbasis drone saat ini masih memiliki kelemahan fundamental. Drone umumnya dioperasikan secara manual dan sangat bergantung pada transmisi video mentah (\textit{video streaming}) ke \textit{Ground Control Station} (GCS) untuk dianalisis oleh mata manusia. Di lingkungan bencana, ketersediaan \textit{bandwidth} jaringan radio seringkali tidak stabil, memicu latensi transmisi yang tinggi atau hilangnya sinyal (\textit{signal loss}). Untuk mengatasi masalah ini, diperlukan pergeseran menuju pemrosesan visual langsung di atas wahana (\textit{on-board detection}) menggunakan konsep komputasi tepi (\textit{edge computing}).
+Meskipun potensinya besar, operasi SAR konvensional berbasis drone saat ini masih memiliki kelemahan fundamental. Drone umumnya dioperasikan secara manual dan sangat bergantung pada transmisi video mentah (\textit{video streaming}) ke \textit{Ground Control Station} (GCS) untuk dianalisis oleh mata manusia. Di lingkungan bencana, ketersediaan \textit{bandwidth} jaringan radio seringkali tidak stabil, memicu latensi transmisi yang tinggi atau hilangnya sinyal (\textit{signal loss}). Untuk mengatasi masalah ini, diperlukan pergeseran menuju pemrosesan visual langsung di atas drone (\textit{on-board detection}) menggunakan konsep komputasi tepi (\textit{edge computing}).
 
-Berdasarkan kondisi tersebut, penelitian ini berfokus pada perancangan sistem drone otonom yang memadukan \textit{flight controller} dengan \textit{companion computer} Raspberry Pi 5. Dengan menempatkan unit pemrosesan kecerdasan buatan secara lokal, drone dapat mengeksekusi model deteksi objek YOLOv8n tanpa bergantung pada komunikasi data ke darat. Sistem ini dirancang agar drone dapat melakukan pencarian dalam mode Scout Mission, mendeteksi keberadaan manusia secara \textit{real-time}, serta mengambil keputusan secara otomatis. Dengan demikian, penelitian ini diharapkan dapat meminimalkan pengaruh latensi komunikasi, membantu kelancaran proses pencarian, dan mendukung keselamatan tim penolong di wilayah bencana.
+Berdasarkan kondisi tersebut, penelitian ini berfokus pada perancangan sistem drone otonom yang memadukan \textit{flight controller} dengan \textit{companion computer} Raspberry Pi 5. Dengan menempatkan unit pemrosesan kecerdasan buatan secara lokal, drone dapat mengeksekusi model deteksi objek YOLOv8n tanpa bergantung pada komunikasi data ke darat. Sistem ini dirancang agar drone dapat melakukan pencarian dalam mode Scout Mission, mendeteksi keberadaan manusia secara \textit{real-time}, serta mengambil keputusan secara otonom. Dengan demikian, sistem otonom yang diusulkan dirancang untuk mendukung pengurangan pengaruh latensi komunikasi, kelancaran proses pencarian, dan keselamatan tim penolong di wilayah bencana.
 
 \section{Rumusan Masalah}
 Berdasarkan uraian latar belakang di atas, rumusan masalah dalam penelitian ini didefinisikan secara lebih spesifik sebagai berikut:
 \begin{enumerate}
-	\item Bagaimana merancang arsitektur perangkat keras dan sistem kelistrikan yang stabil untuk mengintegrasikan \textit{companion computer} Raspberry Pi 5 dan kamera pada drone tanpa mengganggu kestabilan wahana?
+	\item Bagaimana merancang arsitektur perangkat keras dan sistem kelistrikan yang stabil untuk mengintegrasikan \textit{companion computer} Raspberry Pi 5 dan kamera pada drone tanpa mengganggu kestabilan drone?
 	\item Bagaimana mengoptimalkan algoritma deteksi manusia berbasis YOLOv8n agar mampu dieksekusi secara \textit{real-time} pada perangkat \textit{edge} dengan menyeimbangkan \textit{frame rate} (FPS) dan akurasi deteksi?
-	\item Bagaimana merancang mesin logika otonom (\textit{state machine}) yang dapat menerjemahkan hasil deteksi visual menjadi perintah navigasi otomatis penerbangan?
+	\item Bagaimana merancang mesin logika otonom (\textit{state machine}) yang dapat menerjemahkan hasil deteksi visual menjadi perintah navigasi otonom penerbangan?
 \end{enumerate}
 
 \section{Tujuan Penelitian}
@@ -29,7 +29,7 @@ Sejalan dengan rumusan masalah, penelitian ini bertujuan untuk:
 \begin{enumerate}
 	\item Menghasilkan rancang bangun perangkat keras dan kelistrikan sistem drone otonom yang mampu menyuplai daya komputasi secara stabil bagi perangkat \textit{edge} Raspberry Pi 5 serta meminimalkan potensi kegagalan akibat penurunan tegangan (\textit{voltage sag}).
 	\item Mengevaluasi performa iterasi model YOLOv8n format ONNX yang dijalankan pada sistem operasi \textit{headless} untuk meraih keseimbangan \textit{frame rate} (FPS) dan latensi terbaik.
-	\item Membangun mesin logika otonom (\textit{state machine}) tipe \textit{Persistent Multi-Target Scouting} berbasis MAVSDK yang memampukan wahana untuk menavigasi, mendokumentasikan korban, dan menghindari dokumentasi target duplikat secara mandiri.
+	\item Membangun mesin logika otonom (\textit{state machine}) tipe \textit{Persistent Multi-Target Scouting} berbasis MAVSDK yang memampukan drone untuk menavigasi, mendokumentasikan manusia yang terdeteksi, dan menghindari dokumentasi target duplikat secara mandiri.
 \end{enumerate}
 
 \section{Batasan Masalah}
@@ -40,13 +40,13 @@ Agar ruang lingkup penelitian tetap terarah dan terukur, ditetapkan batasan masa
 	\item Sistem deteksi visual murni mengandalkan kamera RGB monokular statis (tanpa stabilisasi mekanis \textit{gimbal}), dengan target identifikasi dibatasi khusus kelas manusia.
 	\item Sistem penglihatan komputer dibatasi pada penggunaan sensor optik RGB standar tanpa kapabilitas visi malam khusus (\textit{night vision} atau kamera termal). Eksekusi pengujian pada kondisi minim cahaya (subuh, petang, atau malam hari) dilakukan murni untuk mengevaluasi batasan toleransi (\textit{environmental robustness}) algoritma deteksi.
 	\item Transmisi pemantauan jarak jauh menggunakan jaringan nirkabel (Wi-Fi lokal atau seluler 4G/5G) diasumsikan berada pada area \textit{Line-of-Sight}, tanpa menjamin kekebalan terhadap gangguan \textit{video stuttering} akibat rintangan fisik padat.
-	\item Mekanisme penolakan target duplikat (\textit{duplicate exclusion}) murni mengandalkan filter jarak spasial absolut berbasis GPS (\textit{Haversine formula}), tanpa mengikutsertakan algoritma pengenalan identitas visual (\textit{Person Re-identification} / ReID) untuk membedakan korban yang bergerak silang.
-	\item Sistem tidak mengimplementasikan estimasi kebutuhan energi berdasarkan jarak tempuh menuju \textit{home position}, prediksi sisa waktu terbang, maupun estimasi konsumsi daya motor, serta tidak menerapkan \textit{energy-aware path planning}. Aktivasi fitur keselamatan \textit{Return-to-Launch} (RTL) dilakukan menggunakan ambang batas tetap (\textit{fixed threshold}) sebesar 15\% yang diperoleh langsung dari telemetri autopilot PX4.
+	\item Mekanisme penolakan target duplikat (\textit{duplicate exclusion}) murni mengandalkan filter jarak spasial absolut berbasis GPS (\textit{Haversine formula}), tanpa mengikutsertakan algoritma pengenalan identitas visual (\textit{Person Re-identification} / ReID) untuk membedakan manusia yang bergerak silang.
+	\item Sistem tidak mengimplementasikan estimasi kebutuhan energi berdasarkan jarak tempuh menuju \textit{home position}, prediksi sisa waktu terbang, maupun estimasi konsumsi daya motor, serta tidak menerapkan \textit{energy-aware path planning}. Aktivasi fitur keselamatan \textit{Return to Launch} (RTL) dilakukan menggunakan ambang batas tetap (\textit{fixed threshold}) sebesar 15\% yang diperoleh langsung dari telemetri autopilot PX4.
 \end{enumerate}
 
 \section{Manfaat Penelitian}
 Penelitian ini diharapkan dapat memberikan kontribusi dan manfaat sebagai berikut:
 \begin{enumerate}
 	\item Menjadi referensi teknis komprehensif terkait optimasi integrasi \textit{edge computing} perangkat keras berbiaya rendah dan arsitektur visi komputer \textit{real-time} pada \textit{unmanned aerial systems}.
-	\item Menghasilkan purwarupa fungsional drone SAR yang berpotensi dikembangkan lebih lanjut untuk membantu instansi tanggap darurat dalam proses pencarian korban secara otomatis.
+	\item Menghasilkan purwarupa fungsional drone SAR yang berpotensi dikembangkan lebih lanjut untuk membantu instansi tanggap darurat dalam proses pencarian korban secara otonom.
 \end{enumerate}
