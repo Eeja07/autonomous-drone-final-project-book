@@ -1,0 +1,228 @@
+.
+├── abstrak
+│   ├── abstrak-en.tex
+│   └── abstrak-id.tex
+├── bab1
+│   └── bab1.tex
+├── bab2
+│   └── bab2.tex
+├── bab3
+│   ├── bab3.tex
+│   ├── baterai_lipo.png
+│   ├── battery_params.png
+│   ├── battery_rtl_flowchart.pdf
+│   ├── belakangbawahclampkanan.png
+│   ├── belakangbawahclampkiri.png
+│   ├── c922.png
+│   ├── casingbateraidesainbaru.png
+│   ├── casingmodemdesainbaru.png
+│   ├── casingraspidesainbaru.png
+│   ├── compress_bab3_images.sh
+│   ├── depanbawahclampkanan.png
+│   ├── depanbawahclampkiri.png
+│   ├── drone_tampak_atas.png
+│   ├── drone_tampak_bawah.png
+│   ├── dudukan_utama_kompartemen_2d.png
+│   ├── dudukan_utama_kompartemen_3d_1.png
+│   ├── dudukan_utama_kompartemen_3d_2.png
+│   ├── dudukan_utama_kompartemen_real1.png
+│   ├── dudukan_utama_kompartemen_real2.png
+│   ├── dudukan_utama_kompartemen_real3.png
+│   ├── flow3-1.pdf
+│   ├── flow3-2.pdf
+│   ├── flow3-31.pdf
+│   ├── flow3-32.pdf
+│   ├── flow3-33.pdf
+│   ├── flow3-34.pdf
+│   ├── flow3-35.pdf
+│   ├── flow3-36.pdf
+│   ├── flow3-3bb.pdf
+│   ├── flow3-3.pdf
+│   ├── flow3-4.pdf
+│   ├── flow3-5.pdf
+│   ├── flow3-6.pdf
+│   ├── flow3-7.pdf
+│   ├── flow3-8.pdf
+│   ├── flow3-9.pdf
+│   ├── full_assembly_real_1.png
+│   ├── full_assembly_real_2.png
+│   ├── full_assembly_real_3.png
+│   ├── imax_charger_lipo.png
+│   ├── IMG_1258.png
+│   ├── IMG_1268.png
+│   ├── integrasi_webcam_rpi5_depan_desainbaru.png
+│   ├── integrasi_webcam_rpi5_depan.png
+│   ├── kabel_konektor_serial.png
+│   ├── konfig_baterai_ganda_nc.png
+│   ├── konfig_baterai_ganda_wc.png
+│   ├── konfig_baterai_tunggal_nc_desainbaru.png
+│   ├── konfig_baterai_tunggal_nc.png
+│   ├── konfig_baterai_tunggal_wc_desainbaru.png
+│   ├── konfig_baterai_tunggal_wc.png
+│   ├── m2_10_atas.png
+│   ├── m2_10_depan.png
+│   ├── m2_8_atas.png
+│   ├── m2_8_depan.png
+│   ├── m3_atas.png
+│   ├── m3_depan.png
+│   ├── modem_mifi_4g_kompart.png
+│   ├── modem_mifi_4g.png
+│   ├── mur_m2_16.png
+│   ├── mur.png
+│   ├── rc_t10.png
+│   ├── retainer_baterai_2d.png
+│   ├── retainer_baterai_3d_1.png
+│   ├── retainer_baterai_3d_2.png
+│   ├── retainer_baterai_real1.png
+│   ├── retainer_baterai_real2.png
+│   ├── rpi5_cover_2d.png
+│   ├── rpi5_cover_3d_1.png
+│   ├── rpi5_cover_3d_2.png
+│   ├── rpi5_cover_real1.png
+│   ├── rpi5_cover_real2.png
+│   ├── rpi5.png
+│   ├── serial_px4_rpi5_depan.png
+│   ├── serial_px4_rpi5_samping.png
+│   ├── serial_uart_px4_rpi5_depan_desainbaru.png
+│   ├── serial_uart_px4_rpi5_depan.png
+│   ├── serial_uart_px4_rpi5_samping_desainbaru.png
+│   ├── serial_uart_px4_rpi5_samping.png
+│   ├── tampaksampingusbdesainbaru.png
+│   ├── top_plate_2d.png
+│   ├── top_plate_3d_1.png
+│   ├── top_plate_3d_2.png
+│   ├── top_plate_real1.png
+│   ├── top_plate_real2.png
+│   ├── tutupclampdesainbaru.png
+│   ├── ubec_cover_2d.png
+│   ├── ubec_cover_3d_1.png
+│   ├── ubec_cover_3d_2.png
+│   ├── ubec_cover_real1.png
+│   ├── ubec_cover_real2.png
+│   ├── ubec.png
+│   ├── ubec_xt60.png
+│   ├── usb_px4_rpi5_depan_desainbaru.png
+│   ├── usb_px4_rpi5_samping_desainbaru.png
+│   ├── webcam_back_cover_2d.png
+│   ├── webcam_back_cover_3d_1.png
+│   ├── webcam_back_cover_3d_2.png
+│   ├── webcam_back_cover_real1.png
+│   ├── webcam_back_cover_real2.png
+│   ├── webcam_back_cover_real3.png
+│   ├── webcam_front_cover_2d.png
+│   ├── webcam_front_cover_3d_1.png
+│   ├── webcam_front_cover_3d_2.png
+│   ├── webcam_front_cover_real1.png
+│   ├── webcam_front_cover_real2.png
+│   ├── xt60_female.png
+│   ├── xt60_male.png
+│   └── xt60_y_splitter.png
+├── bab4
+│   ├── args.yaml
+│   ├── bab4.tex
+│   ├── battery_rtl_trigggered.png
+│   ├── BoxF1_curve.png
+│   ├── BoxP_curve.png
+│   ├── BoxPR_curve.png
+│   ├── BoxR_curve.png
+│   ├── confusion_matrix_normalized.png
+│   ├── confusion_matrix.png
+│   ├── deteksi20m.png
+│   ├── deteksi5m.png
+│   ├── diagram_gstreamer_pipeline.png
+│   ├── document_triggered.png
+│   ├── fix.py
+│   ├── fsm_berdiri.png
+│   ├── fsm_berjalan_old.png
+│   ├── fsm_berjalan.png
+│   ├── fsm_duduk.png
+│   ├── fsm_tiduran.png
+│   ├── indoor_yolov8n256.png
+│   ├── indoor_yolov8n320.png
+│   ├── korslet_pi5.jpeg
+│   ├── labels.jpg
+│   ├── onnx_performance_comparison.png
+│   ├── outdoor_yolov8n256_pose.jpeg
+│   ├── outdoor_yolov8n320.jpeg
+│   ├── preRTLdone_offboardExit.png
+│   ├── rc_override.png
+│   ├── results.csv
+│   ├── results.png
+│   ├── scout_20260603_033804_malamterang.jpg
+│   ├── scout_20260603_034035_malamgelap.jpg
+│   ├── scout_20260603_063222_pagidekat.jpg
+│   ├── scout_20260603_063312_pagijauh.jpg
+│   ├── scout_20260603_150354_siang.jpg
+│   ├── scout_20260603_171205_sore.jpg
+│   ├── screenshot_flask_log_2.png
+│   ├── screenshot_flask_log.png
+│   ├── screenshot_mavsdk_stream.png
+│   ├── screenshot_socket_update.png
+│   ├── screenshot_ui_dashboard_2.png
+│   ├── screenshot_ui_dashboard_3.png
+│   ├── screenshot_ui_dashboard.png
+│   ├── screenshot_yolo_inference.png
+│   ├── terbang_malam_gelap.png
+│   ├── terbang_malam_manusia.png
+│   ├── terbang_pagi.png
+│   ├── terbang_siang.png
+│   ├── terbang_sore.png
+│   ├── throttle_pi5.jpeg
+│   ├── train_batch0.jpg
+│   ├── train_batch1.jpg
+│   ├── train_batch2.jpg
+│   ├── train_batch37000.jpg
+│   ├── train_batch37001.jpg
+│   ├── train_batch37002.jpg
+│   ├── val_batch0_labels.jpg
+│   ├── val_batch0_pred.jpg
+│   ├── val_batch1_labels.jpg
+│   ├── val_batch1_pred.jpg
+│   ├── val_batch2_labels.jpg
+│   └── val_batch2_pred.jpg
+├── bab5
+│   └── bab5.tex
+├── compress.sh
+├── halaman_78_81.pdf
+├── halaman_80_83.pdf
+├── Init
+│   ├── DaftarPustaka.tex
+│   ├── gambar
+│   │   ├── sampul-dalam.png
+│   │   ├── sampul-luar.png
+│   │   └── sampul-luar-tipis.png
+│   ├── Init-a.tex
+│   ├── Init.tex
+│   ├── lembar-pengesahan-en.tex
+│   ├── lembar-pengesahan.tex
+│   ├── pernyataan-keaslian-en.tex
+│   ├── pernyataan-keaslian.tex
+│   ├── sampul-dalam.tex
+│   ├── sampul-luar.tex
+│   ├── sampul-luar-tipis-eng.tex
+│   ├── sampul-luar-tipis.tex
+│   └── TataLetak.tex
+├── KataPengantar
+│   ├── biografi-penulis.tex
+│   ├── kata-pengantar.tex
+│   └── lembar-pengesahan.log
+├── LICENSE
+├── output.pdf
+├── pustaka
+│   ├── pustaka.bib
+│   └── tanda-hubung.tex
+├── README.md
+├── struktur.txt
+├── TemplateTaTeknikKomputer.aux
+├── TemplateTaTeknikKomputer.bbl
+├── TemplateTaTeknikKomputer.blg
+├── TemplateTaTeknikKomputer.lof
+├── TemplateTaTeknikKomputer.log
+├── TemplateTaTeknikKomputer.lot
+├── TemplateTaTeknikKomputer.out
+├── TemplateTaTeknikKomputer.pdf
+├── TemplateTaTeknikKomputer.synctex.gz
+├── TemplateTaTeknikKomputer.tex
+└── TemplateTaTeknikKomputer.toc
+
+11 directories, 215 files
