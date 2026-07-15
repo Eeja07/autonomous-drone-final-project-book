@@ -131,7 +131,7 @@ Mesin pengambil keputusan merupakan bagian utama sistem otonom yang bertugas men
 	\label{fig:blokdiagram5}
 \end{figure}
 
-Gambar \ref{fig:blokdiagram5} menunjukkan arsitektur mesin pengambil keputusan otonom yang bekerja berdasarkan evaluasi kondisi sistem dan kejadian dinamis. Logika pengambil keputusan ini membagi proses menjadi tiga tahap utama secara sekuensial: monitoring kondisi sistem untuk mengumpulkan data telemetri, evaluasi kejadian (*event*) untuk menentukan prioritas kondisi, dan pemilihan tindakan otonom yang sesuai. Struktur ini dirancang untuk mempertahankan keamanan penerbangan dengan memprioritaskan keselamatan drone apabila terdeteksi kondisi kritis di lapangan.
+Gambar \ref{fig:blokdiagram5} menunjukkan arsitektur mesin pengambil keputusan otonom yang bekerja berdasarkan evaluasi kondisi sistem dan kejadian dinamis. Logika pengambil keputusan ini membagi proses menjadi tiga tahap utama secara sekuensial: monitoring kondisi sistem untuk mengumpulkan data telemetri, evaluasi kejadian (\textit{event}) untuk menentukan prioritas kondisi, dan pemilihan tindakan otonom yang sesuai. Struktur ini dirancang untuk mempertahankan keamanan penerbangan dengan memprioritaskan keselamatan drone apabila terdeteksi kondisi kritis di lapangan.
 
 \subsubsection{Monitoring Kondisi Sistem}
 Tahap monitoring kondisi sistem dilakukan secara kontinu selama mode otonom aktif. Sistem memantau beberapa parameter penting seperti status baterai, posisi drone, ketinggian penerbangan, kualitas GPS, dan mode penerbangan. Informasi tersebut digunakan untuk memastikan drone tetap berada pada kondisi operasional yang aman selama misi berlangsung. Selain itu, data telemetri yang diperoleh juga digunakan sebagai dasar evaluasi kondisi sistem sebelum drone menentukan tindakan navigasi berikutnya.
@@ -417,7 +417,7 @@ Setelah seluruh komponen modular disempurnakan pada tahap refinement, integrasi 
 	\label{fig:desain_final_main}
 \end{figure}
 
-Gambar \ref{fig:desain_final_main} menunjukkan rancangan assembly CAD kompartemen utama pada Desain Final, di mana tampak perspektif 1 diperlihatkan pada Gambar \ref{fig:desain-final1} dan tampak perspektif 2 pada Gambar \ref{fig:desain-final2}. Desain final ini menyempurnakan struktur mekanis sambungan antar casing dan memperkuat bodi penopang. Terlihat bahwa seluruh komponen modular terpasang secara simetris di bagian tengah bawah drone untuk menjaga keselarasan titik berat (*center of gravity*) drone agar tidak mengganggu kestabilan kendali terbang.
+Gambar \ref{fig:desain_final_main} menunjukkan rancangan assembly CAD kompartemen utama pada Desain Final, di mana tampak perspektif 1 diperlihatkan pada Gambar \ref{fig:desain-final1} dan tampak perspektif 2 pada Gambar \ref{fig:desain-final2}. Desain final ini menyempurnakan struktur mekanis sambungan antar casing dan memperkuat bodi penopang. Terlihat bahwa seluruh komponen modular terpasang secara simetris di bagian tengah bawah drone untuk menjaga keselarasan titik berat (\textit{center of gravity}) drone agar tidak mengganggu kestabilan kendali terbang.
 
 \begin{figure}[H]
 	\centering
@@ -713,7 +713,7 @@ Komponen ini dirancang menggantikan peran casing power supply terpisah pada desa
 	\label{fig:tutup-clamp-real}
 \end{figure}
 
-Komponen ini berfungsi sebagai penahan utama untuk mengikat seluruh kompartemen tambahan pada batang penyangga (*landing gear rod*) drone. Desain 3D tutup clamp diperlihatkan pada Gambar \ref{fig:tutup-clamp-3d}, sedangkan dimensi detail pengikatan ditunjukkan pada Gambar \ref{fig:tutup-clamp-2d}. Hasil realisasi cetak fisik tutup clamp diperlihatkan pada Gambar \ref{fig:tutup-clamp-real}. Komponen ini dibuat dalam dua bagian (depan dan belakang) untuk memudahkan proses instalasi tanpa harus membongkar struktur landing gear bawaan.
+Komponen ini berfungsi sebagai penahan utama untuk mengikat seluruh kompartemen tambahan pada batang penyangga (\textit{landing gear rod}) drone. Desain 3D tutup clamp diperlihatkan pada Gambar \ref{fig:tutup-clamp-3d}, sedangkan dimensi detail pengikatan ditunjukkan pada Gambar \ref{fig:tutup-clamp-2d}. Hasil realisasi cetak fisik tutup clamp diperlihatkan pada Gambar \ref{fig:tutup-clamp-real}. Komponen ini dibuat dalam dua bagian (depan dan belakang) untuk memudahkan proses instalasi tanpa harus membongkar struktur landing gear bawaan.
 
 \subsection{Desain Software}
 Desain perangkat lunak pada sistem drone otonom ini dirancang untuk menangani tingkat kompleksitas yang tinggi, mencakup navigasi otomatis, deteksi manusia secara \textit{real-time}, pengolahan data telemetri, dan pemantauan sistem. Sistem ini mengimplementasikan arsitektur \textit{multi-thread} dan \textit{asynchronous} terdistribusi untuk memastikan bahwa pemrosesan berat seperti inferensi kecerdasan buatan tidak memblokir atau mengganggu \textit{loop} kontrol penerbangan kritis.
@@ -749,7 +749,7 @@ Subsistem akuisisi video dirancang menggunakan GStreamer untuk mendistribusikan 
 	\caption{Flowchart Deteksi \& Target Lock}
 	\label{fig:flowyolo}
 \end{figure}
-Mekanisme deteksi objek dan penguncian target (*target lock*) secara berurutan ditunjukkan pada diagram alir Gambar \ref{fig:flowyolo}.
+Mekanisme deteksi objek dan penguncian target (\textit{target lock}) secara berurutan ditunjukkan pada diagram alir Gambar \ref{fig:flowyolo}.
 
 Modul deteksi berfungsi menerjemahkan data piksel mentah menjadi koordinat target spasial yang akan digunakan oleh sistem kendali terbang. Berdasarkan hasil analisis dan tahapan optimasi, sistem ini menggunakan model YOLOv8n standar yang telah melalui proses \textit{fine-tuning} khusus untuk deteksi kelas tunggal manusia (\textit{person-only}) menggunakan dataset COCO yang difilter dengan total kotak pembatas anotasi sebanyak 244.799 instans target. Model final PyTorch (\texttt{best.pt}) berukuran 6,0 MB tersebut kemudian diekspor ke dalam format ONNX dengan resolusi input sebesar 320x320 piksel (\texttt{320n.onnx}) untuk diimplementasikan pada perangkat \textit{edge} \textit{companion computer} Raspberry Pi 5.
 
@@ -846,13 +846,13 @@ Seluruh perilaku drone di angkasa secara mendasar diorkestrasi oleh dua arus dat
 		\label{fig:blokvisualtocontrol}
 	\end{figure}
 	
-	Gambar \ref{fig:blokvisualtocontrol} menunjukkan alur transmisi data dari kamera hingga perintah kontrol yaw dan kecepatan otonom dihasilkan. Berdasarkan implementasi tersebut, terdapat pemrosesan beruntun yang mengolah data piksel menjadi keputusan navigasi. Dapat diamati bahwa setiap tahap pemrosesan bekerja secara berurutan guna menjaga waktu respons sistem. Dengan demikian, diagram visual ini memvisualisasikan bagaimana umpan balik (*feedback*) visual diterjemahkan menjadi aksi navigasi fisik. Rincian tahapan pada alur visual tersebut diuraikan sebagai berikut:
+	Gambar \ref{fig:blokvisualtocontrol} menunjukkan alur transmisi data dari kamera hingga perintah kontrol yaw dan kecepatan otonom dihasilkan. Berdasarkan implementasi tersebut, terdapat pemrosesan beruntun yang mengolah data piksel menjadi keputusan navigasi. Dapat diamati bahwa setiap tahap pemrosesan bekerja secara berurutan guna menjaga waktu respons sistem. Dengan demikian, diagram visual ini memvisualisasikan bagaimana umpan balik (\textit{feedback}) visual diterjemahkan menjadi aksi navigasi fisik. Rincian tahapan pada alur visual tersebut diuraikan sebagai berikut:
 	
 	\begin{itemize}
 		\item Webcam USB menangkap aliran data optik mentah ke GStreamer.
-		\item GStreamer mereduksi ukuran piksel citra sesuai kapabilitas komputasi CPU Raspberry Pi 5 dan menampungnya ke dalam *Frame Queue*.
-		\item *YOLO Consumer* mengambil citra tersebut dari antrean, mengeksekusi komputasi \textit{deep learning}, lalu mengirimkan sekumpulan kotak pembatas objek (\textit{bounding box}) menuju *Detection Queue*.
-		\item *Autonomy Controller* memproses data hasil observasi objek tersebut melalui matriks kondisi terkini pada \textit{state machine}, lalu menghasilkan vektor navigasi 3 sumbu berupa kecepatan dan yaw (\textit{VelocityNedYaw}).
+		\item GStreamer mereduksi ukuran piksel citra sesuai kapabilitas komputasi CPU Raspberry Pi 5 dan menampungnya ke dalam \textit{Frame Queue}.
+		\item \textit{YOLO Consumer} mengambil citra tersebut dari antrean, mengeksekusi komputasi \textit{deep learning}, lalu mengirimkan sekumpulan kotak pembatas objek (\textit{bounding box}) menuju \textit{Detection Queue}.
+		\item \textit{Autonomy Controller} memproses data hasil observasi objek tersebut melalui matriks kondisi terkini pada \textit{state machine}, lalu menghasilkan vektor navigasi 3 sumbu berupa kecepatan dan yaw (\textit{VelocityNedYaw}).
 		\item Vektor kecepatan ditransmisikan melalui MAVSDK kepada PX4 Flight Controller yang pada akhirnya dikonversi menjadi sinyal kontrol fisik ke ESC.
 	\end{itemize}
 	\item Alur Telemetri dan Observasi (\textit{Telemetry-to-Frontend Pipeline}):
@@ -863,12 +863,12 @@ Seluruh perilaku drone di angkasa secara mendasar diorkestrasi oleh dua arus dat
 		\label{fig:bloktelemtoreact}
 	\end{figure}
 	
-	Gambar \ref{fig:bloktelemtoreact} menunjukkan alur pemrosesan data telemetri dari flight controller Pixhawk hingga dirender pada antarmuka operator. Berdasarkan implementasi tersebut, data dikirim secara asinkron menggunakan protokol *WebSockets* untuk menghindari kelambatan render visual. Dapat diamati bahwa pemisahan alur telemetri ini menjaga kestabilan data telemetri yang ditampilkan ke pengguna. Dengan demikian, alur komunikasi ini dirancang agar operator dapat menerima metrik penerbangan aktual secara \textit{real-time}. Rincian tahapan pada alur telemetri tersebut diuraikan sebagai berikut:
+	Gambar \ref{fig:bloktelemtoreact} menunjukkan alur pemrosesan data telemetri dari flight controller Pixhawk hingga dirender pada antarmuka operator. Berdasarkan implementasi tersebut, data dikirim secara asinkron menggunakan protokol \textit{WebSockets} untuk menghindari kelambatan render visual. Dapat diamati bahwa pemisahan alur telemetri ini menjaga kestabilan data telemetri yang ditampilkan ke pengguna. Dengan demikian, alur komunikasi ini dirancang agar operator dapat menerima metrik penerbangan aktual secara \textit{real-time}. Rincian tahapan pada alur telemetri tersebut diuraikan sebagai berikut:
 	
 	\begin{itemize}
 		\item PX4 Flight Controller secara internal mengolah sinyal fisik sensor (IMU, Barometer, GPS) menjadi kumpulan paket status.
-		\item *MAVSDK Listener* pada Raspberry Pi terus-menerus berlangganan paket dari drone lalu memperbarui *State Dictionary*.
-		\item Antarmuka Flask SocketIO mengambil jepretan (*snapshot*) matriks ini lima kali tiap detiknya.
+		\item \textit{MAVSDK Listener} pada Raspberry Pi terus-menerus berlangganan paket dari drone lalu memperbarui \textit{State Dictionary}.
+		\item Antarmuka Flask SocketIO mengambil jepretan (\textit{snapshot}) matriks ini lima kali tiap detiknya.
 		\item Data dikodekan menjadi format JSON sebelum ditransmisikan melalui konektivitas jaringan nirkabel menuju aplikasi React Frontend.
 		\item Aplikasi memperbarui dasbor pemantauan berdasarkan perubahan status terkini secara dinamis untuk operator.
 	\end{itemize}
@@ -877,7 +877,7 @@ Seluruh perilaku drone di angkasa secara mendasar diorkestrasi oleh dua arus dat
 Subsistem penerbangan bertumpu pada unit \textit{Flight Controller} Pixhawk dan \textit{firmware} kendalinya, yaitu PX4. Modul ini berfungsi menjaga keseimbangan fisik drone di udara dan bertindak sebagai jembatan antara perintah navigasi dari Raspberry Pi dengan pergerakan mekanis motor penggerak. Pixhawk secara khusus memproses data sensor melalui algoritma EKF2 (\textit{Extended Kalman Filter}) untuk mengatur kecepatan putaran motor \textit{brushless} \cite{dangelo2024_template_based_px4}. Sebagai sistem keamanan utama, subsistem ini dirancang untuk menolak perintah otonom jika dinilai membahayakan penerbangan. Selain itu, sistem ini dirancang agar pilot manusia (melalui \textit{Remote Controller}) memegang kendali tertinggi untuk mengambil alih (\textit{override}) operasi drone dalam keadaan darurat.
 
 \subsubsection{Arsitektur Subsistem Komputasi Otonom}
-Raspberry Pi 5 sebagai *companion computer* bertindak sebagai unit pengambil keputusan pada drone. Tugas utamanya adalah memproses hasil tangkapan kamera menggunakan model deteksi YOLOv8 untuk mendeteksi target, kemudian mengestimasi posisi relatif target tersebut di ruang spasial. Subsistem ini tidak mengatur arus listrik ke motor secara langsung, melainkan bekerja dengan mengirimkan perintah berbasis kecepatan (\textit{Velocity-based setpoints}). Berdasarkan pergerakan target yang dipantau oleh kamera, sistem ini secara otonom akan mengirimkan instruksi arah gerak (seperti pergeseran translasi atau perubahan orientasi rotasi) kepada subsistem penerbangan agar drone dapat mengikuti target.
+Raspberry Pi 5 sebagai \textit{companion computer} bertindak sebagai unit pengambil keputusan pada drone. Tugas utamanya adalah memproses hasil tangkapan kamera menggunakan model deteksi YOLOv8 untuk mendeteksi target, kemudian mengestimasi posisi relatif target tersebut di ruang spasial. Subsistem ini tidak mengatur arus listrik ke motor secara langsung, melainkan bekerja dengan mengirimkan perintah berbasis kecepatan (\textit{Velocity-based setpoints}). Berdasarkan pergerakan target yang dipantau oleh kamera, sistem ini secara otonom akan mengirimkan instruksi arah gerak (seperti pergeseran translasi atau perubahan orientasi rotasi) kepada subsistem penerbangan agar drone dapat mengikuti target.
 
 \subsubsection{Arsitektur Subsistem Monitoring}
 Subsistem pemantauan dirancang dengan prinsip transparansi data namun tidak memiliki akses untuk mengintervensi kendali terbang (\textit{read-only by design}). Subsistem ini dibangun menggunakan teknologi web mutakhir seperti Vite dan React. Desain antarmukanya dibuat sangat ringan agar tidak membebani komputasi \textit{companion computer}, sehingga proses pemantauan secara \textit{real-time} dapat berjalan lancar bagi operator di lapangan. Aliran komunikasi data memanfaatkan protokol \textit{WebSocket} yang andal dan responsif. Melalui dasbor antarmuka, operator dapat memantau berbagai metrik penerbangan (koordinat geospasial dan baterai), siaran langsung video kamera, serta melacak tahapan logika otonom drone (seperti laporan perubahan status dari mode \texttt{SCAN} beralih ke mode \texttt{APPROACH}).
@@ -961,7 +961,7 @@ Realisasi fisik dari purwarupa drone otonom ini dilakukan dengan mewujudkan hasi
 		\label{fig:konfig_baterai_tunggal_main}
 	\end{figure}
 	
-	Realisasi fisik dari konfigurasi baterai tunggal ini ditunjukkan pada Gambar \ref{fig:konfig_baterai_tunggal_main}, di mana Gambar \ref{fig:baterai-tunggal-real-no-case} menampilkan struktur internal perkabelan tanpa casing penutup, dan Gambar \ref{fig:baterai-tunggal-real-with-case} memperlihatkan kondisi akhir kompartemen terpasang di bawah drone. Melalui implementasi modul UBEC 5A pada konfigurasi paralel tersebut, suplai tegangan 5 V ke Raspberry Pi terbukti tetap stabil selama proses inferensi YOLOv8 berlangsung, sehingga berhasil mengatasi masalah ketidakstabilan catu daya (*under-voltage*) pada purwarupa awal.
+	Realisasi fisik dari konfigurasi baterai tunggal ini ditunjukkan pada Gambar \ref{fig:konfig_baterai_tunggal_main}, di mana Gambar \ref{fig:baterai-tunggal-real-no-case} menampilkan struktur internal perkabelan tanpa casing penutup, dan Gambar \ref{fig:baterai-tunggal-real-with-case} memperlihatkan kondisi akhir kompartemen terpasang di bawah drone. Melalui implementasi modul UBEC 5A pada konfigurasi paralel tersebut, suplai tegangan 5 V ke Raspberry Pi terbukti tetap stabil selama proses inferensi YOLOv8 berlangsung, sehingga berhasil mengatasi masalah ketidakstabilan catu daya (\textit{under-voltage}) pada purwarupa awal.
 	
 	\paragraph{Alternatif Konfigurasi Sistem Daya:} Pada tahap pengembangan, sistem juga diimplementasikan menggunakan konfigurasi baterai ganda yang terdiri atas baterai utama sebagai sumber daya motor serta baterai terpisah untuk Raspberry Pi 5. Konfigurasi alternatif ini ditunjukkan pada Gambar \ref{fig:baterai-ganda-real}, dengan detail perkabelan tanpa casing diperlihatkan pada Gambar \ref{fig:baterai-ganda-real-no-case} dan dengan kompartemen tertutup pada Gambar \ref{fig:baterai-ganda-real-with-case}. Konfigurasi ini berhasil diimplementasikan dan seluruh komponen elektronik dapat beroperasi dengan baik selama pengujian fungsional karena adanya isolasi elektrikal penuh antara sistem propulsi dan komputasi.
 	
